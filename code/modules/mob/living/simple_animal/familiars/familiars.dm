@@ -10,7 +10,7 @@
 	universal_speak = FALSE
 	universal_understand = TRUE
 
-	min_gas = list(/decl/material/gas/oxygen = 1)
+	min_gas = list(MAT_OXYGEN = 1)
 	max_gas = null
 	unsuitable_atmos_damage = 1
 
@@ -35,12 +35,11 @@
 
 	health = 200
 	maxHealth = 200
-	natural_weapon = /obj/item/natural_weapon/pincers/strong
+	melee_damage_lower = 10
+	melee_damage_upper = 15
+	attacktext = "pinches"
 	resistance = 9
 	can_escape = TRUE //snip snip
-
-/obj/item/natural_weapon/pincers/strong
-	force = 15
 
 /*familiar version of the Pike w/o all the other hostile/carp stuff getting in the way (namely life)
 */
@@ -59,14 +58,15 @@
 
 	health = 100
 	maxHealth = 100
-	natural_weapon = /obj/item/natural_weapon/bite
+	melee_damage_lower = 10
+	melee_damage_upper = 10
 	can_escape = TRUE
 
 	min_gas = null
 
 	wizardy_spells = list(/spell/aoe_turf/conjure/forcewall)
 
-/mob/living/simple_animal/familiar/pike/Process_Spacemove()
+/mob/living/simple_animal/familiar/pike/Allow_Spacemove(var/check_drift = 0)
 	return 1	//No drifting in space for space carp!	//original comments do not steal
 
 /mob/living/simple_animal/familiar/horror
@@ -82,15 +82,11 @@
 
 	health = 150
 	maxHealth = 150
-	natural_weapon = /obj/item/natural_weapon/horror
+	melee_damage_lower = 5
+	melee_damage_upper = 8
+	attacktext = "touches"
 
 	wizardy_spells = list(/spell/targeted/torment)
-
-/obj/item/natural_weapon/horror
-	name = "foul touch"
-	force = 10
-	damtype = BURN
-	attack_verb = list("touched")
 
 /mob/living/simple_animal/familiar/horror/death(gibbed, deathmessage, show_dead_message)
 	..(null,"rapidly deteriorates","The bonds tying you to this mortal plane have been severed.")
@@ -133,7 +129,7 @@
 		icon_state = icon_rest
 
 /mob/living/simple_animal/familiar/pet/mouse
-	name = "elderly mouse"
+	name = "elderly snaprat"
 	desc = "A small rodent. It looks very old."
 	icon_state = "mouse_gray"
 	icon_living = "mouse_gray"
@@ -149,8 +145,10 @@
 
 	health = 15
 	maxHealth = 15
-	natural_weapon = /obj/item/natural_weapon/bite/mouse
+	melee_damage_lower = 1
+	melee_damage_upper = 1
 	can_escape = TRUE
+	attacktext = "nibbles"
 
 	wizardy_spells = list(/spell/aoe_turf/smoke)
 
@@ -175,6 +173,8 @@
 
 	health = 25
 	maxHealth = 25
-	natural_weapon = /obj/item/natural_weapon/claws/weak
+	melee_damage_lower = 3
+	melee_damage_upper = 4
+	attacktext = "scratched"
 
 	wizardy_spells = list(/spell/targeted/subjugation)

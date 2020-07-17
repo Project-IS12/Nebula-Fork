@@ -1,24 +1,26 @@
 /obj/item/clothing/head/soft
 	name = "cargo cap"
 	desc = "It's a peaked cap in a tasteless yellow color."
-	icon_state = ICON_STATE_WORLD
-	icon = 'icons/clothing/head/softcap.dmi'
-	on_mob_icon = 'icons/clothing/head/softcap.dmi'
-	color = COLOR_YELLOW_GRAY
+	icon_state = "cargosoft"
+	item_state_slots = list(
+		slot_l_hand_str = "helmet", //probably a placeholder
+		slot_r_hand_str = "helmet",
+		)
 	var/flipped = 0
 	siemens_coefficient = 0.9
 	body_parts_covered = 0
 
-/obj/item/clothing/head/soft/on_update_icon()
-	..()
-	if(flipped)
-		icon_state = "[get_world_inventory_state()]_flipped"
+/obj/item/clothing/head/soft/Initialize()
+	. = ..()
+	set_extension(src, /datum/extension/base_icon_state, icon_state)
+	update_icon()
 
-/obj/item/clothing/head/soft/experimental_mob_overlay(mob/user_mob, slot)
-	var/image/ret = ..()
-	if(flipped && check_state_in_icon("[ret.icon_state]_flipped", icon))
-		ret.icon_state = "[ret.icon_state]_flipped"
-	return ret	
+/obj/item/clothing/head/soft/on_update_icon()
+	var/datum/extension/base_icon_state/bis = get_extension(src, /datum/extension/base_icon_state)
+	if(flipped)
+		icon_state = "[bis.base_icon_state]_flipped"
+	else
+		icon_state = bis.base_icon_state
 
 /obj/item/clothing/head/soft/dropped()
 	src.flipped=0
@@ -37,56 +39,59 @@
 /obj/item/clothing/head/soft/red
 	name = "red cap"
 	desc = "It's a peaked hat in a tasteless red color."
-	color = COLOR_NT_RED
+	icon_state = "redsoft"
 
 /obj/item/clothing/head/soft/blue
 	name = "blue cap"
 	desc = "It's a peaked cap in a tasteless blue color."
-	color = COLOR_BLUE_GRAY
+	icon_state = "bluesoft"
 
 /obj/item/clothing/head/soft/green
 	name = "green cap"
 	desc = "It's a peaked cap in a tasteless green color."
-	color = COLOR_BOTTLE_GREEN
+	icon_state = "greensoft"
 
 /obj/item/clothing/head/soft/yellow
 	name = "yellow cap"
 	desc = "It's a peaked cap in a tasteless yellow color."
-	color = COLOR_YELLOW_GRAY
+	icon_state = "yellowsoft"
 
 /obj/item/clothing/head/soft/grey
 	name = "grey cap"
 	desc = "It's a peaked cap in a tasteful grey color."
-	color = COLOR_GRAY
+	icon_state = "greysoft"
 
 /obj/item/clothing/head/soft/orange
 	name = "orange cap"
 	desc = "It's a peaked cap in a tasteless orange color."
-	color = COLOR_SEDONA
+	icon_state = "orangesoft"
 
 /obj/item/clothing/head/soft/mime
 	name = "white cap"
 	desc = "It's a peaked cap in a tasteless white color."
-	color = COLOR_WHITE
+	icon_state = "mimesoft"
 
 /obj/item/clothing/head/soft/purple
 	name = "purple cap"
 	desc = "It's a peaked cap in a tasteless purple color."
-	color = COLOR_PURPLE
+	icon_state = "purplesoft"
 
 /obj/item/clothing/head/soft/rainbow
 	name = "rainbow cap"
 	desc = "It's a peaked cap in a bright rainbow of colors."
-	icon = 'icons/clothing/head/softcap_rainbow.dmi'
-	on_mob_icon = 'icons/clothing/head/softcap_rainbow.dmi'
-	color = null
+	icon_state = "rainbowsoft"
 
 /obj/item/clothing/head/soft/sec
 	name = "security cap"
 	desc = "It's a field cap in tasteful red color."
-	color = COLOR_NT_RED
+	icon_state = "secsoft"
+
+/obj/item/clothing/head/soft/mbill
+	name = "shipping cap"
+	desc = "It's a ballcap bearing the colors of Major Bill's Shipping."
+	icon_state = "mbillsoft"
 
 /obj/item/clothing/head/soft/black
 	name = "black cap"
 	desc = "It's a peaked cap in a tasteful black color."
-	color = COLOR_GRAY20
+	icon_state = "blacksoft"

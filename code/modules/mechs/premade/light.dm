@@ -33,7 +33,7 @@
 	max_damage = 40
 	power_use = 10
 	desc = "As flexible as they are fragile, these Vey-Med manipulators can follow a pilot's movements in close to real time."
-	material = /decl/material/solid/metal/steel
+	material = MAT_STEEL
 
 /obj/item/mech_component/propulsion/light
 	name = "light legs"
@@ -44,7 +44,7 @@
 	max_damage = 40
 	power_use = 5
 	desc = "The electrical systems driving these legs are almost totally silent. Unfortunately slamming a plate of metal against the ground is not."
-	material = /decl/material/solid/metal/steel
+	material = MAT_STEEL
 
 /obj/item/mech_component/sensors/light
 	name = "light sensors"
@@ -56,7 +56,7 @@
 	see_invisible = SEE_INVISIBLE_NOLIGHTING
 	power_use = 50
 	desc = "A series of high resolution optical sensors. They can overlay several images to give the pilot a sense of location even in total darkness. "
-	material = /decl/material/solid/metal/steel
+	material = MAT_STEEL
 
 /obj/item/mech_component/sensors/light/prebuild()
 	..()
@@ -76,11 +76,11 @@
 	has_hardpoints = list(HARDPOINT_BACK)
 	desc = "The Veymed Odysseus series cockpits combine ultralight materials and clear aluminum laminates to provide an optimized cockpit experience."
 	climb_time = 15
-	material = /decl/material/solid/metal/steel
+	material = MAT_STEEL
 
 /obj/item/mech_component/chassis/light/prebuild()
 	. = ..()
-	m_armour = new /obj/item/robot_parts/robot_component/armour/exosuit/radproof(src)
+	armour = new /obj/item/robot_parts/robot_component/armour/exosuit/radproof(src)
 
 /obj/item/mech_component/chassis/light/Initialize()
 	pilot_positions = list(

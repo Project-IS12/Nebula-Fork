@@ -11,15 +11,13 @@
 	opacity =  FALSE
 	anchored = TRUE
 	obj_flags = OBJ_FLAG_NOFALL
-	material = /decl/material/solid/metal/aluminium
+	material = MAT_ALUMINIUM
 	tool_interaction_flags = TOOL_INTERACTION_DECONSTRUCT | TOOL_INTERACTION_ANCHOR
 	material_alteration = MAT_FLAG_ALTERATION_COLOR | MAT_FLAG_ALTERATION_NAME
 
-	var/base_icon = "ladder"
-	var/draw_shadow = TRUE
 	var/obj/structure/ladder/target_up
 	var/obj/structure/ladder/target_down
-	var/climb_time = 2 SECONDS
+	var/const/climb_time = 2 SECONDS
 	var/static/list/climbsounds = list('sound/effects/ladder.ogg','sound/effects/ladder2.ogg','sound/effects/ladder3.ogg','sound/effects/ladder4.ogg')
 
 /obj/structure/ladder/handle_default_wrench_attackby()
@@ -116,7 +114,8 @@
 /obj/structure/ladder/hitby(obj/item/I)
 	if(!target_down)
 		return
-	if(!has_gravity())
+	var/area/room = get_area(src)
+	if(!room.has_gravity())
 		return
 	var/atom/blocker
 	var/turf/landing = get_turf(target_down)
@@ -256,10 +255,10 @@
 /obj/structure/ladder/on_update_icon()
 	. = ..()
 	if(!anchored)
-		icon_state = "[base_icon]00"
+		icon_state = "ladder00"
 	else
-		icon_state = "[base_icon][!!target_up][!!target_down]"
-	if(target_down && draw_shadow)
+		icon_state = "ladder[!!target_up][!!target_down]"
+	if(target_down)
 		var/image/I = image(icon, "downward_shadow")
 		I.appearance_flags |= RESET_COLOR
 		underlays = list(I)
@@ -269,7 +268,7 @@
 /obj/structure/stairs
 	name = "stairs"
 	desc = "Stairs leading to another deck.  Not too useful if the gravity goes out."
-	icon = 'icons/obj/stairs.dmi'
+	icon = 'icons/obj/sstairs.dmi'
 	density = 0
 	opacity = 0
 	anchored = 1
@@ -300,11 +299,11 @@
 			var/mob/living/L = A
 			for(var/obj/item/grab/G in L.get_active_grabs())
 				G.affecting.forceMove(target)
-		if(ishuman(A))
-			var/mob/living/carbon/human/H = A
-			if(H.has_footsteps())
-				playsound(source, 'sound/effects/stairs_step.ogg', 50)
-				playsound(target, 'sound/effects/stairs_step.ogg', 50)
+		//if(ishuman(A))
+		//	var/mob/living/carbon/human/H = A
+		//	if(H.has_footsteps())
+		//		playsound(source, 'sound/effects/stairs_step.ogg', 50)
+		//		playsound(target, 'sound/effects/stairs_step.ogg', 50)
 	else
 		to_chat(A, SPAN_WARNING("Something blocks the path."))
 
@@ -317,23 +316,15 @@
 // type paths to make mapping easier.
 /obj/structure/stairs/north
 	dir = NORTH
-	bound_height = 64
-	bound_y = -32
-	pixel_y = -32
 
 /obj/structure/stairs/south
 	dir = SOUTH
-	bound_height = 64
 
 /obj/structure/stairs/east
 	dir = EAST
-	bound_width = 64
-	bound_x = -32
-	pixel_x = -32
 
 /obj/structure/stairs/west
 	dir = WEST
-	bound_width = 64
 
 /obj/structure/stairs/short
 	bound_height = 32

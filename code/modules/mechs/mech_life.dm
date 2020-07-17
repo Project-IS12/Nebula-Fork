@@ -30,19 +30,11 @@
 
 	..() //Handles stuff like environment
 
-	handle_mutations_and_radiation()
-
 	handle_hud_icons()
 
 	lying = FALSE // Fuck off, carp.
 	handle_vision()
 
-/mob/living/exosuit/handle_mutations_and_radiation()
-	radiation = Clamp(radiation,0,500) //Dont let exosuits accumulate radiation
-
-	if(radiation)
-		radiation--
-	
 /mob/living/exosuit/get_cell()
 	RETURN_TYPE(/obj/item/cell)
 	return body ? body.cell : null

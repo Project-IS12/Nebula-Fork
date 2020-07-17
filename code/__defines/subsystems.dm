@@ -20,8 +20,9 @@
 // Subsystems shutdown in the reverse of the order they initialize in
 // The numbers just define the ordering, they are meaningless otherwise.
 
-#define SS_INIT_EARLY            19
-#define SS_INIT_GARBAGE          18
+#define SS_INIT_EARLY            20
+#define SS_INIT_GARBAGE          19
+#define SS_INIT_CHEMISTRY        18
 #define SS_INIT_MATERIALS        17
 #define SS_INIT_PLANTS           16
 #define SS_INIT_ANTAGS           15
@@ -52,6 +53,7 @@
 #define SS_INIT_BAY_LEGACY      -12
 #define SS_INIT_TICKER          -20
 #define SS_INIT_UNIT_TESTS      -100
+#define INIT_ORDER_CHAT 		-210 //Should be last to ensure chat remains smooth during init.
 
 // SS runlevels
 

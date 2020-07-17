@@ -34,7 +34,7 @@
 	return A
 
 /atom/movable/proc/throw_at_random(var/include_own_turf, var/maxrange, var/speed)
-	var/list/turfs = RANGE_TURFS(src, maxrange)
+	var/list/turfs = trange(maxrange, src)
 	if(!maxrange)
 		maxrange = 1
 
@@ -55,6 +55,6 @@
 		return FALSE
 	if(!reagents)
 		return FALSE
-	if(!REAGENTS_FREE_SPACE(reagents))
+	if(!reagents.get_free_space())
 		return FALSE
 	return TRUE

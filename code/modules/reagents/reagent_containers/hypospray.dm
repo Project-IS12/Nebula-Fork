@@ -79,10 +79,10 @@
 	volume = 0
 	time = 0 // hyposprays are instant for conscious people
 	single_use = FALSE
-	material = /decl/material/solid/metal/steel
+	material = MAT_STEEL
 	matter = list(
-		/decl/material/solid/glass = MATTER_AMOUNT_REINFORCEMENT,
-		/decl/material/solid/metal/silver = MATTER_AMOUNT_TRACE
+		MAT_GLASS = MATTER_AMOUNT_REINFORCEMENT,
+		MAT_SILVER = MATTER_AMOUNT_TRACE
 	)
 	var/obj/item/chems/glass/beaker/vial/loaded_vial
 
@@ -153,7 +153,7 @@
 	origin_tech = "{'materials':2,'biotech':2}"
 	slot_flags = SLOT_BELT | SLOT_EARS
 	w_class = ITEM_SIZE_TINY
-	var/list/starts_with = list(/decl/material/liquid/adrenaline = 5)
+	var/list/starts_with = list(/datum/reagent/adrenaline = 5)
 	var/band_color = COLOR_CYAN
 
 /obj/item/chems/hypospray/autoinjector/Initialize()
@@ -176,7 +176,7 @@
 
 /obj/item/chems/hypospray/autoinjector/examine(mob/user)
 	. = ..(user)
-	if(reagents?.total_volume)
+	if(reagents && reagents.reagent_list.len)
 		to_chat(user, "<span class='notice'>It is currently loaded.</span>")
 	else
 		to_chat(user, "<span class='notice'>It is spent.</span>")
@@ -184,26 +184,26 @@
 /obj/item/chems/hypospray/autoinjector/detox
 	name = "autoinjector (antitox)"
 	band_color = COLOR_GREEN
-	starts_with = list(/decl/material/liquid/antitoxins = 5)
+	starts_with = list(/datum/reagent/antitoxins = 5)
 
 /obj/item/chems/hypospray/autoinjector/pain
 	name = "autoinjector (painkiller)"
 	band_color = COLOR_PURPLE
-	starts_with = list(/decl/material/liquid/painkillers = 5)
+	starts_with = list(/datum/reagent/painkillers = 5)
 
 /obj/item/chems/hypospray/autoinjector/antirad
 	name = "autoinjector (anti-rad)"
 	band_color = COLOR_AMBER
-	starts_with = list(/decl/material/liquid/antirads = 5)
+	starts_with = list(/datum/reagent/antirads = 5)
 
 /obj/item/chems/hypospray/autoinjector/hallucinogenics
 	name = "autoinjector"
 	band_color = COLOR_DARK_GRAY
-	starts_with = list(/decl/material/liquid/hallucinogenics = 5)
+	starts_with = list(/datum/reagent/hallucinogenics = 5)
 
 /obj/item/chems/hypospray/autoinjector/empty
 	name = "autoinjector"
 	band_color = COLOR_WHITE
 	starts_with = list()
-	material = /decl/material/solid/plastic
-	matter = list(/decl/material/solid/glass = MATTER_AMOUNT_REINFORCEMENT)
+	material = MAT_PLASTIC
+	matter = list(MAT_GLASS = MATTER_AMOUNT_REINFORCEMENT)

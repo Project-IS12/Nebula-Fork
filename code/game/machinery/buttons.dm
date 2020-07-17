@@ -4,7 +4,6 @@
 	icon_state = "launcherbtt"
 	desc = "A remote control switch for something."
 	anchored = 1
-	layer = ABOVE_WINDOW_LAYER
 	power_channel = ENVIRON
 	idle_power_usage = 10
 	public_variables = list(
@@ -117,7 +116,7 @@
 
 //alternate button with the same functionality, except has a door control sprite instead
 /obj/machinery/button/alternate
-	icon = 'icons/obj/machines/button_door.dmi'
+	icon = 'icons/obj/stationobjs.dmi'
 	icon_state = "doorctrl"
 
 /obj/machinery/button/alternate/on_update_icon()
@@ -145,7 +144,7 @@
 
 //alternate button with the same toggle functionality, except has a door control sprite instead
 /obj/machinery/button/toggle/alternate
-	icon = 'icons/obj/machines/button_door.dmi'
+	icon = 'icons/obj/stationobjs.dmi'
 	icon_state = "doorctrl"
 
 /obj/machinery/button/toggle/alternate/on_update_icon()
@@ -166,7 +165,7 @@
 //-------------------------------
 
 /obj/machinery/button/alternate/door
-	icon = 'icons/obj/machines/button_door.dmi'
+	icon = 'icons/obj/stationobjs.dmi'
 	icon_state = "doorctrl"
 	stock_part_presets = list(/decl/stock_part_preset/radio/basic_transmitter/button/door)
 

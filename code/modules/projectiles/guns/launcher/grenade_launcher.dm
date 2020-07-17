@@ -1,9 +1,8 @@
 /obj/item/gun/launcher/grenade
 	name = "grenade launcher"
 	desc = "A bulky pump-action grenade launcher. Holds up to 6 grenades in a revolving magazine."
-	on_mob_icon = 'icons/obj/guns/launcher/grenade.dmi'
-	icon = 'icons/obj/guns/launcher/grenade.dmi'
-	icon_state = ICON_STATE_WORLD
+	icon_state = "riotgun"
+	item_state = "riotgun"
 	origin_tech = "{'combat':2,'materials':3}"
 	w_class = ITEM_SIZE_HUGE
 	force = 10
@@ -14,8 +13,8 @@
 	throw_distance = 7
 	release_force = 5
 	combustion = 1
-	material = /decl/material/solid/metal/steel
-	matter = list(/decl/material/solid/glass = MATTER_AMOUNT_REINFORCEMENT)
+	material = MAT_STEEL
+	matter = list(MAT_GLASS = MATTER_AMOUNT_REINFORCEMENT)
 
 	var/obj/item/grenade/chambered
 	var/list/grenades = new/list()
@@ -27,7 +26,7 @@
 		/obj/item/grenade/flashbang/clusterbang,
 		/obj/item/grenade/frag)
 
-	material = /decl/material/solid/metal/steel
+	material = MAT_STEEL
 
 //revolves the magazine, allowing players to choose between multiple grenade types
 /obj/item/gun/launcher/grenade/proc/pump(mob/M)

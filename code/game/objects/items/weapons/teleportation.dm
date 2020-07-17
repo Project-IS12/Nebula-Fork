@@ -22,7 +22,7 @@
 	throw_speed = 4
 	throw_range = 20
 	origin_tech = "{'magnets':1}"
-	material = /decl/material/solid/metal/aluminium
+	material = MAT_ALUMINIUM
 
 /obj/item/locator/attack_self(mob/user)
 	user.set_machine(src)

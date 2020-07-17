@@ -14,7 +14,7 @@
 	// Borer husks regenerate health, feel no pain, and are resistant to stuns and brainloss.
 	for(var/chem_name in chemical_types)
 		var/chem = chemical_types[chem_name]
-		if(REAGENT_VOLUME(owner.reagents, chem) < 3)
+		if(owner.reagents.get_reagent_amount(chem) < 3)
 			owner.reagents.add_reagent(chem, 5)
 
 	// They're also super gross and ooze ichor.
@@ -23,7 +23,8 @@
 		if(!istype(H))
 			return
 
-		blood_splatter(H, null, 1)
+		var/datum/reagent/blood/B = locate(/datum/reagent/blood) in H.vessel.reagent_list
+		blood_splatter(H,B,1)
 		var/obj/effect/decal/cleanable/blood/splatter/goo = locate() in get_turf(owner)
 		if(goo)
 			goo.SetName("husk ichor")

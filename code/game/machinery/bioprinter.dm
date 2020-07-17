@@ -125,7 +125,7 @@
 		)
 
 	var/matter_amount_per_sheet = 10
-	var/matter_type = /decl/material/solid/metal/steel
+	var/matter_type = MAT_STEEL
 
 /obj/machinery/organ_printer/robot/mapped/Initialize()
 	. = ..()
@@ -253,17 +253,17 @@
 	// DNA sample from syringe.
 	if(istype(W,/obj/item/chems/syringe))
 		var/obj/item/chems/syringe/S = W
-		if(REAGENT_VOLUME(S.reagents, /decl/material/liquid/blood))
-			var/loaded_dna = REAGENT_DATA(S.reagents, /decl/material/liquid/blood)
-			if(islist(loaded_dna))
-				var/weakref/R = loaded_dna["donor"]
-				var/mob/living/carbon/human/H = R.resolve()
-				if(H && istype(H) && H.species && H.dna)
-					loaded_species = H.species
-					loaded_dna_datum = H.dna && H.dna.Clone()
-					products = get_possible_products()
-					to_chat(user, SPAN_INFO("You inject the blood sample into the bioprinter."))
-					return TRUE
+		var/datum/reagent/blood/injected = locate() in S.reagents.reagent_list //Grab some blood
+		if(injected && LAZYLEN(injected.data))
+			var/loaded_dna = injected.data
+			var/weakref/R = loaded_dna["donor"]
+			var/mob/living/carbon/human/H = R.resolve()
+			if(H && istype(H) && H.species && H.dna)
+				loaded_species = H.species
+				loaded_dna_datum = H.dna && H.dna.Clone()
+				products = get_possible_products()
+				to_chat(user, SPAN_INFO("You inject the blood sample into the bioprinter."))
+				return TRUE
 		to_chat(user, SPAN_NOTICE("\The [src] displays an error: no viable blood sample could be obtained from \the [W]."))
 	return ..()
 

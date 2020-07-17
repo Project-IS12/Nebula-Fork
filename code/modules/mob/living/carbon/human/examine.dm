@@ -1,5 +1,4 @@
 /mob/living/carbon/human/examine(mob/user, distance)
-	SHOULD_CALL_PARENT(FALSE)
 	. = TRUE
 	var/skipgloves = 0
 	var/skipsuitstorage = 0
@@ -82,12 +81,12 @@
 		msg += "[T.He] [T.has] [back.get_examine_line()] on [T.his] back.\n"
 
 	//left hand
-	if(l_hand)
-		msg += "[T.He] [T.is] holding [l_hand.get_examine_line()] in [T.his] left hand.\n"
+	if(l_hand && !(l_hand.item_flags & ITEM_FLAG_ABSTRACT))
+		msg += "[T.He] [T.is] holding [l_hand.get_examine_line()] in [T.his] [l_hand.wielded ? "hands" : "left hand"].\n"
 
 	//right hand
-	if(r_hand)
-		msg += "[T.He] [T.is] holding [r_hand.get_examine_line()] in [T.his] right hand.\n"
+	if(r_hand && !(r_hand.item_flags & ITEM_FLAG_ABSTRACT))
+		msg += "[T.He] [T.is] holding [r_hand.get_examine_line()] in [T.his] [r_hand.wielded ? "hands" : "right hand"].\n"
 
 	//gloves
 	if(gloves && !skipgloves)
@@ -167,7 +166,7 @@
 		msg += "<span class='warning'>[T.He] [T.is]n't responding to anything around [T.him] and seems to be unconscious.</span>\n"
 		if((stat == DEAD || is_asystole() || src.losebreath) && distance <= 3)
 			msg += "<span class='warning'>[T.He] [T.does] not appear to be breathing.</span>\n"
-		if(ishuman(user) && !user.incapacitated() && Adjacent(user))
+		if(ishuman(user) && !(user.incapacitated(INCAPACITATION_STUNNED) || user.incapacitated(INCAPACITATION_KNOCKOUT)) && Adjacent(user))
 			spawn(0)
 				user.visible_message("<b>\The [user]</b> checks \the [src]'s pulse.", "You check \the [src]'s pulse.")
 				if(do_after(user, 15, src))
@@ -176,11 +175,8 @@
 					else
 						to_chat(user, "<span class='deadsay'>[T.He] [T.has] a pulse!</span>")
 
-	if(fire_stacks > 0)
-		msg += "[T.He] is covered in flammable liquid!\n"
-	else if(fire_stacks < 0)
-		msg += "[T.He] [T.is] soaking wet.\n"
-
+	if(fire_stacks)
+		msg += "[T.He] looks flammable.\n"
 	if(on_fire)
 		msg += "<span class='warning'>[T.He] [T.is] on fire!.</span>\n"
 
@@ -346,7 +342,7 @@
 /mob/living/carbon/human/getHUDsource(hudtype)
 	var/obj/item/clothing/glasses/G = glasses
 	if(!istype(G))
-		return 
+		return
 	if(G.hud_type & hudtype)
 		return G
 	if(G.hud && (G.hud.hud_type & hudtype))

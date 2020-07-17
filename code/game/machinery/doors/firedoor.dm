@@ -15,7 +15,7 @@
 	var/panel_file = 'icons/obj/doors/hazard/panel.dmi'
 	var/welded_file = 'icons/obj/doors/hazard/welded.dmi'
 	icon_state = "open"
-	initial_access = list(list(access_atmospherics, access_engine_equip))
+	req_access = list(list(access_atmospherics, access_engine_equip))
 	autoset_access = FALSE
 	opacity = 0
 	density = 0
@@ -42,11 +42,10 @@
 	var/sound_open = 'sound/machines/airlock_ext_open.ogg'
 	var/sound_close = 'sound/machines/airlock_ext_close.ogg'
 
+	var/hatch_open = 0
+
 	power_channel = ENVIRON
 	idle_power_usage = 5
-
-	frame_type = /obj/structure/firedoor_assembly
-	base_type = /obj/machinery/door/firedoor
 
 	var/list/tile_info[4]
 	var/list/dir_alerts[4] // 4 dirs, bitflags
@@ -88,7 +87,7 @@
 	. = ..()
 
 /obj/machinery/door/firedoor/get_material()
-	return decls_repository.get_decl(/decl/material/solid/metal/steel)
+	return SSmaterials.get_material_datum(MAT_STEEL)
 
 /obj/machinery/door/firedoor/examine(mob/user, distance)
 	. = ..()
@@ -128,7 +127,7 @@
 		to_chat(user, "These people have opened \the [src] during an alert: [users_to_open_string].")
 
 /obj/machinery/door/firedoor/Bumped(atom/AM)
-	if(panel_open || operating)
+	if(p_open || operating)
 		return
 	if(!density)
 		return ..()
@@ -210,18 +209,46 @@
 				to_chat(user, SPAN_WARNING("You must remain still to complete this task."))
 				return
 
-	if(!blocked && (isCrowbar(C) || istype(C,/obj/item/twohanded/fireaxe)))
+	if(density && isScrewdriver(C))
+		hatch_open = !hatch_open
+		user.visible_message("<span class='danger'>[user] has [hatch_open ? "opened" : "closed"] \the [src] maintenance hatch.</span>",
+									"You have [hatch_open ? "opened" : "closed"] the [src] maintenance hatch.")
+		playsound(loc, 'sound/items/Screwdriver.ogg', 50, 1)
+		update_icon()
+		return
+
+	if(blocked && isCrowbar(C) && !repairing)
+		if(!hatch_open)
+			to_chat(user, "<span class='danger'>You must open the maintenance hatch first!</span>")
+		else
+			user.visible_message("<span class='danger'>[user] is removing the electronics from \the [src].</span>",
+									"You start to remove the electronics from [src].")
+			if(do_after(user,30,src))
+				if(blocked && density && hatch_open)
+					playsound(src.loc, 'sound/items/Crowbar.ogg', 100, 1)
+					user.visible_message("<span class='danger'>[user] has removed the electronics from \the [src].</span>",
+										"You have removed the electronics from [src].")
+					deconstruct(user)
+			else
+				to_chat(user, "<span class='notice'>You must remain still to remove the electronics from \the [src].</span>")
+		return
+
+	if(blocked)
+		to_chat(user, "<span class='danger'>\The [src] is welded shut!</span>")
+		return
+
+	if(isCrowbar(C) || istype(C,/obj/item/material/twohanded/fireaxe))
 		if(operating)
 			return
 
-		if(isCrowbar(C))
+		if(blocked && isCrowbar(C))
 			user.visible_message("<span class='danger'>\The [user] pries at \the [src] with \a [C], but \the [src] is welded in place!</span>",\
 			"You try to pry \the [src] [density ? "open" : "closed"], but it is welded in place!",\
 			"You hear someone struggle and metal straining.")
 			return
 
-		if(istype(C,/obj/item/twohanded/fireaxe))
-			var/obj/item/twohanded/fireaxe/F = C
+		if(istype(C,/obj/item/material/twohanded/fireaxe))
+			var/obj/item/material/twohanded/fireaxe/F = C
 			if(!F.wielded)
 				return
 
@@ -239,20 +266,30 @@
 						"You force \the [ blocked ? "welded" : "" ] [src] [density ? "open" : "closed"] with \the [C]!",\
 						"You hear metal strain and groan, and a door [density ? "opening" : "closing"].")
 			if(density)
-				open(1)
+				spawn(0)
+					open(1)
 			else
-				close()
+				spawn(0)
+					close()
+			return
 		else
 			to_chat(user, "<span class='notice'>You must remain still to interact with \the [src].</span>")
 	return ..()
 
-/obj/machinery/door/firedoor/dismantle(var/moved = FALSE)
-	var/obj/structure/firedoor_assembly/FA = ..()
-	. = FA
+/obj/machinery/door/firedoor/deconstruct(mob/user, var/moved = FALSE)
+	if (stat & BROKEN)
+		new /obj/item/stock_parts/circuitboard/broken(src.loc)
+	else
+		new /obj/item/stock_parts/circuitboard/air_alarm(src.loc)
+
+	var/obj/structure/firedoor_assembly/FA = new/obj/structure/firedoor_assembly(src.loc)
 	FA.anchored = !moved
 	FA.set_density(1)
 	FA.wired = 1
 	FA.update_icon()
+	qdel(src)
+
+	return FA
 
 // CHECK PRESSURE
 /obj/machinery/door/firedoor/Process()
@@ -315,12 +352,8 @@
 	return ..()
 
 /obj/machinery/door/firedoor/open(var/forced = 0)
-	if(panel_open)
-		panel_open = FALSE
-		if(istype(construct_state, /decl/machine_construction/default/panel_open))
-			var/decl/machine_construction/default/panel_open/open = construct_state
-			construct_state = open.up_state
-			construct_state.validate_state(src)
+	if(hatch_open)
+		hatch_open = 0
 		visible_message("The maintenance hatch of \the [src] closes.")
 		update_icon()
 
@@ -385,7 +418,7 @@
 
 	if(density)
 		icon_state = "closed"
-		if(panel_open)
+		if(hatch_open)
 			overlays = panel_overlay
 		if(pdiff_alert)
 			lights_overlay += "palert"

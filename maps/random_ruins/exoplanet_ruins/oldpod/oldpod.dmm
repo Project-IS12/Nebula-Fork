@@ -271,7 +271,7 @@
 /area/map_template/oldpod)
 "aJ" = (
 /obj/effect/landmark/corpse/pirate,
-/obj/item/gun/energy/captain,
+/obj/item/gun/energy/retro,
 /obj/effect/decal/cleanable/dirt,
 /obj/effect/decal/cleanable/dirt,
 /turf/simulated/floor/tiled/monotile,
@@ -292,8 +292,8 @@
 /area/map_template/oldpod)
 "aM" = (
 /obj/effect/landmark/corpse/scientist,
-/obj/item/baton/cattleprod,
-/obj/item/shard,
+/obj/item/melee/baton/cattleprod,
+/obj/item/material/shard,
 /obj/effect/decal/cleanable/blood,
 /obj/effect/decal/cleanable/dirt,
 /turf/simulated/floor/tiled/monotile,
@@ -306,10 +306,10 @@
 /obj/item/stack/material/rods,
 /obj/item/stack/material/rods,
 /obj/item/stack/material/rods,
-/obj/item/shard,
-/obj/item/shard,
-/obj/item/shard,
-/obj/item/shard,
+/obj/item/material/shard,
+/obj/item/material/shard,
+/obj/item/material/shard,
+/obj/item/material/shard,
 /turf/simulated/floor/plating,
 /area/map_template/oldpod)
 "aO" = (
@@ -372,10 +372,10 @@
 	},
 /obj/structure/closet/crate/freezer/rations,
 /obj/effect/decal/cleanable/dirt,
-/obj/item/gun/projectile/zipgun,
-/obj/item/gun/projectile/zipgun,
-/obj/item/gun/projectile/zipgun,
-/obj/item/gun/projectile/zipgun,
+/obj/item/gun/projectile/pirate,
+/obj/item/gun/projectile/pirate,
+/obj/item/gun/projectile/pirate,
+/obj/item/gun/projectile/pirate,
 /turf/simulated/floor/tiled/white/monotile,
 /area/map_template/oldpod)
 "aU" = (

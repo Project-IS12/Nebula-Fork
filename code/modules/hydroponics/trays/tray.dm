@@ -1,7 +1,7 @@
 /obj/machinery/portable_atmospherics/hydroponics
 	name = "hydroponics tray"
 	desc = "A mechanical basin designed to nurture plants. It has various useful sensors."
-	icon = 'icons/obj/hydroponics/hydroponics_machines.dmi'
+	icon = 'icons/obj/hydroponics_machines.dmi'
 	icon_state = "hydrotray3"
 	density = 1
 	anchored = 1
@@ -48,76 +48,80 @@
 	// Reagent information for process(), consider moving this to a controller along
 	// with cycle information under 'mechanical concerns' at some point.
 	var/global/list/toxic_reagents = list(
-		/decl/material/liquid/antitoxins =         -2,
-		/decl/material/liquid/fuel/hydrazine =      2.5,
-		/decl/material/liquid/acetone =	            1,
-		/decl/material/liquid/acid =                1.5,
-		/decl/material/liquid/acid/hydrochloric =   1.5,
-		/decl/material/liquid/acid/polyacid =       3,
-		/decl/material/liquid/weedkiller =          3,
-		/decl/material/solid/metal/radium =         2
-	)
+		/datum/reagent/antitoxins =         -2,
+		/datum/reagent/toxin =             2,
+		/datum/reagent/fuel/hydrazine =         2.5,
+		/datum/reagent/acetone =	       1,
+		/datum/reagent/acid =              1.5,
+		/datum/reagent/acid/hydrochloric = 1.5,
+		/datum/reagent/acid/polyacid =     3,
+		/datum/reagent/toxin/plantbgone =  3,
+		/datum/reagent/radium =            2
+		)
 	var/global/list/nutrient_reagents = list(
-		/decl/material/liquid/drink/milk =          0.1,
-		/decl/material/liquid/ethanol/beer =        0.25,
-		/decl/material/solid/phosphorus =           0.1,
-		/decl/material/liquid/nutriment/sugar =     0.1,
-		/decl/material/liquid/drink/sodawater =     0.1,
-		/decl/material/gas/ammonia =                1,
-		/decl/material/liquid/nutriment =           1,
-		/decl/material/liquid/adminordrazine =      1,
-		/decl/material/liquid/fertilizer =          1
-	)
+		/datum/reagent/drink/milk =                     0.1,
+		/datum/reagent/ethanol/beer =                   0.25,
+		/datum/reagent/phosphorus =                     0.1,
+		/datum/reagent/nutriment/sugar =                          0.1,
+		/datum/reagent/drink/sodawater =                0.1,
+		/datum/reagent/ammonia =                        1,
+		/datum/reagent/nutriment =                      1,
+		/datum/reagent/adminordrazine =                 1,
+		/datum/reagent/toxin/fertilizer/eznutrient =    1,
+		/datum/reagent/toxin/fertilizer/robustharvest = 1,
+		/datum/reagent/toxin/fertilizer/left4zed =      1
+		)
 	var/global/list/weedkiller_reagents = list(
-		/decl/material/liquid/fuel/hydrazine =     -4,
-		/decl/material/solid/phosphorus =          -2,
-		/decl/material/liquid/nutriment/sugar =     2,
-		/decl/material/liquid/acid =               -2,
-		/decl/material/liquid/acid/hydrochloric =  -2,
-		/decl/material/liquid/acid/polyacid =      -4,
-		/decl/material/liquid/weedkiller =         -8,
-		/decl/material/liquid/adminordrazine =     -5
-	)
+		/datum/reagent/fuel/hydrazine =          -4,
+		/datum/reagent/phosphorus =         -2,
+		/datum/reagent/nutriment/sugar =               2,
+		/datum/reagent/acid =               -2,
+		/datum/reagent/acid/hydrochloric =  -2,
+		/datum/reagent/acid/polyacid =      -4,
+		/datum/reagent/toxin/plantbgone =   -8,
+		/datum/reagent/adminordrazine =     -5
+		)
 	var/global/list/pestkiller_reagents = list(
-		/decl/material/liquid/nutriment/sugar =     2,
-		/decl/material/liquid/bromide =            -2,
-		/decl/material/gas/methyl_bromide =        -4,
-		/decl/material/liquid/adminordrazine =     -5
-	)
+		/datum/reagent/nutriment/sugar =                 2,
+		/datum/reagent/toxin/bromide =        -2,
+		/datum/reagent/toxin/methyl_bromide = -4,
+		/datum/reagent/adminordrazine =       -5
+		)
 	var/global/list/water_reagents = list(
-		/decl/material/liquid/water =               1,
-		/decl/material/liquid/adminordrazine =      1,
-		/decl/material/liquid/drink/milk =          0.9,
-		/decl/material/liquid/ethanol/beer =        0.7,
-		/decl/material/liquid/fuel/hydrazine =     -2,
-		/decl/material/solid/phosphorus =          -0.5,
-		/decl/material/liquid/water =               1,
-		/decl/material/liquid/drink/sodawater =     1
-	)
+		/datum/reagent/water =           1,
+		/datum/reagent/adminordrazine =  1,
+		/datum/reagent/drink/milk =      0.9,
+		/datum/reagent/ethanol/beer =    0.7,
+		/datum/reagent/fuel/hydrazine =      -2,
+		/datum/reagent/phosphorus =     -0.5,
+		/datum/reagent/water =           1,
+		/datum/reagent/drink/sodawater = 1,
+		)
 
 	// Beneficial reagents also have values for modifying yield_mod and mut_mod (in that order).
 	var/global/list/beneficial_reagents = list(
-		/decl/material/liquid/ethanol/beer =       list( -0.05, 0,   0  ),
-		/decl/material/liquid/fuel/hydrazine =     list( -2,    0,   0  ),
-		/decl/material/solid/phosphorus =          list( -0.75, 0,   0  ),
-		/decl/material/liquid/drink/sodawater =    list(  0.1,  0,   0  ),
-		/decl/material/liquid/acid =               list( -1,    0,   0  ),
-		/decl/material/liquid/acid/hydrochloric =  list( -1,    0,   0  ),
-		/decl/material/liquid/acid/polyacid =      list( -2,    0,   0  ),
-		/decl/material/liquid/weedkiller =         list( -2,    0,   0.2),
-		/decl/material/gas/ammonia =               list(  0.5,  0.2, 0.2),
-		/decl/material/liquid/nutriment =          list(  0.5,  0.1, 0  ),
-		/decl/material/solid/metal/radium =        list( -1.5,  0,   0.2),
-		/decl/material/liquid/adminordrazine =     list(  1,    1,   1  ),
-		/decl/material/liquid/fertilizer =         list(  0,    0.2, 0.2)
-	)
+		/datum/reagent/ethanol/beer =                    list( -0.05, 0,   0  ),
+		/datum/reagent/fuel/hydrazine =                       list( -2,    0,   0  ),
+		/datum/reagent/phosphorus =                      list( -0.75, 0,   0  ),
+		/datum/reagent/drink/sodawater =                 list(  0.1,  0,   0  ),
+		/datum/reagent/acid =                            list( -1,    0,   0  ),
+		/datum/reagent/acid/hydrochloric =               list( -1,    0,   0  ),
+		/datum/reagent/acid/polyacid =                   list( -2,    0,   0  ),
+		/datum/reagent/toxin/plantbgone =                list( -2,    0,   0.2),
+		/datum/reagent/ammonia =                         list(  0.5,  0,   0  ),
+		/datum/reagent/nutriment =                       list(  0.5,  0.1, 0  ),
+		/datum/reagent/radium =                          list( -1.5,  0,   0.2),
+		/datum/reagent/adminordrazine =                  list(  1,    1,   1  ),
+		/datum/reagent/toxin/fertilizer/robustharvest =  list(  0,    0.2, 0  ),
+		/datum/reagent/toxin/fertilizer/left4zed =       list(  0,    0,   0.2)
+		)
 
 	// Mutagen list specifies minimum value for the mutation to take place, rather
 	// than a bound as the lists above specify.
 	var/global/list/mutagenic_reagents = list(
-		/decl/material/solid/metal/radium =  8,
-		/decl/material/liquid/mutagenics =  15
-	)
+		/datum/reagent/radium =  8,
+		/datum/reagent/mutagenics = 15,
+		/datum/reagent/toxin/fertilizer/left4zed = 30)
 
 /obj/machinery/portable_atmospherics/hydroponics/AltClick()
 	if(mechanical && !usr.incapacitated() && Adjacent(usr))
@@ -212,37 +216,37 @@
 
 	reagents.trans_to_obj(temp_chem_holder, min(reagents.total_volume,rand(1,3)))
 
-	for(var/R in temp_chem_holder.reagents.reagent_volumes)
+	for(var/datum/reagent/R in temp_chem_holder.reagents.reagent_list)
 
-		var/reagent_total = REAGENT_VOLUME(temp_chem_holder.reagents, R)
+		var/reagent_total = temp_chem_holder.reagents.get_reagent_amount(R.type)
 
 		if(seed && !dead)
 			//Handle some general level adjustments.
-			if(toxic_reagents[R])
-				toxins += toxic_reagents[R]         * reagent_total
-			if(weedkiller_reagents[R])
-				weedlevel += weedkiller_reagents[R] * reagent_total
-			if(pestkiller_reagents[R])
-				pestlevel += pestkiller_reagents[R] * reagent_total
+			if(toxic_reagents[R.type])
+				toxins += toxic_reagents[R.type]         * reagent_total
+			if(weedkiller_reagents[R.type])
+				weedlevel += weedkiller_reagents[R.type] * reagent_total
+			if(pestkiller_reagents[R.type])
+				pestlevel += pestkiller_reagents[R.type] * reagent_total
 
 			// Beneficial reagents have a few impacts along with health buffs.
-			if(beneficial_reagents[R])
-				health += beneficial_reagents[R][1]       * reagent_total
-				yield_mod += beneficial_reagents[R][2]    * reagent_total
-				mutation_mod += beneficial_reagents[R][3] * reagent_total
+			if(beneficial_reagents[R.type])
+				health += beneficial_reagents[R.type][1]       * reagent_total
+				yield_mod += beneficial_reagents[R.type][2]    * reagent_total
+				mutation_mod += beneficial_reagents[R.type][3] * reagent_total
 
 			// Mutagen is distinct from the previous types and mostly has a chance of proccing a mutation.
-			if(mutagenic_reagents[R])
-				mutation_level += reagent_total*mutagenic_reagents[R]+mutation_mod
+			if(mutagenic_reagents[R.type])
+				mutation_level += reagent_total*mutagenic_reagents[R.type]+mutation_mod
 
 		// Handle nutrient refilling.
-		if(nutrient_reagents[R])
-			nutrilevel += nutrient_reagents[R]  * reagent_total
+		if(nutrient_reagents[R.type])
+			nutrilevel += nutrient_reagents[R.type]  * reagent_total
 
 		// Handle water and water refilling.
 		var/water_added = 0
-		if(water_reagents[R])
-			var/water_input = water_reagents[R] * reagent_total
+		if(water_reagents[R.type])
+			var/water_input = water_reagents[R.type] * reagent_total
 			water_added += water_input
 			waterlevel += water_input
 
@@ -456,7 +460,7 @@
 
 		plant_seed(user, O)
 
-	else if (istype(O, /obj/item/minihoe))  // The minihoe
+	else if (istype(O, /obj/item/material/minihoe))  // The minihoe
 
 		if(weedlevel > 0)
 			user.visible_message("<span class='notice'>[user] starts uprooting the weeds.</span>", "<span class='notice'>You remove the weeds from the [src].</span>")

@@ -44,7 +44,6 @@ var/list/gamemode_cache = list()
 	var/continous_rounds = 0			// Gamemodes which end instantly will instead keep on going until the round ends by escape shuttle or nuke.
 	var/allow_Metadata = 0				// Metadata is supported.
 	var/popup_admin_pm = 0				//adminPMs to non-admins show in a pop-up 'reply' window when set to 1.
-	var/allow_holidays = FALSE
 	var/fps = 20
 	var/tick_limit_mc_init = TICK_LIMIT_MC_INIT_DEFAULT	//SSinitialization throttling
 	var/list/resource_urls = null
@@ -54,7 +53,6 @@ var/list/gamemode_cache = list()
 	var/list/modes = list()				// allowed modes
 	var/list/votable_modes = list()		// votable modes
 	var/list/probabilities = list()		// relative probability of each mode
-	var/secret_hide_possibilities = FALSE // Whether or not secret modes show list of possible round types
 	var/humans_need_surnames = 0
 	var/allow_random_events = 0			// enables random events mid-round when set to 1
 	var/allow_ai = 1					// allow ai job
@@ -130,8 +128,8 @@ var/list/gamemode_cache = list()
 	//Used for modifying movement speed for mobs.
 	//Unversal modifiers
 	var/run_delay = 2
-	var/walk_delay = 4
-	var/creep_delay = 6
+	var/walk_delay = 3
+	var/creep_delay = 5
 	var/minimum_sprint_cost = 0.8
 	var/skill_sprint_cost_range = 0.8
 	var/minimum_stamina_recovery = 1
@@ -564,7 +562,7 @@ var/list/gamemode_cache = list()
 					config.popup_admin_pm = 1
 
 				if("allow_holidays")
-					config.allow_holidays = 1
+					Holiday = 1
 
 				if("use_irc_bot")
 					use_irc_bot = 1
@@ -584,9 +582,6 @@ var/list/gamemode_cache = list()
 					config.antag_hud_allowed = 1
 				if("antag_hud_restricted")
 					config.antag_hud_restricted = 1
-
-				if("secret_hide_possibilities")
-					secret_hide_possibilities = TRUE
 
 				if("humans_need_surnames")
 					humans_need_surnames = 1

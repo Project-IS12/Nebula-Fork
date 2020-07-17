@@ -103,19 +103,18 @@
 /obj/item/clothing/head/det
 	name = "fedora"
 	desc = "A brown fedora - either the cornerstone of a detective's style or a poor attempt at looking cool, depending on the person wearing it."
-	icon_state = ICON_STATE_WORLD
-	icon = 'icons/clothing/head/detective.dmi'
-	on_mob_icon = 'icons/clothing/head/detective.dmi'
-	color = "#725443"
+	icon_state = "detective"
+	item_state_slots = list(
+		slot_l_hand_str = "det_hat",
+		slot_r_hand_str = "det_hat",
+		)
 	armor = list(
-		melee = ARMOR_MELEE_RESISTANT, 
+		melee = ARMOR_MELEE_RESISTANT,
 		laser = ARMOR_LASER_SMALL,
 		energy = ARMOR_ENERGY_MINOR
 		)
 	siemens_coefficient = 0.9
 	flags_inv = BLOCKHEADHAIR
-	markings_icon = "band"
-	markings_color = "#b2977c"
 
 /obj/item/clothing/head/det/attack_self(mob/user)
 	flags_inv ^= BLOCKHEADHAIR
@@ -123,14 +122,9 @@
 	..()
 
 /obj/item/clothing/head/det/grey
-	color = COLOR_GRAY40
-	markings_color = COLOR_SILVER
+	icon_state = "detective2"
 	desc = "A grey fedora - either the cornerstone of a detective's style or a poor attempt at looking cool, depending on the person wearing it."
 
-/obj/item/clothing/head/det/wack
-	color = COLOR_VIOLET
-	markings_color = COLOR_YELLOW
-	desc = "A colorful fedora - either the cornerstone of a detective's style or a poor attempt at looking disco, depending on the person wearing it."
 
 /*
  * Head of Security
@@ -158,10 +152,10 @@
 	desc = "You're not quite sure how you manage to take it on and off, but it implants nicely in your head."
 	icon_state = "dermal"
 	armor = list(
-		melee = ARMOR_MELEE_MAJOR, 
-		bullet = ARMOR_BALLISTIC_PISTOL, 
+		melee = ARMOR_MELEE_MAJOR,
+		bullet = ARMOR_BALLISTIC_PISTOL,
 		laser = ARMOR_LASER_HANDGUNS,
-		energy = ARMOR_ENERGY_SMALL, 
+		energy = ARMOR_ENERGY_SMALL,
 		bomb = ARMOR_BOMB_PADDED
 		)
 	siemens_coefficient = 0.6
@@ -172,10 +166,10 @@
 	icon_state = "hos"
 	body_parts_covered = UPPER_TORSO|LOWER_TORSO|ARMS|LEGS
 	armor = list(
-		melee = ARMOR_MELEE_MAJOR, 
-		bullet = ARMOR_BALLISTIC_PISTOL, 
-		laser = ARMOR_LASER_HANDGUNS, 
-		energy = ARMOR_ENERGY_MINOR, 
+		melee = ARMOR_MELEE_MAJOR,
+		bullet = ARMOR_BALLISTIC_PISTOL,
+		laser = ARMOR_LASER_HANDGUNS,
+		energy = ARMOR_ENERGY_MINOR,
 		bomb = ARMOR_BOMB_PADDED
 		)
 	flags_inv = HIDEJUMPSUIT
@@ -221,3 +215,27 @@
 	icon_state = "wardenblueclothes"
 	item_state = "ba_suit"
 	worn_state = "wardenblueclothes"
+
+/obj/item/clothing/under/rank/redteam
+	name = "Red Baron uniform"
+	desc = "You wear it."
+	icon_state = "sbdu"
+	item_state = "sbdu"
+	worn_state = "sbdu"
+
+/obj/item/clothing/under/rank/redteam/leader
+	icon_state = "redteam_leader"
+	item_state = "redteam_leader"
+	worn_state = "redteam_leader"
+
+/obj/item/clothing/under/rank/blueteam
+	name = "Blue Eagle uniform"
+	desc = "You wear it."
+	icon_state = "blueteam"
+	item_state = "blueteam"
+	worn_state = "blueteam"
+
+/obj/item/clothing/under/rank/blueteam/leader
+	icon_state = "blueteam_leader"
+	item_state = "blueteam_leader"
+	worn_state = "blueteam_leader"

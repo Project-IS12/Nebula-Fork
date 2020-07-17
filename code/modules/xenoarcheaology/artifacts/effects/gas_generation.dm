@@ -5,7 +5,7 @@
 /datum/artifact_effect/gas/New()
 	..()
 	if(!spawned_gas)
-		spawned_gas = pick(subtypesof(/decl/material/gas))
+		spawned_gas = pick(SSmaterials.all_gasses)
 	operation_type = pick(EFFECT_TOUCH, EFFECT_AURA)
 	origin_type = pick(EFFECT_BLUESPACE, EFFECT_SYNTH)
 
@@ -23,20 +23,20 @@
 
 /datum/artifact_effect/gas/oxygen
 	name = "O2 creation"
-	spawned_gas = /decl/material/gas/oxygen
+	spawned_gas = MAT_OXYGEN
 
 /datum/artifact_effect/gas/phoron
 	name = "phoron creation"
-	spawned_gas = /decl/material/solid/phoron
+	spawned_gas = MAT_PHORON
 
 /datum/artifact_effect/gas/sleeping
 	name = "N2O creation"
-	spawned_gas = /decl/material/gas/nitrous_oxide
+	spawned_gas = MAT_N2O
 
 /datum/artifact_effect/gas/nitro
 	name = "N2 creation"
-	spawned_gas = /decl/material/gas/nitrogen
+	spawned_gas = MAT_NITROGEN
 
 /datum/artifact_effect/gas/co2
 	name = "CO2 creation"
-	spawned_gas = /decl/material/gas/carbon_dioxide
+	spawned_gas = MAT_CO2

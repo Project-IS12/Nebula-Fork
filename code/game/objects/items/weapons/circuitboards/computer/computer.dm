@@ -59,6 +59,10 @@
 	name = T_BOARD("prisoner management console")
 	build_path = /obj/machinery/computer/prisoner
 
+/obj/item/stock_parts/circuitboard/rdservercontrol
+	name = T_BOARD("R&D server control console")
+	build_path = /obj/machinery/computer/rdservercontrol
+
 /obj/item/stock_parts/circuitboard/operating
 	name = T_BOARD("patient monitoring console")
 	build_path = /obj/machinery/computer/operating
@@ -83,10 +87,6 @@
 /obj/item/stock_parts/circuitboard/sensors
 	name = T_BOARD("sensors console")
 	build_path = /obj/machinery/computer/ship/sensors
-
-/obj/item/stock_parts/circuitboard/design_console
-	name = T_BOARD("design database console")
-	build_path = /obj/machinery/computer/design_console
 
 /obj/item/stock_parts/circuitboard/area_atmos
 	name = T_BOARD("area air control console")

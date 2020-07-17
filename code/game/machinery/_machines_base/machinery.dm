@@ -78,13 +78,11 @@ Class Procs:
 
 /obj/machinery
 	name = "machinery"
+	icon = 'icons/obj/stationobjs.dmi'
 	w_class = ITEM_SIZE_STRUCTURE
 	layer = STRUCTURE_LAYER // Layer under items
-	throw_speed = 1
-	throw_range = 5
 
 	var/stat = 0
-	var/waterproof = TRUE
 	var/reason_broken = 0
 	var/stat_immune = NOSCREEN | NOINPUT // The machine will never set stat to these flags.
 	var/emagged = 0
@@ -115,8 +113,6 @@ Class Procs:
 
 	var/list/processing_parts // Component parts queued for processing by the machine. Expected type: /obj/item/stock_parts
 	var/processing_flags         // What is being processed
-
-	var/list/initial_access		// Used to setup network locks on machinery at populate_parts.
 
 /obj/machinery/Initialize(mapload, d=0, populate_parts = TRUE)
 	. = ..()
@@ -245,7 +241,7 @@ Class Procs:
 
 /obj/machinery/proc/get_tool_manipulation_info()
 	return construct_state?.mechanics_info()
-
+	
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 /obj/machinery/attack_ai(mob/user)
@@ -262,7 +258,7 @@ Class Procs:
 /obj/machinery/attack_ghost(mob/user)
 	interface_interact(user)
 
-// If you don't call parent in this proc, you must make all appropriate checks yourself.
+// If you don't call parent in this proc, you must make all appropriate checks yourself. 
 // If you do, you must respect the return value.
 /obj/machinery/attack_hand(mob/user)
 	if((. = ..())) // Buckling, climbers; unlikely to return true.
@@ -349,7 +345,7 @@ Class Procs:
 	var/obj/frame
 	if(ispath(frame_type, /obj/item/pipe) || ispath(frame_type, /obj/structure/disposalconstruct))
 		frame = new frame_type(get_turf(src), src)
-	else if(frame_type)
+	else
 		frame = new frame_type(get_turf(src), dir)
 
 	var/list/expelled_components = list()
@@ -358,16 +354,15 @@ Class Procs:
 	while(LAZYLEN(uncreated_component_parts))
 		var/path = uncreated_component_parts[1]
 		expelled_components += uninstall_component(path, refresh_parts = FALSE)
-	if(frame)
-		var/datum/extension/parts_stash/stash = get_extension(frame, /datum/extension/parts_stash)
-		if(stash)
-			stash.stash(expelled_components)
+	var/datum/extension/parts_stash/stash = get_extension(frame, /datum/extension/parts_stash)
+	if(stash)
+		stash.stash(expelled_components)
 
 	for(var/obj/O in src)
 		O.dropInto(loc)
 
 	qdel(src)
-	return frame
+	return 1
 
 /obj/machinery/InsertedContents()
 	return (contents - component_parts)
@@ -392,8 +387,8 @@ Class Procs:
 		var/line = "<span class='notice'>	[C.name]</span>"
 		if(!C.health)
 			line = "<span class='warning'>	[C.name] (destroyed)</span>"
-		else if(C.health < 0.75 * C.max_health)
-			line = "<span class='notice'>	[C.name] (damaged)</span>"
+		else if(C.health < initial(C.health))
+			line = "<span class='warning'>	[C.name] (damaged)</span>"
 		to_chat(user, line)
 	for(var/path in uncreated_component_parts)
 		var/obj/item/thing = path
@@ -420,10 +415,10 @@ Class Procs:
 		to_chat(user, "\The [src] is missing [english_list(parts)], rendering it inoperable.")
 
 // This is really pretty crap and should be overridden for specific machines.
-/obj/machinery/fluid_act(var/datum/reagents/fluids)
+/obj/machinery/water_act(var/depth)
 	..()
-	if(!(stat & (NOPOWER|BROKEN)) && !waterproof && (fluids.total_volume > FLUID_DEEP))
-		explosion_act(3)
+	if(!(stat & (NOPOWER|BROKEN)) && !waterproof && (depth > FLUID_DEEP))
+		ex_act(3)
 
 /obj/machinery/Move()
 	. = ..()
@@ -451,8 +446,3 @@ Class Procs:
 
 /obj/machinery/proc/on_user_login(var/mob/M)
 	return
-
-/obj/machinery/get_req_access()
-	. = ..() || list()
-	for(var/obj/item/stock_parts/network_lock/lock in get_all_components_of_type(/obj/item/stock_parts/network_lock))
-		.+= lock.get_req_access()

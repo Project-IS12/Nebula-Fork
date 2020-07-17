@@ -28,12 +28,12 @@ If the spell_projectile is seeking, it will update its target every process and 
 		projectile.original = target
 		projectile.starting = get_turf(user)
 		projectile.shot_from = user //fired from the user
-		projectile.current = projectile.original
+		//projectile.current = projectile.original
 		projectile.yo = target.y - user.y
 		projectile.xo = target.x - user.x
-		projectile.life_span = src.duration
+		projectile.range = src.duration
 		projectile.hitscan = !proj_step_delay
-		projectile.step_delay = proj_step_delay
+		projectile.speed = proj_step_delay
 		projectile.launch(target)
 	return
 

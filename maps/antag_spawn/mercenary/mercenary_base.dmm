@@ -903,12 +903,12 @@
 	id_tag = "merc_shuttle";
 	pixel_x = 0
 	},
-/obj/item/crowbar,
-/obj/item/crowbar,
-/obj/item/crowbar,
-/obj/item/crowbar,
-/obj/item/crowbar,
-/obj/item/crowbar,
+/obj/item/crowbar/prybar,
+/obj/item/crowbar/prybar,
+/obj/item/crowbar/prybar,
+/obj/item/crowbar/prybar,
+/obj/item/crowbar/prybar,
+/obj/item/crowbar/prybar,
 /obj/machinery/button/blast_door{
 	id_tag = "merc_airlock";
 	req_access = list("ACCESS_SYNDICATE")
@@ -1017,7 +1017,7 @@
 /turf/simulated/floor/tiled/techfloor,
 /area/map_template/merc_shuttle/rear)
 "bI" = (
-/obj/effect/wallframe_spawn/reinforced_borosilicate,
+/obj/effect/wallframe_spawn/reinforced_phoron,
 /obj/machinery/atmospherics/pipe/manifold/visible/fuel{
 	dir = 4
 	},
@@ -1127,7 +1127,7 @@
 /turf/simulated/wall/ocp_wall,
 /area/map_template/merc_shuttle/rear)
 "bR" = (
-/obj/effect/wallframe_spawn/reinforced_borosilicate,
+/obj/effect/wallframe_spawn/reinforced_phoron,
 /obj/machinery/atmospherics/pipe/manifold4w/visible/fuel,
 /obj/machinery/door/blast/regular/open{
 	density = 0;
@@ -1139,7 +1139,7 @@
 /turf/simulated/floor/plating,
 /area/map_template/merc_shuttle/rear)
 "bS" = (
-/obj/effect/wallframe_spawn/reinforced_borosilicate,
+/obj/effect/wallframe_spawn/reinforced_phoron,
 /obj/machinery/atmospherics/pipe/manifold/visible/fuel{
 	dir = 4
 	},
@@ -1407,7 +1407,7 @@
 /obj/item/stack/material/steel/fifty,
 /obj/item/stack/material/rods/fifty,
 /obj/item/stack/material/glass/reinforced/fifty,
-/obj/item/stack/material/glass/reinforced_borosilicate/ten,
+/obj/item/stack/material/glass/phoronrglass/ten,
 /obj/structure/cable{
 	d1 = 1;
 	d2 = 2;
@@ -2071,8 +2071,10 @@
 /area/space)
 "hX" = (
 /obj/structure/table/rack,
-/obj/item/gun/projectile/revolver,
-/obj/item/gun/projectile/revolver,
+/obj/item/gun/projectile/revolver/medium,
+/obj/item/gun/projectile/revolver/medium,
+/obj/item/ammo_magazine/speedloader,
+/obj/item/ammo_magazine/speedloader,
 /obj/item/ammo_magazine/speedloader,
 /obj/item/ammo_magazine/speedloader,
 /obj/effect/landmark/delete_on_shuttle{
@@ -2093,12 +2095,12 @@
 /area/map_template/merc_spawn)
 "iB" = (
 /obj/structure/table/rack,
-/obj/item/gun/projectile/pistol,
-/obj/item/gun/projectile/pistol,
-/obj/item/ammo_magazine/pistol,
-/obj/item/ammo_magazine/pistol,
-/obj/item/ammo_magazine/pistol,
-/obj/item/ammo_magazine/pistol,
+/obj/item/gun/projectile/pistol/throwback,
+/obj/item/gun/projectile/pistol/throwback,
+/obj/item/ammo_magazine/pistol/throwback,
+/obj/item/ammo_magazine/pistol/throwback,
+/obj/item/ammo_magazine/pistol/throwback,
+/obj/item/ammo_magazine/pistol/throwback,
 /obj/effect/landmark/delete_on_shuttle{
 	shuttle_name = "Desperado"
 	},
@@ -2548,7 +2550,8 @@
 /obj/machinery/vending/cigarette{
 	dir = 8;
 	name = "hacked cigarette machine";
-	markup = 0,products = list(/obj/item/storage/fancy/cigarettes = 10, /obj/item/storage/box/matches = 10, /obj/item/flame/lighter/zippo/random = 4, /obj/item/clothing/mask/smokable/cigarette/cigar/havana = 2)
+	markup = 0
+	products = list(/obj/item/storage/fancy/cigarettes = 10, /obj/item/storage/box/matches = 10, /obj/item/flame/lighter/zippo/random = 4, /obj/item/clothing/mask/smokable/cigarette/cigar/havana = 2)
 	},
 /obj/structure/railing/mapped/no_density{
 	icon_state = "railing0-1";
@@ -2647,12 +2650,15 @@
 /obj/item/gun/energy/plasmacutter,
 /obj/item/gun/energy/plasmacutter,
 /obj/structure/window/reinforced{
+	icon_state = "rwindow";
 	dir = 4
 	},
 /obj/structure/window/reinforced{
+	icon_state = "rwindow";
 	dir = 8
 	},
 /obj/structure/window/reinforced{
+	icon_state = "rwindow";
 	dir = 1
 	},
 /turf/simulated/floor/plating,
@@ -2702,7 +2708,7 @@
 /area/map_template/merc_spawn)
 "IB" = (
 /obj/structure/table/rack,
-/obj/item/gun/energy/ionrifle,
+/obj/item/gun/energy/ionrifle/small,
 /obj/effect/landmark/delete_on_shuttle{
 	shuttle_name = "Desperado"
 	},
@@ -2771,9 +2777,9 @@
 /obj/item/stack/material/ocp/ten,
 /obj/item/stack/material/ocp/ten,
 /obj/item/stack/material/ocp/ten,
-/obj/item/stack/material/glass/reinforced_borosilicate/ten,
-/obj/item/stack/material/glass/reinforced_borosilicate/ten,
-/obj/item/stack/material/glass/reinforced_borosilicate/ten,
+/obj/item/stack/material/glass/phoronrglass/ten,
+/obj/item/stack/material/glass/phoronrglass/ten,
+/obj/item/stack/material/glass/phoronrglass/ten,
 /obj/structure/railing/mapped/no_density{
 	icon_state = "railing0-1";
 	dir = 8
@@ -3071,12 +3077,15 @@
 "Ya" = (
 /obj/structure/table/rack,
 /obj/structure/window/reinforced{
+	icon_state = "rwindow";
 	dir = 4
 	},
 /obj/structure/window/reinforced{
+	icon_state = "rwindow";
 	dir = 8
 	},
 /obj/structure/window/reinforced{
+	icon_state = "rwindow";
 	dir = 1
 	},
 /obj/item/rig/medical/equipped,
@@ -3098,6 +3107,19 @@
 	dir = 8
 	},
 /obj/structure/railing/mapped/no_density,
+/turf/simulated/floor/plating,
+/area/map_template/merc_spawn)
+"Zl" = (
+/obj/structure/table/rack,
+/obj/item/gun/projectile/pistol/military,
+/obj/item/gun/projectile/pistol/military/alt,
+/obj/item/ammo_magazine/pistol/double,
+/obj/item/ammo_magazine/pistol/double,
+/obj/item/ammo_magazine/pistol/double,
+/obj/item/ammo_magazine/pistol/double,
+/obj/effect/landmark/delete_on_shuttle{
+	shuttle_name = "Desperado"
+	},
 /turf/simulated/floor/plating,
 /area/map_template/merc_spawn)
 "Zx" = (
@@ -8692,7 +8714,7 @@ dh
 dh
 XS
 Kk
-iB
+Zl
 XS
 aa
 aa

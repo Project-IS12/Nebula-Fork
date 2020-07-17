@@ -15,6 +15,7 @@
 	status_flags = CANPUSH
 	universal_speak = FALSE
 	universal_understand = TRUE
+	attack_sound = 'sound/weapons/spiderlunge.ogg'
 	min_gas = null
 	max_gas = null
 	minbodytemp = 0
@@ -61,7 +62,7 @@
 	..()
 	add_glow()
 
-/mob/living/simple_animal/construct/attack_animal(var/mob/user)
+/mob/living/simple_animal/construct/attack_generic(var/mob/user)
 	if(istype(user, /mob/living/simple_animal/construct/builder))
 		if(health < maxHealth)
 			adjustBruteLoss(-5)
@@ -108,26 +109,22 @@
 	speak_emote = list("rumbles")
 	response_harm   = "harmlessly punches"
 	harm_intent_damage = 0
-	natural_weapon = /obj/item/natural_weapon/juggernaut
+	melee_damage_lower = 30
+	melee_damage_upper = 30
+	attacktext = "smashed their armoured gauntlet into"
 	mob_size = MOB_SIZE_LARGE
 	speed = 3
 	environment_smash = 2
+	attack_sound = 'sound/weapons/heavysmash.ogg'
 	status_flags = 0
 	resistance = 10
 	construct_spells = list(/spell/aoe_turf/conjure/forcewall/lesser)
 	can_escape = TRUE
 
-/obj/item/natural_weapon/juggernaut
-	name = "armored gauntlet"
-	gender = NEUTER
-	attack_verb = list("smashed", "demolished")
-	hitsound = 'sound/weapons/heavysmash.ogg'
-	force = 30
-
 /mob/living/simple_animal/construct/armoured/Life()
 	weakened = 0
 	if ((. = ..()))
-		return 
+		return
 
 /mob/living/simple_animal/construct/armoured/bullet_act(var/obj/item/projectile/P)
 	if(istype(P, /obj/item/projectile/energy) || istype(P, /obj/item/projectile/beam))
@@ -137,6 +134,7 @@
 			visible_message("<span class='danger'>The [P.name] gets reflected by [src]'s shell!</span>", \
 							"<span class='userdanger'>The [P.name] gets reflected by [src]'s shell!</span>")
 
+			/*
 			// Find a turf near or on the original location to bounce to
 			if(P.starting)
 				var/new_x = P.starting.x + pick(0, 0, -1, 1, -2, 2, -2, 2, -2, 2, -3, 3, -3, 3)
@@ -145,6 +143,7 @@
 
 				// redirect the projectile
 				P.redirect(new_x, new_y, curloc, src)
+			*/
 
 			return -1 // complete projectile permutation
 
@@ -166,19 +165,15 @@
 	icon_dead = "floating_dead"
 	maxHealth = 75
 	health = 75
-	natural_weapon = /obj/item/natural_weapon/wraith
+	melee_damage_lower = 25
+	melee_damage_upper = 25
+	attacktext = "slashed"
 	speed = -1
 	environment_smash = 1
 	see_in_dark = 7
+	attack_sound = 'sound/weapons/rapidslice.ogg'
 	construct_spells = list(/spell/targeted/ethereal_jaunt/shift)
 
-/obj/item/natural_weapon/wraith
-	name = "wicked blade"
-	gender = NEUTER
-	attack_verb = list("slashed", "tore into")
-	hitsound = 'sound/weapons/rapidslice.ogg'
-	edge = TRUE
-	force = 25
 
 /////////////////////////////Artificer/////////////////////////
 
@@ -195,9 +190,12 @@
 	health = 50
 	response_harm = "viciously beaten"
 	harm_intent_damage = 5
-	natural_weapon = /obj/item/natural_weapon/cult_builder
+	melee_damage_lower = 5
+	melee_damage_upper = 5
+	attacktext = "rammed"
 	speed = 0
 	environment_smash = 1
+	attack_sound = 'sound/weapons/rapidslice.ogg'
 	construct_spells = list(/spell/aoe_turf/conjure/construct/lesser,
 							/spell/aoe_turf/conjure/wall,
 							/spell/aoe_turf/conjure/floor,
@@ -205,10 +203,6 @@
 							/spell/aoe_turf/conjure/pylon
 							)
 
-/obj/item/natural_weapon/cult_builder
-	name = "heavy arms"
-	attack_verb = list("rammed")
-	force = 5
 
 /////////////////////////////Behemoth/////////////////////////
 
@@ -225,17 +219,17 @@
 	speak_emote = list("rumbles")
 	response_harm   = "harmlessly punched"
 	harm_intent_damage = 0
-	natural_weapon = /obj/item/natural_weapon/juggernaut/behemoth
+	melee_damage_lower = 50
+	melee_damage_upper = 50
+	attacktext = "brutally crushed"
 	speed = 5
 	environment_smash = 2
+	attack_sound = 'sound/weapons/heavysmash.ogg'
 	resistance = 10
 	var/energy = 0
 	var/max_energy = 1000
 	construct_spells = list(/spell/aoe_turf/conjure/forcewall/lesser)
 	can_escape = TRUE
-
-/obj/item/natural_weapon/juggernaut/behemoth
-	force = 50
 
 ////////////////////////Harvester////////////////////////////////
 
@@ -251,22 +245,17 @@
 	icon_dead = "harvester_dead"
 	maxHealth = 150
 	health = 150
-	natural_weapon = /obj/item/natural_weapon/harvester
+	melee_damage_lower = 25
+	melee_damage_upper = 25
+	attacktext = "violently stabbed"
 	speed = -1
 	environment_smash = 1
 	see_in_dark = 7
+	attack_sound = 'sound/weapons/pierce.ogg'
 
 	construct_spells = list(
 			/spell/targeted/harvest
 		)
-
-/obj/item/natural_weapon/harvester
-	name = "malicious spike"
-	gender = NEUTER
-	attack_verb = list("violently stabbed", "ran through")
-	hitsound = 'sound/weapons/pierce.ogg'
-	sharp = TRUE
-	force = 25
 
 ////////////////Glow//////////////////
 /mob/living/simple_animal/construct/proc/add_glow()

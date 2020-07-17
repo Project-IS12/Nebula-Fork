@@ -14,12 +14,8 @@
 	var/base_name = null // Name to put in front of drinks, i.e. "[base_name] of [contents]"
 	var/base_icon = null // Base icon name for fill states
 
-/obj/item/chems/food/drinks/Initialize()
-	. = ..()
-	base_name = name
-
-/obj/item/chems/food/drinks/get_base_name()
-	. = base_name
+/obj/item/chems/food/drinks/on_reagent_change()
+	update_icon()
 
 /obj/item/chems/food/drinks/dragged_onto(var/mob/user)
 	attack_self(user)
@@ -72,8 +68,8 @@
 /obj/item/chems/food/drinks/self_feed_message(var/mob/user)
 	to_chat(user, "<span class='notice'>You swallow a gulp from \the [src].</span>")
 	if(user.has_personal_goal(/datum/goal/achievement/specific_object/drink))
-		for(var/R in reagents.reagent_volumes)
-			user.update_personal_goal(/datum/goal/achievement/specific_object/drink, R)
+		for(var/datum/reagent/R in reagents.reagent_list)
+			user.update_personal_goal(/datum/goal/achievement/specific_object/drink, R.type)
 
 /obj/item/chems/food/drinks/feed_sound(var/mob/user)
 	playsound(user.loc, 'sound/items/drink.ogg', rand(10, 50), 1)
@@ -99,17 +95,13 @@
 		if(percent <= k)
 			return k
 
-/obj/item/chems/food/drinks/get_base_name()
-	. = base_name
-
-/obj/item/chems/food/drinks/on_reagent_change()
-	. = ..()
-	var/decl/material/R = reagents.get_primary_reagent_decl()
-	desc = R?.glass_desc || initial(desc)
-
 /obj/item/chems/food/drinks/on_update_icon()
 	overlays.Cut()
-	if(LAZYLEN(reagents.reagent_volumes))
+	if(reagents.reagent_list.len > 0)
+		if(base_name)
+			var/datum/reagent/R = reagents.get_master_reagent()
+			SetName("[base_name] of [R.glass_name ? R.glass_name : "something"]")
+			desc = R.glass_desc ? R.glass_desc : initial(desc)
 		if(filling_states)
 			var/image/filling = image(icon, src, "[base_icon][get_filling_state()]")
 			filling.color = reagents.get_color()
@@ -151,7 +143,7 @@
 
 /obj/item/chems/food/drinks/milk/Initialize()
 	. = ..()
-	reagents.add_reagent(/decl/material/liquid/drink/milk, 50)
+	reagents.add_reagent(/datum/reagent/drink/milk, 50)
 
 /obj/item/chems/food/drinks/soymilk
 	name = "soymilk carton"
@@ -162,7 +154,7 @@
 
 /obj/item/chems/food/drinks/soymilk/Initialize()
 	. = ..()
-	reagents.add_reagent(/decl/material/liquid/drink/milk/soymilk, 50)
+	reagents.add_reagent(/datum/reagent/drink/milk/soymilk, 50)
 
 /obj/item/chems/food/drinks/milk/smallcarton
 	name = "small milk carton"
@@ -171,7 +163,7 @@
 
 /obj/item/chems/food/drinks/milk/smallcarton/Initialize()
 	. = ..()
-	reagents.add_reagent(/decl/material/liquid/drink/milk, 30)
+	reagents.add_reagent(/datum/reagent/drink/milk, 30)
 
 /obj/item/chems/food/drinks/milk/smallcarton/chocolate
 	name = "small chocolate milk carton"
@@ -179,7 +171,7 @@
 
 /obj/item/chems/food/drinks/milk/smallcarton/chocolate/Initialize()
 	. = ..()
-	reagents.add_reagent(/decl/material/liquid/drink/milk/chocolate, 30)
+	reagents.add_reagent(/datum/reagent/drink/milk/chocolate, 30)
 
 
 /obj/item/chems/food/drinks/coffee
@@ -190,7 +182,7 @@
 
 /obj/item/chems/food/drinks/coffee/Initialize()
 	. = ..()
-	reagents.add_reagent(/decl/material/liquid/drink/coffee, 30)
+	reagents.add_reagent(/datum/reagent/drink/coffee, 30)
 
 /obj/item/chems/food/drinks/ice
 	name = "cup of ice"
@@ -200,7 +192,7 @@
 
 /obj/item/chems/food/drinks/ice/Initialize()
 	. = ..()
-	reagents.add_reagent(/decl/material/solid/ice, 30)
+	reagents.add_reagent(/datum/reagent/drink/ice, 30)
 
 /obj/item/chems/food/drinks/h_chocolate
 	name = "cup of hot cocoa"
@@ -211,7 +203,7 @@
 
 /obj/item/chems/food/drinks/h_chocolate/Initialize()
 	. = ..()
-	reagents.add_reagent(/decl/material/liquid/drink/hot_coco, 30)
+	reagents.add_reagent(/datum/reagent/drink/hot_coco, 30)
 
 /obj/item/chems/food/drinks/dry_ramen
 	name = "cup ramen"
@@ -222,7 +214,7 @@
 
 /obj/item/chems/food/drinks/dry_ramen/Initialize()
 	. = ..()
-	reagents.add_reagent(/decl/material/liquid/drink/dry_ramen, 30)
+	reagents.add_reagent(/datum/reagent/drink/dry_ramen, 30)
 
 
 /obj/item/chems/food/drinks/sillycup
@@ -233,8 +225,7 @@
 	volume = 10
 	center_of_mass = @"{'x':16,'y':12}"
 
-/obj/item/chems/food/drinks/sillycup/on_update_icon()
-	. = ..()
+/obj/item/chems/food/drinks/sillycup/on_reagent_change()
 	if(reagents.total_volume)
 		icon_state = "water_cup"
 	else
@@ -320,7 +311,7 @@
 
 /obj/item/chems/food/drinks/tea/black/Initialize()
 	. = ..()
-	reagents.add_reagent(/decl/material/liquid/drink/tea/black, 30)
+	reagents.add_reagent(/datum/reagent/drink/tea, 30)
 
 /obj/item/chems/food/drinks/tea/green
 	name = "cup of green tea"
@@ -328,7 +319,7 @@
 
 /obj/item/chems/food/drinks/tea/green/Initialize()
 	. = ..()
-	reagents.add_reagent(/decl/material/liquid/drink/tea/green, 30)
+	reagents.add_reagent(/datum/reagent/drink/tea/green, 30)
 
 /obj/item/chems/food/drinks/tea/chai
 	name = "cup of chai tea"
@@ -336,4 +327,4 @@
 
 /obj/item/chems/food/drinks/tea/chai/Initialize()
 	. = ..()
-	reagents.add_reagent(/decl/material/liquid/drink/tea/chai, 30)
+	reagents.add_reagent(/datum/reagent/drink/tea/chai, 30)

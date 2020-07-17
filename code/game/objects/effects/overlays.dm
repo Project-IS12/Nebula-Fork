@@ -1,7 +1,7 @@
 /obj/effect/overlay
 	name = "overlay"
 	unacidable = 1
-	var/i_attached//Added for possible image attachments to objects. For hallucinations and the like.
+	var/i_attached //Added for possible image attachments to objects. For hallucinations and the like.
 
 /obj/effect/overlay/beam//Not actually a projectile, just an effect.
 	name="beam"
@@ -53,3 +53,10 @@
 	. = ..()
 	pixel_x += rand(-10, 10)
 	pixel_y += rand(-10, 10)
+
+/obj/effect/overlay/bmark
+	name = "bullet hole"
+	desc = "Well someone shot something."
+	icon = 'icons/effects/effects.dmi'
+	layer = ABOVE_TILE_LAYER
+	icon_state = "scorch"

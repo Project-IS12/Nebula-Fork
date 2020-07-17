@@ -1,7 +1,7 @@
 /obj/item/clothing/accessory/cloak // A colorable cloak
 	name = "plain cloak"
 	desc = "A simple, bland cloak."
-	icon_state = ICON_STATE_WORLD
+	icon_state = "world"
 	icon = 'icons/clothing/suit/cloaks/_cloak.dmi'
 	on_mob_icon = 'icons/clothing/suit/cloaks/_cloak.dmi'
 	w_class = ITEM_SIZE_NORMAL
@@ -29,28 +29,15 @@
 // Cloaks should layer over and under everything, so set the layer directly rather 
 // than relying on overlay order. This also overlays over inhands but it looks ok.
 /obj/item/clothing/accessory/cloak/apply_overlays(mob/user_mob, bodytype, image/overlay, slot)
-
 	if(slot == slot_wear_suit_str || slot == slot_tie_str || slot == slot_w_uniform_str)
-
-		var/image/underlay
-		var/image/cloverlay
-
-		if(ishuman(user_mob) && bodytype != user_mob.get_bodytype())
-			var/mob/living/carbon/human/H = user_mob
-			var/bodyicon = get_icon_for_bodytype(BODYTYPE_HUMANOID)
-			underlay =  H.species.get_offset_overlay_image(FALSE, bodyicon, "[bodytype]-underlay", color, slot)
-			cloverlay = H.species.get_offset_overlay_image(FALSE, bodyicon, "[bodytype]-overlay", color, slot)
-		else
-			var/bodyicon = get_icon_for_bodytype(bodytype)
-			underlay = image(bodyicon, "[bodytype]-underlay")
-			cloverlay = image(bodyicon, "[bodytype]-overlay")
-
+		var/bodyicon = get_icon_for_bodytype(bodytype)
+		var/image/underlay = image(bodyicon, "[bodytype]-underlay")
 		underlay.layer = MOB_LAYER-0.01
 		overlay.underlays = list(underlay)
+		var/image/cloverlay = image(bodyicon, "[bodytype]-overlay")
 		cloverlay.layer = MOB_LAYER+0.01
 		overlay.overlays = list(cloverlay)
-
-	. = overlay
+	. = ..()
 
 /obj/item/clothing/accessory/cloak/captain
 	name = "captain's cloak"
@@ -129,20 +116,3 @@
 	desc = "A simple blue and white cloak."
 	icon_state = "cloak_med"
 	on_mob_icon = 'icons/clothing/suit/cloaks/cloak_medical.dmi'
-
-/obj/item/clothing/accessory/cloak/hide
-	name = "cloak"
-	desc = "A ragged cloak made of some sort of thick hide."
-	icon_state = "cloak_hide"
-	on_mob_icon = 'icons/clothing/suit/cloaks/cloak_hide.dmi'
-	material = /decl/material/solid/leather
-	applies_material_colour = TRUE
-	applies_material_name = TRUE
-	armor_type = /datum/extension/armor/ablative
-	body_parts_covered = UPPER_TORSO|LOWER_TORSO
-	material_armor_multiplier = 0.5
-
-/obj/item/clothing/accessory/cloak/hide/set_material(var/new_material)
-	..()
-	if(istype(material))
-		desc = "A ragged cloak made of [material.solid_name]."

@@ -83,12 +83,12 @@ obj/item/clothing/mask/chewable/Destroy()
 /obj/item/clothing/mask/chewable/tobacco/lenni
 	name = "chewing tobacco"
 	desc = "A chewy wad of tobacco. Cut in long strands and treated with syrups so it tastes less like a ash-tray when you stuff it into your face."
-	filling = list(/decl/material/solid/tobacco = 2)
+	filling = list(/datum/reagent/tobacco = 2)
 
 /obj/item/clothing/mask/chewable/tobacco/redlady
 	name = "chewing tobacco"
 	desc = "A chewy wad of fine tobacco. Cut in long strands and treated with syrups so it doesn't taste like a ash-tray when you stuff it into your face"
-	filling = list(/decl/material/solid/tobacco/fine = 2)
+	filling = list(/datum/reagent/tobacco/fine = 2)
 
 /obj/item/clothing/mask/chewable/tobacco/nico
 	name = "nicotine gum"
@@ -98,7 +98,7 @@ obj/item/clothing/mask/chewable/Destroy()
 
 /obj/item/clothing/mask/chewable/tobacco/nico/Initialize()
 	. = ..()
-	reagents.add_reagent(/decl/material/liquid/nicotine, 2)
+	reagents.add_reagent(/datum/reagent/nicotine, 2)
 	color = reagents.get_color()
 
 /obj/item/clothing/mask/chewable/candy
@@ -111,7 +111,7 @@ obj/item/clothing/mask/chewable/Destroy()
 	slot_flags = SLOT_EARS | SLOT_MASK
 	chem_volume = 50
 	chewtime = 300
-	filling = list(/decl/material/liquid/nutriment/sugar = 2)
+	filling = list(/datum/reagent/nutriment/sugar = 2)
 
 /obj/item/trash/cigbutt/spitgum
 	name = "old gum"
@@ -132,15 +132,15 @@ obj/item/clothing/mask/chewable/Destroy()
 /obj/item/clothing/mask/chewable/candy/gum/Initialize()
 	. = ..()
 	reagents.add_reagent(pick(list(
-				/decl/material/liquid/drink/juice/grape,
-				/decl/material/liquid/drink/juice/orange,
-				/decl/material/liquid/drink/juice/lemon,
-				/decl/material/liquid/drink/juice/lime,
-				/decl/material/liquid/drink/juice/apple,
-				/decl/material/liquid/drink/juice/pear,
-				/decl/material/liquid/drink/juice/banana,
-				/decl/material/liquid/drink/juice/berry,
-				/decl/material/liquid/drink/juice/watermelon)), 3)
+				/datum/reagent/drink/juice/grape,
+				/datum/reagent/drink/juice/orange,
+				/datum/reagent/drink/juice/lemon,
+				/datum/reagent/drink/juice/lime,
+				/datum/reagent/drink/juice/apple,
+				/datum/reagent/drink/juice/pear,
+				/datum/reagent/drink/juice/banana,
+				/datum/reagent/drink/juice/berry,
+				/datum/reagent/drink/juice/watermelon)), 3)
 	color = reagents.get_color()
 
 /obj/item/clothing/mask/chewable/candy/lolli
@@ -153,16 +153,16 @@ obj/item/clothing/mask/chewable/Destroy()
 /obj/item/clothing/mask/chewable/candy/lolli/Initialize()
 	. = ..()
 	reagents.add_reagent(pick(list(
-				/decl/material/liquid/fuel,
-				/decl/material/liquid/drink/juice/grape,
-				/decl/material/liquid/drink/juice/orange,
-				/decl/material/liquid/drink/juice/lemon,
-				/decl/material/liquid/drink/juice/lime,
-				/decl/material/liquid/drink/juice/apple,
-				/decl/material/liquid/drink/juice/pear,
-				/decl/material/liquid/drink/juice/banana,
-				/decl/material/liquid/drink/juice/berry,
-				/decl/material/liquid/drink/juice/watermelon)), 3)
+				/datum/reagent/fuel,
+				/datum/reagent/drink/juice/grape,
+				/datum/reagent/drink/juice/orange,
+				/datum/reagent/drink/juice/lemon,
+				/datum/reagent/drink/juice/lime,
+				/datum/reagent/drink/juice/apple,
+				/datum/reagent/drink/juice/pear,
+				/datum/reagent/drink/juice/banana,
+				/datum/reagent/drink/juice/berry,
+				/datum/reagent/drink/juice/watermelon)), 3)
 	color = reagents.get_color()
 
 /obj/item/clothing/mask/chewable/candy/lolli/meds
@@ -174,31 +174,31 @@ obj/item/clothing/mask/chewable/Destroy()
 /obj/item/clothing/mask/chewable/candy/lolli/meds/Initialize()
 	. = ..()
 	reagents.add_reagent(pick(list(
-				/decl/material/liquid/oxy_meds,
-				/decl/material/liquid/regenerator,
-				/decl/material/liquid/amphetamines,
-				/decl/material/liquid/antirads,
-				/decl/material/liquid/stimulants,
-				/decl/material/liquid/antidepressants,
-				/decl/material/liquid/antitoxins,
-				/decl/material/liquid/brute_meds,
-				/decl/material/liquid/burn_meds,
-				/decl/material/liquid/stabilizer)), 10)
+				/datum/reagent/oxy_meds,
+				/datum/reagent/regenerator,
+				/datum/reagent/amphetamines,
+				/datum/reagent/antirads,
+				/datum/reagent/stimulants,
+				/datum/reagent/antidepressants,
+				/datum/reagent/antitoxins,
+				/datum/reagent/brute_meds,
+				/datum/reagent/burn_meds,
+				/datum/reagent/adrenaline)), 10)
 	color = reagents.get_color()
 
 /obj/item/clothing/mask/chewable/candy/lolli/weak_meds
 	name = "medicine lollipop"
 	desc = "A sucrose sphere on a small handle, it has been infused with medication."
-	filling = list(/decl/material/liquid/nutriment/sugar = 6)
+	filling = list(/datum/reagent/nutriment/sugar = 6)
 
 /obj/item/clothing/mask/chewable/candy/lolli/weak_meds/Initialize()
 	. = ..()
-	var/decl/material/payload = pick(list(
-				/decl/material/liquid/antibiotics,
-				/decl/material/liquid/painkillers,
-				/decl/material/liquid/regenerator,
-				/decl/material/liquid/antitoxins,
-				/decl/material/liquid/stabilizer))
+	var/datum/reagent/payload = pick(list(
+				/datum/reagent/antibiotics,
+				/datum/reagent/painkillers,
+				/datum/reagent/regenerator,
+				/datum/reagent/antitoxins,
+				/datum/reagent/adrenaline))
 	reagents.add_reagent(payload, 15)
 	color = reagents.get_color()
 	desc = "[desc]. This one is labeled '[initial(payload.name)]'"

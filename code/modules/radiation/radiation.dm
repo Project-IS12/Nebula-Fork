@@ -37,7 +37,7 @@
 	cached_rad_resistance = 0
 	for(var/obj/O in src.contents)
 		if(!(O.rad_resistance_modifier <= 0) && O.density)
-			var/decl/material/M = O.get_material()
+			var/material/M = O.get_material()
 			if(!M)	continue
 			cached_rad_resistance += (M.weight * O.rad_resistance_modifier) / config.radiation_material_resistance_divisor
 	// Looks like storing the contents length is meant to be a basic check if the cache is stale due to items enter/exiting.  Better than nothing so I'm leaving it as is. ~Leshana
@@ -49,14 +49,6 @@
 
 /obj
 	var/rad_resistance_modifier = 1  // Allow overriding rad resistance
-
-/atom/proc/get_rads()
-	if(loc)
-		return loc.get_rads()
-	return 0
-
-/turf/get_rads()
-	return SSradiation.get_rads_at_turf(src)
 
 // If people expand the system, this may be useful. Here as a placeholder until then
 /atom/proc/rad_act(var/severity)

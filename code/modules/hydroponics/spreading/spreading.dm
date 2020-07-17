@@ -38,7 +38,7 @@
 /obj/effect/vine
 	name = "vine"
 	anchored = 1
-	icon = 'icons/obj/hydroponics/hydroponics_growing.dmi'
+	icon = 'icons/obj/hydroponics_growing.dmi'
 	icon_state = ""
 	pass_flags = PASS_FLAG_TABLE
 	mouse_opacity = 1
@@ -127,7 +127,7 @@
 		layer = (seed && seed.force_layer) ? seed.force_layer : ABOVE_OBJ_LAYER
 		if(growth_type in list(GROWTH_VINES,GROWTH_BIOMASS))
 			set_opacity(1)
-		if(islist(seed.chems) && !isnull(seed.chems[/decl/material/solid/wood]))
+		if(islist(seed.chems) && !isnull(seed.chems[/datum/reagent/woodpulp]))
 			set_density(1)
 			set_opacity(1)
 
@@ -258,15 +258,21 @@
 	if(aggression > 0)
 		adjust_health(-aggression*5)
 
-/obj/effect/vine/physically_destroyed()
-	SHOULD_CALL_PARENT(FALSE)
-	die_off()
-	. = TRUE
-
-/obj/effect/vine/explosion_act(severity)
-	. = ..()
-	if(. && !QDELETED(src) && (severity == 1 || (severity == 2 && prob(50)) || (severity == 3 && prob(5))))
-		physically_destroyed(src)
+/obj/effect/vine/ex_act(severity)
+	switch(severity)
+		if(1.0)
+			die_off()
+			return
+		if(2.0)
+			if (prob(50))
+				die_off()
+				return
+		if(3.0)
+			if (prob(5))
+				die_off()
+				return
+		else
+	return
 
 /obj/effect/vine/proc/adjust_health(value)
 	health = Clamp(health + value, 0, max_health)

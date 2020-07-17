@@ -17,11 +17,6 @@
 		body.MouseDrop_T(dropping, user)
 	else . = ..()
 
-/mob/living/exosuit/MouseDrop(mob/living/carbon/human/over_object) //going from assumption none of previous options are relevant to exosuit
-	if(body)
-		if(!body.MouseDrop(over_object))
-			return ..()
-	
 /mob/living/exosuit/RelayMouseDrag(src_object, over_object, src_location, over_location, src_control, over_control, params, var/mob/user)
 	if(user && (user in pilots) && user.loc == src)
 		return OnMouseDrag(src_object, over_object, src_location, over_location, src_control, over_control, params, user)
@@ -55,12 +50,6 @@
 	if(LAZYISIN(pilots, user) && !hatch_closed)
 		return TRUE
 	. = ..()
-
-//UI distance checks
-/mob/living/exosuit/contents_nano_distance(src_object, mob/living/user)
-	. = ..()
-	if(!hatch_closed)
-		return max(shared_living_nano_distance(src_object), .) //Either visible to mech(outside) or visible to user (inside)
 	
 /mob/living/exosuit/ClickOn(var/atom/A, var/params, var/mob/user)
 
@@ -74,20 +63,15 @@
 	if(modifiers["shift"])
 		user.examinate(A)
 		return
-		
-	if(modifiers["ctrl"] && selected_system == A)
-		selected_system.CtrlClick(user)
-		setClickCooldown(3)
-		return	
 
 	if(!(user in pilots) && user != src)
 		return
 
-	if(!canClick())
-		return
-	
 	// Are we facing the target?
 	if(A.loc != src && !(get_dir(src, A) & dir))
+		return
+
+	if(!canClick())
 		return
 
 	if(!arms)
@@ -244,7 +228,7 @@
 	LAZYDISTINCTADD(pilots, user)
 	sync_access()
 	playsound(src, 'sound/machines/windowdoor.ogg', 50, 1)
-	user.playsound_local(get_turf(src), 'sound/mecha/nominal.ogg', 50)
+	user.playsound_local(null, 'sound/mecha/nominal.ogg', 50)
 	if(user.client) user.client.screen |= hud_elements
 	LAZYDISTINCTADD(user.additional_vision_handlers, src)
 	update_pilots()

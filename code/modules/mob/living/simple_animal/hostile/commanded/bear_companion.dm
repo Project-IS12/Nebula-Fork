@@ -12,10 +12,12 @@
 
 	density = 1
 
-	natural_weapon = /obj/item/natural_weapon/claws
+	attacktext = "swatted"
+	melee_damage_lower = 10
+	melee_damage_upper = 10
 	can_escape = TRUE
 
-	max_gas = list(/decl/material/solid/phoron = 2, /decl/material/gas/carbon_dioxide = 5)
+	max_gas = list(MAT_PHORON = 2, MAT_CO2 = 5)
 
 	response_help = "pets"
 	response_harm = "hits"

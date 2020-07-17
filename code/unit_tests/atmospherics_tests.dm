@@ -41,7 +41,7 @@
 
 /datum/unit_test/atmos_machinery/proc/check_moles_conserved(var/case_name, var/list/before_gas_mixes, var/list/after_gas_mixes)
 	var/failed = FALSE
-	for(var/gasid in subtypesof(/decl/material/gas))
+	for(var/gasid in SSmaterials.all_gasses)
 		var/before = 0
 		for(var/gasmix in before_gas_mixes)
 			var/datum/gas_mixture/G = before_gas_mixes[gasmix]
@@ -65,21 +65,21 @@
 		uphill = list(
 			source = list(
 				initial_gas = list(
-					/decl/material/gas/oxygen         = 5,
-					/decl/material/gas/nitrogen       = 10,
-					/decl/material/gas/carbon_dioxide = 5,
-					/decl/material/solid/phoron         = 10,
-					/decl/material/gas/nitrous_oxide = 5,
+					MAT_OXYGEN         = 5,
+					MAT_NITROGEN       = 10,
+					MAT_CO2 = 5,
+					MAT_PHORON         = 10,
+					MAT_N2O = 5,
 				),
 				temperature = T20C - 5,
 			),
 			sink = list(
 				initial_gas = list(
-					/decl/material/gas/oxygen         = 10,
-					/decl/material/gas/nitrogen       = 20,
-					/decl/material/gas/carbon_dioxide = 10,
-					/decl/material/solid/phoron         = 20,
-					/decl/material/gas/nitrous_oxide = 10,
+					MAT_OXYGEN         = 10,
+					MAT_NITROGEN       = 20,
+					MAT_CO2 = 10,
+					MAT_PHORON         = 20,
+					MAT_N2O = 10,
 				),
 				temperature = T20C + 5,
 			)
@@ -87,21 +87,21 @@
 		downhill = list(
 			source = list(
 				initial_gas = list(
-					/decl/material/gas/oxygen         = 10,
-					/decl/material/gas/nitrogen       = 20,
-					/decl/material/gas/carbon_dioxide = 10,
-					/decl/material/solid/phoron         = 20,
-					/decl/material/gas/nitrous_oxide = 10,
+					MAT_OXYGEN         = 10,
+					MAT_NITROGEN       = 20,
+					MAT_CO2 = 10,
+					MAT_PHORON         = 20,
+					MAT_N2O = 10,
 				),
 				temperature = T20C + 5,
 			),
 			sink = list(
 				initial_gas = list(
-					/decl/material/gas/oxygen         = 5,
-					/decl/material/gas/nitrogen       = 10,
-					/decl/material/gas/carbon_dioxide = 5,
-					/decl/material/solid/phoron         = 10,
-					/decl/material/gas/nitrous_oxide = 5,
+					MAT_OXYGEN         = 5,
+					MAT_NITROGEN       = 10,
+					MAT_CO2 = 5,
+					MAT_PHORON         = 10,
+					MAT_N2O = 5,
 				),
 				temperature = T20C - 5,
 			),
@@ -109,21 +109,21 @@
 		flat = list(
 			source = list(
 				initial_gas = list(
-					/decl/material/gas/oxygen         = 10,
-					/decl/material/gas/nitrogen       = 20,
-					/decl/material/gas/carbon_dioxide = 10,
-					/decl/material/solid/phoron         = 20,
-					/decl/material/gas/nitrous_oxide = 10,
+					MAT_OXYGEN         = 10,
+					MAT_NITROGEN       = 20,
+					MAT_CO2 = 10,
+					MAT_PHORON         = 20,
+					MAT_N2O = 10,
 				),
 				temperature = T20C,
 			),
 			sink = list(
 				initial_gas = list(
-					/decl/material/gas/oxygen         = 10,
-					/decl/material/gas/nitrogen       = 20,
-					/decl/material/gas/carbon_dioxide = 10,
-					/decl/material/solid/phoron         = 20,
-					/decl/material/gas/nitrous_oxide = 10,
+					MAT_OXYGEN         = 10,
+					MAT_NITROGEN       = 20,
+					MAT_CO2 = 10,
+					MAT_PHORON         = 20,
+					MAT_N2O = 10,
 				),
 				temperature = T20C,
 			),
@@ -131,11 +131,11 @@
 		vacuum_sink = list(
 			source = list(
 				initial_gas = list(
-					/decl/material/gas/oxygen         = 10,
-					/decl/material/gas/nitrogen       = 20,
-					/decl/material/gas/carbon_dioxide = 10,
-					/decl/material/solid/phoron         = 20,
-					/decl/material/gas/nitrous_oxide = 10,
+					MAT_OXYGEN         = 10,
+					MAT_NITROGEN       = 20,
+					MAT_CO2 = 10,
+					MAT_PHORON         = 20,
+					MAT_N2O = 10,
 				),
 				temperature = T20C,
 			),
@@ -151,11 +151,11 @@
 			),
 			sink = list(
 				initial_gas = list(
-					/decl/material/gas/oxygen         = 10,
-					/decl/material/gas/nitrogen       = 20,
-					/decl/material/gas/carbon_dioxide = 10,
-					/decl/material/solid/phoron         = 20,
-					/decl/material/gas/nitrous_oxide = 10,
+					MAT_OXYGEN         = 10,
+					MAT_NITROGEN       = 20,
+					MAT_CO2 = 10,
+					MAT_PHORON         = 20,
+					MAT_N2O = 10,
 				),
 				temperature = T20C,
 			),
@@ -197,7 +197,7 @@
 	name = "ATMOS MACHINERY: scrub_gas() Conserves Moles"
 
 /datum/unit_test/atmos_machinery/conserve_moles/scrub_gas/start_test()
-	var/list/filtering = subtypesof(/decl/material/gas)
+	var/list/filtering = SSmaterials.all_gasses
 	for(var/case_name in test_cases)
 		var/gas_mix_data = test_cases[case_name]
 		var/list/before_gas_mixes = create_gas_mixes(gas_mix_data)
@@ -213,7 +213,8 @@
 	name = "ATMOS MACHINERY: filter_gas() Conserves Moles"
 
 /datum/unit_test/atmos_machinery/conserve_moles/filter_gas/start_test()
-	var/list/filtering = subtypesof(/decl/material/gas)
+	var/list/filtering = SSmaterials.all_gasses
+
 	for(var/case_name in test_cases)
 		var/gas_mix_data = test_cases[case_name]
 		var/list/before_gas_mixes = create_gas_mixes(gas_mix_data)
@@ -235,7 +236,7 @@
 		var/list/after_gas_mixes = create_gas_mixes(gas_mix_data)
 
 		var/list/filtering = list()
-		for(var/gasid in subtypesof(/decl/material/gas))
+		for(var/gasid in SSmaterials.all_gasses)
 			filtering[gasid] = after_gas_mixes["sink"] //just filter everything to sink
 
 		filter_gas_multi(null, filtering, after_gas_mixes["source"], after_gas_mixes["sink"], null, INFINITY)
@@ -254,7 +255,7 @@
 		var/list/after_gas_mixes = create_gas_mixes(gas_mix_data)
 
 		var/list/mix_sources = list()
-		var/list/all_gasses = subtypesof(/decl/material/gas)
+		var/list/all_gasses = SSmaterials.all_gasses
 		var/gas_count = length(all_gasses)
 		for(var/gasid in all_gasses)
 			var/datum/gas_mixture/mix_source = after_gas_mixes["sink"]

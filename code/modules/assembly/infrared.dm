@@ -5,10 +5,10 @@
 	desc = "Emits a visible or invisible beam and is triggered when the beam is interrupted."
 	icon_state = "infrared"
 	origin_tech = "{'magnets':2}"
-	material = /decl/material/solid/metal/steel
+	material = MAT_STEEL
 	matter = list(
-		/decl/material/solid/glass = MATTER_AMOUNT_REINFORCEMENT,
-		/decl/material/solid/slag = MATTER_AMOUNT_TRACE
+		MAT_GLASS = MATTER_AMOUNT_REINFORCEMENT,
+		MAT_WASTE = MATTER_AMOUNT_TRACE
 	)
 	wires = WIRE_PULSE
 	secured = 0

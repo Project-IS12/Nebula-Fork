@@ -93,10 +93,8 @@
 	if(Adjacent(user) && isrobot(user))
 		return attack_hand(user)
 
-/obj/structure/door/explosion_act(severity)
-	. = ..()
-	if(!QDELETED(src))
-		take_damage(100 - (severity * 30))
+/obj/structure/door/ex_act(severity)
+	take_damage(100 - (severity * 30))
 
 /obj/structure/door/can_repair(var/mob/user)
 	. = ..()
@@ -122,11 +120,11 @@
 			to_chat(user, SPAN_WARNING("\The [src] is locked!"))
 		return TRUE
 
-	if(istype(I,/obj/item/lock_construct))
+	if(istype(I,/obj/item/material/lock_construct))
 		if(lock)
 			to_chat(user, SPAN_WARNING("\The [src] already has a lock."))
 		else
-			var/obj/item/lock_construct/L = I
+			var/obj/item/material/lock_construct/L = I
 			lock = L.create_lock(src,user)
 		return
 
@@ -155,45 +153,45 @@
 	open()
 
 /obj/structure/door/iron
-	material = /decl/material/solid/metal/iron
+	material = MAT_IRON
 
 /obj/structure/door/silver
-	material = /decl/material/solid/metal/silver
+	material = MAT_SILVER
 
 /obj/structure/door/gold
-	material = /decl/material/solid/metal/gold
+	material = MAT_GOLD
 
 /obj/structure/door/uranium
-	material = /decl/material/solid/metal/uranium
+	material = MAT_URANIUM
 
 /obj/structure/door/sandstone
-	material = /decl/material/solid/stone/sandstone
+	material = MAT_SANDSTONE
 
 /obj/structure/door/diamond
-	material = /decl/material/solid/gemstone/diamond
+	material = MAT_DIAMOND
 
 /obj/structure/door/wood
-	material = /decl/material/solid/wood
+	material = MAT_WOOD
 
 /obj/structure/door/mahogany
-	material = /decl/material/solid/wood/mahogany
+	material = MAT_MAHOGANY
 
 /obj/structure/door/maple
-	material = /decl/material/solid/wood/maple
+	material = MAT_MAPLE
 
 /obj/structure/door/ebony
-	material = /decl/material/solid/wood/ebony
+	material = MAT_EBONY
 
 /obj/structure/door/walnut
-	material = /decl/material/solid/wood/walnut
+	material = MAT_WALNUT
 
 /obj/structure/door/cult
-	material = /decl/material/solid/stone/cult
+	material = MAT_CULT
 
 /obj/structure/door/wood/saloon
 	icon_base = "saloon"
-	material = /decl/material/solid/wood
+	material = MAT_WOOD
 	opacity = FALSE
 
 /obj/structure/door/shuttle
-	material = /decl/material/solid/metal/steel
+	material = MAT_STEEL

@@ -2,7 +2,7 @@
 	name = "portable cooling unit"
 	desc = "A large portable heat sink with liquid cooled radiator packaged into a modified backpack."
 	w_class = ITEM_SIZE_LARGE
-	icon = 'icons/obj/items/suitcooler.dmi'
+	icon = 'icons/obj/suitcooler.dmi'
 	icon_state = "suitcooler0"
 	item_state = "coolingpack"			// beautiful codersprites until someone makes a prettier one.
 	slot_flags = SLOT_BACK
@@ -15,8 +15,8 @@
 	throw_range = 4
 	action_button_name = "Toggle Heatsink"
 
-	material = /decl/material/solid/metal/aluminium
-	matter = list(/decl/material/solid/glass = MATTER_AMOUNT_REINFORCEMENT)
+	material = MAT_ALUMINIUM
+	matter = list(MAT_GLASS = MATTER_AMOUNT_REINFORCEMENT)
 	origin_tech = "{'magnets':2,'materials':2}"
 
 	var/on = 0								//is it turned on?

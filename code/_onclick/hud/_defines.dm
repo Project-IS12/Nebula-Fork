@@ -53,6 +53,7 @@
 #define ui_drop_throw "RIGHT-1:28,BOTTOM+1:7"
 #define ui_pull_resist "RIGHT-2:26,BOTTOM+1:7"
 #define ui_acti "RIGHT-2:26,BOTTOM:5"
+#define ui_fixeye "RIGHT-3:26,BOTTOM:5"
 #define ui_movi "RIGHT-3:24,BOTTOM:5"
 #define ui_zonesel "RIGHT-1:28,BOTTOM:5"
 #define ui_acti_alt "RIGHT-1:28,BOTTOM:5" //alternative intent switcher for when the interface is hidden (F12)

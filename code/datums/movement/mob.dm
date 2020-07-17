@@ -78,26 +78,24 @@
 		return MOVEMENT_PROCEED
 	return (MOVEMENT_PROCEED|MOVEMENT_HANDLED)
 
-/datum/movement_handler/mob/space
-	var/allow_move
-
 // Space movement
 /datum/movement_handler/mob/space/DoMove(var/direction, var/mob/mover)
-	if(!mob.has_gravity())
-		if(!allow_move)
+	if(!mob.check_solid_ground())
+		var/allowmove = mob.Allow_Spacemove(0)
+		if(!allowmove)
 			return MOVEMENT_HANDLED
-		if(!mob.space_do_move(allow_move, direction))
+		else if(allowmove == -1 && mob.handle_spaceslipping()) //Check to see if we slipped
 			return MOVEMENT_HANDLED
+		else
+			mob.inertia_dir = 0 //If not then we can reset inertia and move
 
 /datum/movement_handler/mob/space/MayMove(var/mob/mover, var/is_external)
 	if(IS_NOT_SELF(mover) && is_external)
 		return MOVEMENT_PROCEED
 
-	if(!mob.has_gravity())
-		allow_move = mob.Process_Spacemove(1)
-		if(!allow_move)
+	if(!mob.check_solid_ground())
+		if(!mob.Allow_Spacemove(0))
 			return MOVEMENT_STOP
-
 	return MOVEMENT_PROCEED
 
 // Buckle movement
@@ -146,9 +144,11 @@
 
 /datum/movement_handler/mob/delay/proc/SetDelay(var/delay)
 	next_move = max(next_move, world.time + delay)
+	mob.glide_size = world.icon_size / max((delay-GLIDE_SIZE_CONSTANT), world.tick_lag) * world.tick_lag
 
 /datum/movement_handler/mob/delay/proc/AddDelay(var/delay)
 	next_move += max(0, delay)
+	mob.glide_size = world.icon_size / max((next_move-world.time)-GLIDE_SIZE_CONSTANT, world.tick_lag) * world.tick_lag
 
 // Stop effect
 /datum/movement_handler/mob/stop_effect/DoMove()
@@ -274,7 +274,7 @@
 /mob/living/carbon/human/get_stamina_used_per_step()
 	var/mod = (1-((get_skill_value(SKILL_HAULING) - SKILL_MIN)/(SKILL_MAX - SKILL_MIN)))
 	if(species && (species.species_flags & SPECIES_FLAG_LOW_GRAV_ADAPTED))
-		if(has_gravity())
+		if(has_gravity(src))
 			mod *= 1.2
 		else
 			mod *= 0.8
@@ -284,7 +284,7 @@
 /datum/movement_handler/mob/movement/proc/HandleGrabs(var/direction, var/old_turf)
 	. = 0
 	// TODO: Look into making grabs use movement events instead, this is a mess.
-	for(var/obj/item/grab/G in mob?.get_active_grabs())
+	for(var/obj/item/grab/G in mob.get_active_grabs())
 		if(G.assailant == G.affecting)
 			return
 		if(G.affecting.anchored)

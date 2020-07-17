@@ -13,9 +13,9 @@
 	level_max = list(Sp_TOTAL = 1, Sp_SPEED = 0, Sp_POWER = 1)
 	duration = 300 //30 seconds
 	max_targets = 1
-	equipped_summons = list("active hand" = /obj/item/sword)
+	equipped_summons = list("active hand" = /obj/item/material/sword)
 	delete_old = 0
-	var/material = /decl/material/solid/metal/gold
+	var/material = MAT_GOLD
 
 	hud_state = "gen_immolate"
 
@@ -33,7 +33,7 @@
 	if(!..())
 		return 0
 
-	material = /decl/material/solid/metal/silver
+	material = MAT_SILVER
 	return "Dyrnwyn has been made pure: it is now made of silver."
 
 /spell/targeted/equip_item/dyrnwyn/tower

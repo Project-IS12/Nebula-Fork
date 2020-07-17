@@ -36,10 +36,10 @@
 
 /turf/simulated/floor/fixed/alium/Initialize()
 	. = ..()
-	var/decl/material/A = decls_repository.get_decl(/decl/material/solid/metal/aliumium)
+	var/material/A = SSmaterials.get_material_datum(MAT_ALIENALLOY)
 	if(!A)
 		return
-	color = A.color
+	color = A.icon_colour
 	var/style = A.hardness % 2 ? "curvy" : "jaggy"
 	icon_state = "[style][(x*y) % 7]"
 
@@ -47,9 +47,8 @@
 	initial_gas = null
 	temperature = TCMB
 
-/turf/simulated/floor/fixed/alium/explosion_act(severity)
-	SHOULD_CALL_PARENT(FALSE)
-	var/decl/material/A = decls_repository.get_decl(/decl/material/solid/metal/aliumium)
+/turf/simulated/floor/fixed/alium/ex_act(severity)
+	var/material/A = SSmaterials.get_material_datum(MAT_ALIENALLOY)
 	if(prob(A.explosion_resistance))
 		return
 	if(severity == 1)

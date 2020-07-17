@@ -32,11 +32,19 @@
 	name = "Dead Magnitka's fleet officer" 
 	uniform = /obj/item/clothing/under/magintka_uniform 
 	suit = /obj/item/clothing/suit/storage/hooded/wintercoat 
-	shoes = /obj/item/clothing/shoes/jackboots/jungleboots 
+	shoes = /obj/item/clothing/shoes/jungleboots 
 	gloves = /obj/item/clothing/gloves/thick 
 	head = /obj/item/clothing/head/beret 
-	l_pocket = /obj/item/knife/folding/combat/switchblade 
+	l_pocket = /obj/item/material/knife/folding/combat/switchblade 
  
+/obj/item/gun/projectile/revolver/medium/marooned
+	name = "worn-out revolver"
+
+/obj/item/gun/projectile/revolver/medium/marooned/Initialize()
+	. = ..()
+	consume_next_projectile()
+	handle_post_fire()
+
 /area/map_template/marooned
 	name = "\improper Crashed Dropship"
 	icon_state = "A"

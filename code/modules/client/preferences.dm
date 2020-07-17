@@ -160,18 +160,26 @@ datum/preferences
 	character.age = age
 	character.b_type = b_type
 
-	character.eye_colour = eye_colour
+	character.r_eyes = r_eyes
+	character.g_eyes = g_eyes
+	character.b_eyes = b_eyes
 
 	character.h_style = h_style
-	character.hair_colour = hair_colour
+	character.r_hair = r_hair
+	character.g_hair = g_hair
+	character.b_hair = b_hair
 
 	character.f_style = f_style
-	character.facial_hair_colour = facial_hair_colour
+	character.r_facial = r_facial
+	character.g_facial = g_facial
+	character.b_facial = b_facial
 
-	character.skin_colour = skin_colour
+	character.r_skin = r_skin
+	character.g_skin = g_skin
+	character.b_skin = b_skin
 
-	character.skin_tone = skin_tone
-	character.skin_base = skin_base
+	character.s_tone = s_tone
+	character.s_base = s_base
 
 	character.h_style = h_style
 	character.f_style = f_style
@@ -235,7 +243,7 @@ datum/preferences
 			var/underwear_item_name = all_underwear[underwear_category_name]
 			var/datum/category_item/underwear/UWD = underwear_category.items_by_name[underwear_item_name]
 			var/metadata = all_underwear_metadata[underwear_category_name]
-			var/obj/item/underwear/UW = UWD.create_underwear(character, metadata)
+			var/obj/item/underwear/UW = UWD.create_underwear(metadata)
 			if(UW)
 				UW.ForceEquipUnderwear(character, FALSE)
 		else

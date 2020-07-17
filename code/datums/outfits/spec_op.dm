@@ -1,14 +1,14 @@
 /decl/hierarchy/outfit/spec_op_officer
 	name = "Spec Ops - Officer"
 	uniform = /obj/item/clothing/under/syndicate/combat
-	suit = /obj/item/clothing/suit/armor/officer
+	suit = /obj/item/clothing/suit/armor/swat/officer
 	l_ear = /obj/item/radio/headset/ert
 	glasses = /obj/item/clothing/glasses/thermal/plain/eyepatch
 	mask = /obj/item/clothing/mask/smokable/cigarette/cigar/havana
 	head = /obj/item/clothing/head/beret
-	belt = /obj/item/gun/energy/pulse_pistol
+	belt = /obj/item/gun/energy/pulse_rifle/pistol
 	back = /obj/item/storage/backpack/satchel
-	shoes = /obj/item/clothing/shoes/jackboots/swat/combat
+	shoes = /obj/item/clothing/shoes/combat
 	gloves = /obj/item/clothing/gloves/thick/combat
 
 	id_slot = slot_wear_id
@@ -26,8 +26,8 @@
 
 /decl/hierarchy/outfit/ert
 	name = "Spec Ops - Emergency response team"
-	uniform = /obj/item/clothing/under/syndicate/combat
-	shoes = /obj/item/clothing/shoes/jackboots/swat
+	uniform = /obj/item/clothing/under/ert
+	shoes = /obj/item/clothing/shoes/swat
 	gloves = /obj/item/clothing/gloves/thick/swat
 	l_ear = /obj/item/radio/headset/ert
 	belt = /obj/item/gun/energy/gun
@@ -40,7 +40,7 @@
 /decl/hierarchy/outfit/mercenary
 	name = "Spec Ops - Mercenary"
 	uniform = /obj/item/clothing/under/syndicate
-	shoes = /obj/item/clothing/shoes/jackboots/swat/combat
+	shoes = /obj/item/clothing/shoes/combat
 	l_ear = /obj/item/radio/headset/syndicate/alt
 	belt = /obj/item/storage/belt/holster/security
 	glasses = /obj/item/clothing/glasses/sunglasses
@@ -60,7 +60,7 @@
 	suit = /obj/item/clothing/suit/armor/vest
 	mask = /obj/item/clothing/mask/gas
 	head = /obj/item/clothing/head/helmet/swat
-	shoes = /obj/item/clothing/shoes/jackboots/swat
+	shoes = /obj/item/clothing/shoes/swat
 	id_desc = "Syndicate Operative"
 
 /decl/hierarchy/outfit/mercenary/syndicate/commando

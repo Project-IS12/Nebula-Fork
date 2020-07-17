@@ -906,7 +906,7 @@
 /obj/item/fossil/animal,
 /obj/item/fossil/animal,
 /obj/item/fossil,
-/obj/item/cat_hide,
+/obj/item/xenos_claw,
 /obj/item/ore/strangerock,
 /turf/simulated/floor/tiled/usedup,
 /area/ship/scrap/cargo/lower)
@@ -2152,8 +2152,8 @@
 	dir = 9
 	},
 /obj/item/stock_parts/circuitboard/air_alarm,
-/obj/item/stock_parts/circuitboard/airlock_electronics,
-/obj/item/stock_parts/circuitboard/airlock_electronics,
+/obj/item/airlock_electronics,
+/obj/item/airlock_electronics,
 /obj/structure/table/rack,
 /turf/simulated/floor/tiled/usedup,
 /area/ship/scrap/maintenance/storage)
@@ -2526,7 +2526,7 @@
 "eG" = (
 /obj/structure/table/rack,
 /obj/item/stock_parts/circuitboard/pacman/super/potato,
-/obj/item/stack/material/glass/reinforced_borosilicate/ten,
+/obj/item/stack/material/glass/phoronrglass/ten,
 /obj/item/stack/material/ocp/ten,
 /obj/item/stock_parts/circuitboard/unary_atmos/engine,
 /obj/item/stock_parts/circuitboard/unary_atmos/engine,

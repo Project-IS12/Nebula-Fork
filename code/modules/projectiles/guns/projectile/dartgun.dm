@@ -1,9 +1,54 @@
+/obj/item/projectile/bullet/chemdart
+	name = "dart"
+	icon_state = "dart"
+	damage = 5
+	sharp = 1
+	embed = 1 //the dart is shot fast enough to pierce space suits, so I guess splintering inside the target can be a thing. Should be rare due to low damage.
+	var/reagent_amount = 15
+	range = 15 //shorter range
+	unacidable = 1
+
+	muzzle_type = null
+
+/obj/item/projectile/bullet/chemdart/Initialize()
+	. = ..()
+	create_reagents(reagent_amount)
+
+/obj/item/projectile/bullet/chemdart/on_hit(var/atom/target, var/blocked = 0, var/def_zone = null)
+	if(blocked < 100 && isliving(target))
+		var/mob/living/L = target
+		if(L.can_inject(null, def_zone))
+			reagents.trans_to_mob(L, reagent_amount, CHEM_INJECT)
+
+/obj/item/ammo_casing/chemdart
+	name = "chemical dart"
+	desc = "A small hardened, hollow dart."
+	icon_state = "dart"
+	caliber = CALIBER_DART
+	projectile_type = /obj/item/projectile/bullet/chemdart
+	leaves_residue = 0
+
+/obj/item/ammo_casing/chemdart/expend()
+	qdel(src)
+
+/obj/item/ammo_magazine/chemdart
+	name = "dart cartridge"
+	desc = "A rack of hollow darts."
+	icon_state = "darts"
+	item_state = "rcdammo"
+	origin_tech = "{'" + TECH_MATERIAL + "':2}"
+	mag_type = MAGAZINE
+	caliber = CALIBER_DART
+	ammo_type = /obj/item/ammo_casing/chemdart
+	max_ammo = 5
+	multiple_sprites = 1
+
 /obj/item/gun/projectile/dartgun
 	name = "dart gun"
 	desc = "The Artemis is a gas-powered dart gun capable of delivering chemical cocktails swiftly across short distances."
-	on_mob_icon = 'icons/obj/guns/dartgun.dmi'
 	icon = 'icons/obj/guns/dartgun.dmi'
-	icon_state = ICON_STATE_WORLD
+	icon_state = "dartgun-empty"
+	item_state = null
 
 	caliber = CALIBER_DART
 	fire_sound = 'sound/weapons/empty.ogg'
@@ -34,20 +79,17 @@
 
 /obj/item/gun/projectile/dartgun/on_update_icon()
 	if(!ammo_magazine)
-		icon_state = "[get_world_inventory_state()]-empty"
+		icon_state = "dartgun-empty"
 		return 1
 
-	icon_state = "[get_world_inventory_state()]-[Clamp(length(ammo_magazine.stored_ammo.len), 0, 5)]"
+	if(!ammo_magazine.stored_ammo || ammo_magazine.stored_ammo.len)
+		icon_state = "dartgun-0"
+	else if(ammo_magazine.stored_ammo.len > 5)
+		icon_state = "dartgun-5"
+	else
+		icon_state = "dartgun-[ammo_magazine.stored_ammo.len]"
 	return 1
 
-/obj/item/gun/projectile/dartgun/experimental_mob_overlay(mob/user_mob, slot)
-	var/image/I = ..()
-	if(slot == slot_r_hand_str || slot == slot_l_hand_str)
-		if(!ammo_magazine)
-			I.icon_state += "-empty"
-		else
-			I.icon_state += "-[Clamp(length(ammo_magazine.stored_ammo.len), 0, 5)]"
-	return I
 /obj/item/gun/projectile/dartgun/consume_next_projectile()
 	. = ..()
 	var/obj/item/projectile/bullet/chemdart/dart = .
@@ -59,10 +101,9 @@
 	if (beakers.len)
 		to_chat(user, "<span class='notice'>\The [src] contains:</span>")
 		for(var/obj/item/chems/glass/beaker/B in beakers)
-			if(B.reagents && LAZYLEN(B.reagents?.reagent_volumes))
-				for(var/rtype in B.reagents.reagent_volumes)
-					var/decl/material/R = decls_repository.get_decl(rtype)
-					to_chat(user, "<span class='notice'>[REAGENT_VOLUME(B.reagents, rtype)] units of [R.name]</span>")
+			if(B.reagents && B.reagents.reagent_list.len)
+				for(var/datum/reagent/R in B.reagents.reagent_list)
+					to_chat(user, "<span class='notice'>[R.volume] units of [R.name]</span>")
 
 /obj/item/gun/projectile/dartgun/attackby(obj/item/I, mob/user)
 	if(istype(I, /obj/item/chems/glass))
@@ -110,10 +151,9 @@
 			if(!istype(B)) continue
 
 			dat += "Beaker [i] contains: "
-			if(B.reagents && LAZYLEN(B.reagents.reagent_volumes))
-				for(var/rtype in B.reagents.reagent_volumes)
-					var/decl/material/R = decls_repository.get_decl(rtype)
-					dat += "<br>    [REAGENT_VOLUME(B.reagents, rtype)] units of [R.name], "
+			if(B.reagents && B.reagents.reagent_list.len)
+				for(var/datum/reagent/R in B.reagents.reagent_list)
+					dat += "<br>    [R.volume] units of [R.name], "
 				if(B in mixing)
 					dat += "<A href='?src=\ref[src];stop_mix=[i]'><font color='green'>Mixing</font></A> "
 				else
@@ -155,8 +195,12 @@
 
 	Interact(usr)
 
-/obj/item/gun/projectile/dartgun/medical
-	starting_chems = list(/decl/material/liquid/burn_meds,/decl/material/liquid/brute_meds,/decl/material/liquid/antitoxins)
+/obj/item/gun/projectile/dartgun/vox
+	name = "alien dart gun"
+	desc = "A small gas-powered dartgun, fitted for nonhuman hands."
 
-/obj/item/gun/projectile/dartgun/raider
-	starting_chems = list(/decl/material/liquid/psychoactives,/decl/material/liquid/sedatives,/decl/material/liquid/narcotics)
+/obj/item/gun/projectile/dartgun/vox/medical
+	starting_chems = list(/datum/reagent/burn_meds,/datum/reagent/brute_meds,/datum/reagent/antitoxins)
+
+/obj/item/gun/projectile/dartgun/vox/raider
+	starting_chems = list(/datum/reagent/psychoactives,/datum/reagent/sedatives,/datum/reagent/narcotics)

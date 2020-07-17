@@ -28,12 +28,12 @@
 	else
 		A.SetName("alien creature")
 		A.real_name = "alien creature"
-		A.verbs |= /mob/living/simple_animal/proc/name_species
+		//A.verbs |= /mob/living/simple_animal/proc/name_species
 	if(atmosphere)
 		//Set up gases for living things
-		var/list/all_gasses = subtypesof(/decl/material/gas)
+		var/list/all_gasses = SSmaterials.all_gasses
 		if(!LAZYLEN(breathgas))
-			var/list/goodgases = all_gasses.Copy() 
+			var/list/goodgases = all_gasses.Copy()
 			var/gasnum = min(rand(1,3), goodgases.len)
 			for(var/i = 1 to gasnum)
 				var/gas = pick(goodgases)
@@ -71,7 +71,7 @@
 		if(istype(A,species_type))
 			A.SetName(newname)
 			A.real_name = newname
-			A.verbs -= /mob/living/simple_animal/proc/name_species
+			//A.verbs -= /mob/living/simple_animal/proc/name_species
 	return TRUE
 
 // Landmarks placed by random map generator
@@ -87,7 +87,7 @@
 	var/obj/effect/overmap/visitable/sector/exoplanet/E = map_sectors["[z]"]
 	if(istype(E))
 		do_spawn(E)
-		
+
 /obj/effect/landmark/exoplanet_spawn/proc/do_spawn(var/obj/effect/overmap/visitable/sector/exoplanet/planet)
 	if(LAZYLEN(planet.fauna_types))
 		var/beastie = pick(planet.fauna_types)

@@ -22,7 +22,7 @@
 	var/turf/simulated/open/O = GetAbove(src)
 	var/atom/climb_target
 	if(istype(O))
-		for(var/turf/T in RANGE_TURFS(O, 1))
+		for(var/turf/T in trange(1,O))
 			if(!isopenspace(T) && T.is_floor())
 				climb_target = T
 			else
@@ -68,19 +68,19 @@
 	return 0
 
 /mob/living/carbon/human/can_ztravel()
-	if(Process_Spacemove())
+	if(Allow_Spacemove())
 		return 1
 
 	if(Check_Shoegrip())	//scaling hull with magboots
-		for(var/turf/simulated/T in RANGE_TURFS(src, 1))
+		for(var/turf/simulated/T in trange(1,src))
 			if(T.density)
 				return 1
 
 /mob/living/silicon/robot/can_ztravel()
-	if(Process_Spacemove()) //Checks for active jetpack
+	if(Allow_Spacemove()) //Checks for active jetpack
 		return 1
 
-	for(var/turf/simulated/T in RANGE_TURFS(src, 1)) //Robots get "magboots"
+	for(var/turf/simulated/T in trange(1,src)) //Robots get "magboots"
 		if(T.density)
 			return 1
 
@@ -100,7 +100,8 @@
 		return
 
 	// No gravity in space, apparently.
-	if(!has_gravity())
+	var/area/area = get_area(src)
+	if(!area.has_gravity())
 		return
 
 	if(throwing)
@@ -226,6 +227,8 @@
 			victim.dislocate()
 			to_chat(src, "<span class='warning'>You feel a sickening pop as your [victim.joint] is wrenched out of the socket.</span>")
 
+	playsound(loc, 'sound/effects/gore/fallsmash.ogg', 75, 1)//Splat
+
 	if(client)
 		var/area/A = get_area(landing)
 		if(A)
@@ -240,7 +243,8 @@
 	var/turf/T = get_turf(A)
 	var/turf/above = GetAbove(src)
 	if(above && T.Adjacent(bound_overlay) && above.CanZPass(src, UP)) //Certain structures will block passage from below, others not
-		if(loc.has_gravity() && !can_overcome_gravity())
+		var/area/location = get_area(loc)
+		if(location.has_gravity && !can_overcome_gravity())
 			return FALSE
 
 		visible_message("<span class='notice'>[src] starts climbing onto \the [A]!</span>", "<span class='notice'>You start climbing onto \the [A]!</span>")
@@ -338,8 +342,7 @@
 /atom/movable/z_observer/can_fall()
 	return FALSE
 
-/atom/movable/z_observer/explosion_act()
-	SHOULD_CALL_PARENT(FALSE)
+/atom/movable/z_observer/ex_act()
 	return
 
 /atom/movable/z_observer/singularity_act()

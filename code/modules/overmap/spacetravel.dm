@@ -6,7 +6,7 @@ var/list/cached_space = list()
 /obj/effect/overmap/visitable/sector/temporary
 	name = "Deep Space"
 	invisibility = 101
-	sector_flags = OVERMAP_SECTOR_IN_SPACE
+	known = 0
 
 /obj/effect/overmap/visitable/sector/temporary/Initialize(mapload, var/nx, var/ny, var/nz)
 	var/start_loc = locate(1, 1, nz) // This will be moved to the overmap in ..(), but must start on this z level for init to function.
@@ -52,7 +52,7 @@ proc/get_deepspace(x,y)
 	return isnull(client)
 
 /mob/living/carbon/human/lost_in_space()
-	return isnull(client) && (!last_ckey || stat == DEAD)
+	return isnull(client) && !last_ckey && stat == DEAD
 
 proc/overmap_spacetravel(var/turf/space/T, var/atom/movable/A)
 	if (!T || !A)
@@ -92,7 +92,7 @@ proc/overmap_spacetravel(var/turf/space/T, var/atom/movable/A)
 	var/turf/map = locate(M.x,M.y,GLOB.using_map.overmap_z)
 	var/obj/effect/overmap/visitable/TM
 	for(var/obj/effect/overmap/visitable/O in map)
-		if(O != M && (O.sector_flags & OVERMAP_SECTOR_IN_SPACE) && prob(50))
+		if(O != M && O.in_space && prob(50))
 			TM = O
 			break
 	if(!TM)

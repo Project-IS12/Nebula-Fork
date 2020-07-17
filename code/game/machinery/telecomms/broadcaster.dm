@@ -12,7 +12,7 @@ var/message_delay = 0 // To make sure restarting the recentmessages list is kept
 
 /obj/machinery/telecomms/broadcaster
 	name = "Subspace Broadcaster"
-	icon = 'icons/obj/machines/tcomms/broadcaster.dmi'
+	icon = 'icons/obj/stationobjs.dmi'
 	icon_state = "broadcaster"
 	desc = "A dish-shaped machine used to broadcast processed subspace signals."
 	density = 1
@@ -113,7 +113,7 @@ var/message_delay = 0 // To make sure restarting the recentmessages list is kept
 
 /obj/machinery/telecomms/allinone
 	name = "Telecommunications Mainframe"
-	icon = 'icons/obj/machines/tcomms/comm_server.dmi'
+	icon = 'icons/obj/stationobjs.dmi'
 	icon_state = "comm_server"
 	desc = "A compact machine used for portable subspace telecommuniations processing."
 	density = 1
@@ -128,7 +128,7 @@ var/message_delay = 0 // To make sure restarting the recentmessages list is kept
 	var/channel_color
 	var/channel_name
 	var/intercept = 0 // if nonzero, broadcasts all messages to syndicate channel
-	
+
 /obj/machinery/telecomms/allinone/Initialize()
 	if(!listening_freqs)
 		listening_freqs = ANTAG_FREQS	//Covers any updates to ANTAG_FREQS
@@ -288,7 +288,7 @@ var/message_delay = 0 // To make sure restarting the recentmessages list is kept
 
 	for(var/obj/item/radio/R in radios)
 		if((R.last_radio_sound + 1 SECOND) < world.time && R != radio)
-			playsound(R.loc, 'sound/effects/radio_chatter.ogg', 10, 0, -6)
+			playsound(R.loc, 'sound/effects/radiohiss.ogg', 10, 0, -6)
 			R.last_radio_sound = world.time
 
 	// Get a list of mobs who can hear from the radios we collected.

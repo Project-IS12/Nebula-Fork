@@ -9,18 +9,18 @@
 /obj/item/stock_parts/smes_coil
 	name = "superconductive magnetic coil"
 	desc = "Standard superconductive magnetic coil with average capacity and I/O rating."
-	icon = 'icons/obj/items/stock_parts/stock_parts.dmi'
+	icon = 'icons/obj/stock_parts.dmi'
 	icon_state = "smes_coil"			// Just few icons patched together. If someone wants to make better icon, feel free to do so!
 	w_class = ITEM_SIZE_LARGE							// It's LARGE (backpack size)
 	origin_tech = "{'materials':7,'powerstorage':7,'engineering':5}"
 	base_type = /obj/item/stock_parts/smes_coil
 	part_flags = PART_FLAG_HAND_REMOVE
-	material = /decl/material/solid/metal/steel
+	material = MAT_STEEL
 	matter = list(
-		/decl/material/solid/glass = MATTER_AMOUNT_REINFORCEMENT,
-		/decl/material/solid/metal/gold = MATTER_AMOUNT_TRACE,
-		/decl/material/solid/metal/silver = MATTER_AMOUNT_TRACE,
-		/decl/material/solid/metal/aluminium = MATTER_AMOUNT_TRACE
+		MAT_GLASS = MATTER_AMOUNT_REINFORCEMENT,
+		MAT_GOLD = MATTER_AMOUNT_TRACE,
+		MAT_SILVER = MATTER_AMOUNT_TRACE,
+		MAT_ALUMINIUM = MATTER_AMOUNT_TRACE
 	)
 
 	var/ChargeCapacity = 50 KILOWATTS

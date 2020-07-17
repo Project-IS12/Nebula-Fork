@@ -1,5 +1,5 @@
 /obj/item/bone
-	icon = 'icons/obj/items/bone.dmi'
+	icon = 'icons/obj/butchery.dmi'
 	var/bone_amt = 1
 
 /obj/item/bone/skull

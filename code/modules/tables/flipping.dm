@@ -18,7 +18,7 @@
 	set category = "Object"
 	set src in oview(1)
 
-	if (!usr.can_touch(src) || ismouse(usr))
+	if (!can_touch(usr) || ismouse(usr))
 		return
 
 	if(reinf_material || flipped < 0 || !flip(get_cardinal_dir(usr,src)))
@@ -61,7 +61,7 @@
 	set category = "Object"
 	set src in oview(1)
 
-	if (!usr.can_touch(src))
+	if (!can_touch(usr))
 		return
 
 	if (!unflipping_check())

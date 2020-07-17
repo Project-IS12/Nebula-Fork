@@ -9,9 +9,9 @@
 /decl/archaeological_find/cutlery
 	item_type = "cutlery"
 	possible_types = list(
-		/obj/item/kitchen/utensil/fork,
-		/obj/item/knife/table,
-		/obj/item/kitchen/utensil/spoon
+		/obj/item/material/kitchen/utensil/fork,
+		/obj/item/material/knife/table,
+		/obj/item/material/kitchen/utensil/spoon
 	)
 
 /decl/archaeological_find/cutlery/new_icon_state()
@@ -22,13 +22,13 @@
 		"It's like no [item_type] you've ever seen before.",
 		"It's a mystery how anyone is supposed to eat with this.",
 		"You wonder what the creator's mouth was shaped like.")
-		
+
 // Coin
 /decl/archaeological_find/coin
 	item_type = "coin"
 	modification_flags = XENOFIND_REPLACE_ICON
 	engraving_chance = 100
-	responsive_reagent = /decl/material/solid/metal/iron
+	responsive_reagent = /datum/reagent/iron
 	possible_types = list(/obj/item/coin)
 
 /decl/archaeological_find/coin/new_icon_state()
@@ -56,7 +56,7 @@
 /decl/archaeological_find/tank/spawn_item(atom/loc)
 	var/obj/item/tank/new_item = ..()
 	new_item.air_contents.gas.Cut()
-	new_item.air_contents.adjust_gas(pick(subtypesof(/decl/material/gas)),15)
+	new_item.air_contents.adjust_gas(pick(SSmaterials.all_gasses),15)
 	return new_item
 
 /decl/archaeological_find/tank/generate_name()
@@ -68,7 +68,7 @@
 //Random tool
 /decl/archaeological_find/tool
 	item_type = "tool"
-	responsive_reagent = /decl/material/solid/metal/iron
+	responsive_reagent = /datum/reagent/iron
 	possible_types = list(
 		/obj/item/wrench,
 		/obj/item/crowbar,
@@ -86,7 +86,7 @@
 	item_type = "crystal"
 	modification_flags = XENOFIND_REPLACE_ICON
 	engraving_chance = 100
-	responsive_reagent = /decl/material/gas/ammonia
+	responsive_reagent = /datum/reagent/ammonia
 
 /decl/archaeological_find/crystal/new_icon_state()
 	if(prob(25))
@@ -103,3 +103,10 @@
 		"It seems to draw you inward as you look it at.",
 		"Something twinkles faintly as you look at it.",
 		"It's mesmerizing to behold.")
+/*
+/client/verb/spawn_find()
+	var/list/finds = decls_repository.get_decls_of_type(/decl/archaeological_find)
+	var/find = input("What find") as anything in finds
+	var/decl/archaeological_find/F = finds[find]
+	F.create_find(get_turf(mob))
+*/

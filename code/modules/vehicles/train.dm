@@ -1,6 +1,6 @@
 /obj/vehicle/train
 	name = "train"
-	dir = EAST
+	dir = 4
 
 	move_delay = 1
 

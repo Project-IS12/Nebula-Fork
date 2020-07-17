@@ -2,6 +2,9 @@
 	path = /obj/item/crowbar
 	category = "Tools"
 
+/datum/fabricator_recipe/tool/prybar
+	path = /obj/item/crowbar/prybar
+
 /datum/fabricator_recipe/tool/int_wirer
 	path = /obj/item/integrated_electronics/wirer
 
@@ -30,10 +33,10 @@
 	path = /obj/item/wrench
 
 /datum/fabricator_recipe/tool/hatchet
-	path = /obj/item/hatchet
+	path = /obj/item/material/hatchet
 
 /datum/fabricator_recipe/tool/minihoe
-	path = /obj/item/minihoe
+	path = /obj/item/material/minihoe
 
 /datum/fabricator_recipe/tool/welder_industrial
 	path = /obj/item/weldingtool/largetank

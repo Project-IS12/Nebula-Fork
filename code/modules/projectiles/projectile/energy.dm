@@ -7,6 +7,32 @@
 	damage_flags = 0
 	distance_falloff = 2.5
 
+/obj/item/projectile/energy/laser
+	name = "laser"
+	fire_sound='sound/weapons/Laser.ogg'
+	impact_sounds = list(BULLET_IMPACT_MEAT = SOUNDS_LASER_MEAT, BULLET_IMPACT_METAL = SOUNDS_LASER_METAL)
+	pass_flags = PASS_FLAG_TABLE | PASS_FLAG_GLASS | PASS_FLAG_GRILLE
+	damage = 40
+	sharp = 1 //concentrated burns
+	damage_flags = DAM_LASER
+	eyeblur = 4
+	icon_state = "laser"
+
+/obj/item/projectile/energy/laser/heavylaser
+	fire_sound = 'sound/weapons/lasercannonfire.ogg'
+	damage = 60
+	armor_penetration = 30
+	distance_falloff = 0.5
+
+/obj/item/projectile/energy/laser/midlaser
+	damage = 50
+
+/obj/item/projectile/energy/laser/smalllaser
+	damage = 25
+
+/obj/item/projectile/energy/laser/practice
+	damage = 0
+
 //releases a burst of light on impact or after travelling a distance
 /obj/item/projectile/energy/flash
 	name = "chemical shell"
@@ -14,7 +40,7 @@
 	fire_sound = 'sound/weapons/gunshot/gunshot_pistol.ogg'
 	damage = 5
 	agony = 20
-	life_span = 15 //if the shell hasn't hit anything after travelling this far it just explodes.
+	range = 15 //if the shell hasn't hit anything after travelling this far it just explodes.
 	muzzle_type = /obj/effect/projectile/bullet/muzzle
 	var/flash_range = 1
 	var/brightness = 7
@@ -51,40 +77,14 @@
 	brightness = 15
 
 /obj/item/projectile/energy/flash/flare/on_impact(var/atom/A)
-	light_colour = pick("#e58775", "#ffffff", "#faa159", "#e34e0e")
+	light_colour = pick("#e58775", "#ffffff", "#90ff90", "#a09030")
 	set_light(1, 1, 4, 2, light_colour)
 	..() //initial flash
 
 	//residual illumination
 	new /obj/effect/effect/smoke/illumination(loc, rand(190,240), 8, 1, light_colour) //same lighting power as flare
 
-	var/turf/TO = get_turf(src)
-	var/area/AO = TO.loc
-	if(AO && (AO.area_flags & AREA_FLAG_EXTERNAL))
-		//Everyone saw that!
-		for(var/mob/living/mob in GLOB.living_mob_list_)
-			var/turf/T = get_turf(mob)
-			var/area/A1 = T.loc
-			if(T && (T != TO) && (TO.z == T.z) && !mob.blinded)
-				var/visible = FALSE
-				if(A1 && (A1.area_flags & AREA_FLAG_EXTERNAL))
-					visible = TRUE
-				else
-					var/dir = get_dir(T,TO)
-					var/turf/pos = T
-					for (var/j in 0 to 5)
-						pos = get_step(pos, dir)
-						if(pos.opacity)
-							break
-						A1 = pos.loc
-						if(A1 && (A1.area_flags & AREA_FLAG_EXTERNAL))
-							visible = TRUE
-							break
-				if(visible)
-					to_chat(mob, SPAN_NOTICE("You see a bright light to \the [dir2text(get_dir(T,TO))]"))
-			CHECK_TICK
-				
-/obj/item/projectile/energy/electrode	//has more pain than a beam because it's harder to hit 
+/obj/item/projectile/energy/electrode	//has more pain than a beam because it's harder to hit
 	name = "electrode"
 	icon_state = "spark"
 	fire_sound = 'sound/weapons/Taser.ogg'
@@ -92,7 +92,7 @@
 	damage = 2
 	damage_type = BURN
 	eyeblur = 1//Some feedback that you've been hit
-	step_delay = 0.7
+	speed = 0.7
 
 /obj/item/projectile/energy/electrode/green
 	icon_state = "spark_green"
@@ -137,8 +137,8 @@
 	damage_type = TOX
 	weaken = 5
 
-/obj/item/projectile/energy/radiation
-	name = "radiation bolt"
+/obj/item/projectile/energy/phoron
+	name = "phoron bolt"
 	icon_state = "energy"
 	fire_sound = 'sound/effects/stealthoff.ogg'
 	damage = 20
@@ -150,7 +150,7 @@
 	icon_state = "plasma_stun"
 	fire_sound = 'sound/weapons/blaster.ogg'
 	armor_penetration = 10
-	life_span = 4
+	range = 4
 	damage = 5
 	agony = 70
 	damage_type = BURN

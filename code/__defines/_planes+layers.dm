@@ -71,6 +71,8 @@ What is the naming convention for planes or layers?
 	#define DEBRIS_LAYER                 1
 	#define DUST_LAYER                   2
 
+#define GLIDE_SIZE_CONSTANT world.tick_lag
+
 // Openspace uses planes -80 through -70.
 
 #define OVER_OPENSPACE_PLANE        -3
@@ -151,10 +153,8 @@ What is the naming convention for planes or layers?
 	#define PROJECTILE_LAYER            4.17
 	#define ABOVE_PROJECTILE_LAYER      4.18
 	#define SINGULARITY_LAYER           4.19
-	#define SINGULARITY_EFFECT_LAYER    4.20
-	#define POINTER_LAYER               4.21
-	// Z-Mimic-managed lighting
-	#define MIMICED_LIGHTING_LAYER      4.22
+	#define POINTER_LAYER               4.20
+	#define MIMICED_LIGHTING_LAYER      4.21	// Z-Mimic-managed lighting
 
 	//FLY_LAYER                          5
 	//OBSERVER
@@ -188,7 +188,6 @@ What is the naming convention for planes or layers?
 	#define HUD_BASE_LAYER               2
 	#define HUD_ITEM_LAYER               3
 	#define HUD_ABOVE_ITEM_LAYER         4
-	#define HUD_ABOVE_HUD_LAYER          5
 
 
 //This is difference between planes used for atoms and effects
@@ -221,6 +220,17 @@ What is the naming convention for planes or layers?
 	appearance_flags = PLANE_MASTER
 	screen_loc = "CENTER,CENTER"
 	globalscreen = 1
+
+/obj/screen/plane_master/blur_all
+	plane = DEFAULT_PLANE
+	filters = filter(type = "blur", size = 2)
+
+/obj/screen/plane_master/blurs
+	filters = filter(type = "blur", size = 2)
+
+/obj/screen/plane_master/openspace_blur
+	plane = OVER_OPENSPACE_PLANE
+	filters = filter(type = "blur", size = 1)
 
 /obj/screen/plane_master/ghost_master
 	plane = OBSERVER_PLANE

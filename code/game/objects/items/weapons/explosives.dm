@@ -79,9 +79,9 @@
 			var/turf/simulated/wall/W = target
 			W.dismantle_wall(1)
 		else if(istype(target, /mob/living))
-			target.explosion_act(2) // c4 can't gib mobs anymore.
+			target.ex_act(2) // c4 can't gib mobs anymore.
 		else
-			target.explosion_act(1)
+			target.ex_act(1)
 	if(target)
 		target.overlays -= image_overlay
 	qdel(src)

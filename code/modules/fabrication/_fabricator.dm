@@ -31,30 +31,21 @@
 	var/list/stored_material
 	var/list/storage_capacity
 	var/list/base_storage_capacity = list(
-		/decl/material/solid/metal/steel =     SHEET_MATERIAL_AMOUNT * 20,
-		/decl/material/solid/metal/aluminium = SHEET_MATERIAL_AMOUNT * 20,
-		/decl/material/solid/glass =     SHEET_MATERIAL_AMOUNT * 10,
-		/decl/material/solid/plastic =   SHEET_MATERIAL_AMOUNT * 10
+		MAT_STEEL =     SHEET_MATERIAL_AMOUNT * 20,
+		MAT_ALUMINIUM = SHEET_MATERIAL_AMOUNT * 20,
+		MAT_GLASS =     SHEET_MATERIAL_AMOUNT * 10,
+		MAT_PLASTIC =   SHEET_MATERIAL_AMOUNT * 10
 	)
 
-	var/initial_id_tag
 	var/show_category = "All"
 	var/fab_status_flags = 0
 	var/mat_efficiency = 1.1
 	var/build_time_multiplier = 1
 	var/global/list/stored_substances_to_names = list()
 
-	var/list/design_cache = list()
-	var/list/installed_designs
-
 	var/sound_id
 	var/datum/sound_token/sound_token
 	var/fabricator_sound = 'sound/machines/fabricator_loop.ogg'
-
-	var/output_dir
-
-	var/initial_network_id
-	var/initial_network_key
 
 /obj/machinery/fabricator/Destroy()
 	QDEL_NULL(currently_building)
@@ -73,14 +64,9 @@
 		to_chat(user, SPAN_NOTICE("It has a built-in shredder that can recycle most items, although any materials it cannot use will be wasted."))
 
 /obj/machinery/fabricator/Initialize()
-
 	panel_image = image(icon, "[base_icon_state]_panel")
 	. = ..()
 	sound_id = "[fabricator_sound]"
-
-	// Get any local network we need to be part of.
-	set_extension(src, /datum/extension/network_device, initial_network_id, initial_network_key, NETWORK_CONNECTION_WIRED)
-
 	// Initialize material storage lists.
 	stored_material = list()
 	for(var/mat in base_storage_capacity)
@@ -88,32 +74,13 @@
 
 		// Update global type to string cache.
 		if(!stored_substances_to_names[mat])
-			if(ispath(mat, /decl/material))
-				var/decl/material/mat_instance = decls_repository.get_decl(mat)
+			if(ispath(mat, /material))
+				var/material/mat_instance = SSmaterials.get_material_datum(mat)
 				if(istype(mat_instance))
-					stored_substances_to_names[mat] =  lowertext(mat_instance.name)
-			else if(ispath(mat, /decl/material))
-				var/decl/material/reg = mat
+					stored_substances_to_names[mat] =  lowertext(mat_instance.display_name)
+			else if(ispath(mat, /datum/reagent))
+				var/datum/reagent/reg = mat
 				stored_substances_to_names[mat] = lowertext(initial(reg.name))
-
-	SSfabrication.init_fabricator(src)
-
-/obj/machinery/fabricator/proc/refresh_design_cache(var/list/known_tech)
-	if(length(installed_designs))
-		design_cache |= installed_designs
-	if(!known_tech)
-		known_tech = list()
-		var/datum/extension/network_device/device = get_extension(src, /datum/extension/network_device)
-		var/datum/computer_network/network = device.get_network()
-		if(network)
-			for(var/obj/machinery/design_database/db in network.get_devices_by_type(/obj/machinery/design_database))
-				for(var/tech in db.tech_levels)
-					if(db.tech_levels[tech] > known_tech[tech])
-						known_tech[tech] = db.tech_levels[tech]
-	if(length(known_tech))
-		var/list/unlocked_tech = SSfabrication.get_unlocked_recipes(fabricator_class, known_tech)
-		if(length(unlocked_tech))
-			design_cache |= unlocked_tech
 
 /obj/machinery/fabricator/state_transition(var/decl/machine_construction/default/new_state)
 	. = ..()
@@ -167,9 +134,9 @@
 
 /obj/machinery/fabricator/dismantle()
 	for(var/mat in stored_material)
-		if(ispath(mat, /decl/material))
+		if(ispath(mat, /material))
 			var/mat_name = stored_substances_to_names[mat]
-			var/decl/material/M = decls_repository.get_decl(mat_name)
+			var/material/M = SSmaterials.get_material_datum(mat_name)
 			if(stored_material[mat] > SHEET_MATERIAL_AMOUNT)
 				M.place_sheet(get_turf(src), round(stored_material[mat] / SHEET_MATERIAL_AMOUNT), M.type)
 	..()

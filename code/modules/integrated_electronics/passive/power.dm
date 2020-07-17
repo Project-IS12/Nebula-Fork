@@ -97,7 +97,7 @@
 	activators = list("push ref" = IC_PINTYPE_PULSE_IN)
 	spawn_flags = IC_SPAWN_DEFAULT|IC_SPAWN_RESEARCH
 	var/volume = 60
-	var/list/fuel = list(/decl/material/solid/phoron = 50000, /decl/material/liquid/fuel = 15000, /decl/material/solid/carbon = 10000, /decl/material/liquid/ethanol = 10000, /decl/material/liquid/nutriment = 8000)
+	var/list/fuel = list(/datum/reagent/toxin/phoron = 50000, /datum/reagent/fuel = 15000, /datum/reagent/carbon = 10000, /datum/reagent/ethanol = 10000, /datum/reagent/nutriment = 8000)
 	var/multi = 1
 	var/lfwb =TRUE
 
@@ -120,7 +120,7 @@
 	if(assembly)
 		if(assembly.battery)
 			var/bp = 5000
-			if((assembly.battery.maxcharge-assembly.battery.charge) / CELLRATE > bp && reagents.remove_reagent(/decl/material/liquid/blood, 1)) //only blood is powerful enough to power the station(c)
+			if((assembly.battery.maxcharge-assembly.battery.charge) / CELLRATE > bp && reagents.remove_reagent(/datum/reagent/blood, 1)) //only blood is powerful enough to power the station(c)
 				assembly.give_power(bp)
 			for(var/I in fuel)
 				if((assembly.battery.maxcharge-assembly.battery.charge) / CELLRATE > fuel[I])

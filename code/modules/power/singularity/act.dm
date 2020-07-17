@@ -29,8 +29,8 @@
 
 /obj/singularity_act()
 	if(simulated)
-		explosion_act(1)
-		if(!QDELETED(src))
+		ex_act(1)
+		if(src)
 			qdel(src)
 		return 2
 

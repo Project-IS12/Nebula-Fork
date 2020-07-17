@@ -87,6 +87,12 @@
 		if("usr")		hsrc = mob
 		if("prefs")		return prefs.process_link(usr,href_list)
 		if("vars")		return view_var_Topic(href,href_list,hsrc)
+		if("chat")		return chatOutput.Topic(href, href_list)
+
+	switch(href_list["action"])
+		if("openLink")
+			src << link(href_list["link"])
+
 
 	if(codex_topic(href, href_list))
 		return
@@ -118,6 +124,7 @@
 	//CONNECT//
 	///////////
 /client/New(TopicData)
+	chatOutput = new /datum/chatOutput(src)
 	TopicData = null							//Prevent calls to client.Topic from connect
 
 	switch (connection)
@@ -180,6 +187,9 @@
 
 	. = ..()	//calls mob.Login()
 
+	chatOutput.start() // Starts the chat
+	force_dark_theme()
+
 	GLOB.using_map.map_info(src)
 
 	if(custom_event_msg && custom_event_msg != "")
@@ -214,8 +224,8 @@
 		src.lore_splash()
 		to_chat(src, "<span class = 'notice'>Greetings, and welcome to the server! A link to the beginner's lore page has been opened, please read through it! This window will stop automatically opening once your account here is greater than 7 days old.</span>")
 
-	if(!winexists(src, "asset_cache_browser")) // The client is using a custom skin, tell them.
-		to_chat(src, "<span class='warning'>Unable to access asset cache browser, if you are using a custom skin file, please allow DS to download the updated version, if you are not, then make a bug report. This is not a critical issue but can cause issues with resource downloading, as it is impossible to know when extra resources arrived to you.</span>")
+	if(get_preference_value(/datum/client_preference/fullscreen_mode) != GLOB.PREF_OFF)
+		toggle_fullscreen(get_preference_value(/datum/client_preference/fullscreen_mode))
 
 	if(!tooltips)
 		tooltips = new /datum/tooltip(src)
@@ -223,9 +233,33 @@
 	if(holder)
 		src.control_freak = 0 //Devs need 0 for profiler access
 
-	//////////////
-	//DISCONNECT//
-	//////////////
+	//SetWindowIconSize(96)
+
+	// Maptext tooltip
+	tooltip = new()
+	tooltip.icon = 'icons/misc/static.dmi'
+	tooltip.icon_state = "blank"
+	tooltip.screen_loc = "NORTH,WEST+25%"
+	tooltip.maptext_width = 256
+	tooltip.maptext_x = 0
+	tooltip.plane = FULLSCREEN_PLANE
+
+	if (mob && mob.get_preference_value("TOOLTIP") == GLOB.PREF_NO)
+		tooltip.alpha = 0
+
+	screen += tooltip
+
+
+/client/MouseEntered(atom/object, location, control, params)
+	if (tooltip)
+		screen |= tooltip
+		tooltip.maptext = ""
+		if(GAME_STATE > RUNLEVEL_LOBBY)
+			tooltip.maptext = "<center style=\"text-shadow: 1px 1px 2px black; font:'Small Fonts';font-size:8px;font-weight:bold;\">[uppertext(object.name)]</center>"
+
+//////////////
+//DISCONNECT//
+//////////////
 /client/Del()
 	ticket_panels -= src
 	if(src && watched_variables_window)
@@ -253,7 +287,7 @@
 
 	var/sql_ckey = sql_sanitize_text(ckey(key))
 
-	var/DBQuery/query = dbcon.NewQuery("SELECT DATEDIFF(NOW(), `firstseen`) AS `age` FROM `erro_player` WHERE `ckey` = '[sql_ckey]'")
+	var/DBQuery/query = dbcon.NewQuery("SELECT datediff(Now(),firstseen) as age FROM erro_player WHERE ckey = '[sql_ckey]'")
 	query.Execute()
 
 	if(query.NextRow())
@@ -273,7 +307,7 @@
 
 	var/sql_ckey = sql_sanitize_text(src.ckey)
 
-	var/DBQuery/query = dbcon.NewQuery("SELECT `id`, DATEDIFF(NOW(), `firstseen`) AS `age` FROM `erro_player` WHERE `ckey` = '[sql_ckey]'")
+	var/DBQuery/query = dbcon.NewQuery("SELECT id, datediff(Now(),firstseen) as age FROM erro_player WHERE ckey = '[sql_ckey]'")
 	query.Execute()
 	var/sql_id = 0
 	player_age = 0	// New players won't have an entry so knowing we have a connection we set this to zero to be updated if their is a record.
@@ -282,21 +316,21 @@
 		player_age = text2num(query.item[2])
 		break
 
-	var/DBQuery/query_ip = dbcon.NewQuery("SELECT `ckey` FROM `erro_player` WHERE `ip` = '[address]'")
+	var/DBQuery/query_ip = dbcon.NewQuery("SELECT ckey FROM erro_player WHERE ip = '[address]'")
 	query_ip.Execute()
 	related_accounts_ip = ""
 	while(query_ip.NextRow())
 		related_accounts_ip += "[query_ip.item[1]], "
 		break
 
-	var/DBQuery/query_cid = dbcon.NewQuery("SELECT `ckey` FROM `erro_player` WHERE `computerid` = '[computer_id]'")
+	var/DBQuery/query_cid = dbcon.NewQuery("SELECT ckey FROM erro_player WHERE computerid = '[computer_id]'")
 	query_cid.Execute()
 	related_accounts_cid = ""
 	while(query_cid.NextRow())
 		related_accounts_cid += "[query_cid.item[1]], "
 		break
 
-	var/DBQuery/query_staffwarn = dbcon.NewQuery("SELECT `staffwarn` FROM `erro_player` WHERE `ckey` = '[sql_ckey]' AND !ISNULL(`staffwarn`)")
+	var/DBQuery/query_staffwarn = dbcon.NewQuery("SELECT staffwarn FROM erro_player WHERE ckey = '[sql_ckey]' AND !ISNULL(staffwarn)")
 	query_staffwarn.Execute()
 	if(query_staffwarn.NextRow())
 		src.staffwarn = query_staffwarn.item[1]
@@ -322,16 +356,16 @@
 
 	if(sql_id)
 		//Player already identified previously, we need to just update the 'lastseen', 'ip' and 'computer_id' variables
-		var/DBQuery/query_update = dbcon.NewQuery("UPDATE `erro_player` SET `lastseen` = NOW(), `ip` = '[sql_ip]', `computerid` = '[sql_computerid]', `lastadminrank` = '[sql_admin_rank]' WHERE `id` = [sql_id]")
+		var/DBQuery/query_update = dbcon.NewQuery("UPDATE erro_player SET lastseen = Now(), ip = '[sql_ip]', computerid = '[sql_computerid]', lastadminrank = '[sql_admin_rank]' WHERE id = [sql_id]")
 		query_update.Execute()
 	else
 		//New player!! Need to insert all the stuff
-		var/DBQuery/query_insert = dbcon.NewQuery("INSERT INTO `erro_player` (`id`, `ckey`, `firstseen`, `lastseen`, `ip`, `computerid`, `lastadminrank`) VALUES (NULL, '[sql_ckey]', NOW(), NOW(), '[sql_ip]', '[sql_computerid]', '[sql_admin_rank]')")
+		var/DBQuery/query_insert = dbcon.NewQuery("INSERT INTO erro_player (id, ckey, firstseen, lastseen, ip, computerid, lastadminrank) VALUES (null, '[sql_ckey]', Now(), Now(), '[sql_ip]', '[sql_computerid]', '[sql_admin_rank]')")
 		query_insert.Execute()
 
 	//Logging player access
 	var/serverip = "[world.internet_address]:[world.port]"
-	var/DBQuery/query_accesslog = dbcon.NewQuery("INSERT INTO `erro_connection_log` (`id`, `datetime`, `serverip`, `ckey`, `ip`, `computerid`) VALUES (NULL, NOW(), '[serverip]', '[sql_ckey]', '[sql_ip]', '[sql_computerid]');")
+	var/DBQuery/query_accesslog = dbcon.NewQuery("INSERT INTO `erro_connection_log`(`id`,`datetime`,`serverip`,`ckey`,`ip`,`computerid`) VALUES(null,Now(),'[serverip]','[sql_ckey]','[sql_ip]','[sql_computerid]');")
 	query_accesslog.Execute()
 
 
@@ -446,6 +480,7 @@ client/verb/character_setup()
 	handle_resize(src)
 
 /proc/handle_resize(client/C)
+	return
 	if (!C)
 		return
 	var/divisor = text2num(winget(C, "mapwindow.map", "icon-size")) || world.icon_size
@@ -472,50 +507,6 @@ client/verb/character_setup()
 		if(C.mob.l_general)
 			C.mob.l_general.fit_to_client_view(C.last_view_x_dim, C.last_view_y_dim)
 		C.mob.reload_fullscreen()
-
-/client/proc/update_chat_position(use_alternative)
-	var/input_height = 0
-	// Hell
-	if(use_alternative == TRUE)
-		input_height = winget(src, "input", "size")
-		input_height = text2num(splittext(input_height, "x")[2])
-
-		winset(src, "input_alt", "is-visible=true;is-disabled=false;is-default=true")
-		winset(src, "hotkey_toggle_alt", "is-visible=true;is-disabled=false;is-default=true")
-		winset(src, "saybutton_alt", "is-visible=true;is-disabled=false;is-default=true")
-
-		winset(src, "input", "is-visible=false;is-disabled=true;is-default=false")
-		winset(src, "hotkey_toggle", "is-visible=false;is-disabled=true;is-default=false")
-		winset(src, "saybutton", "is-visible=false;is-disabled=true;is-default=false")
-
-		var/current_size = splittext(winget(src, "outputwindow.output", "size"), "x")
-		var/new_size = "[current_size[1]]x[text2num(current_size[2]) - input_height]"
-		winset(src, "outputwindow.output", "size=[new_size]")
-		winset(src, "outputwindow.browseroutput", "size=[new_size]")
-
-		current_size = splittext(winget(src, "mainwindow.mainvsplit", "size"), "x")
-		new_size = "[current_size[1]]x[text2num(current_size[2]) + input_height]"
-		winset(src, "mainwindow.mainvsplit", "size=[new_size]")
-	else
-		input_height = winget(src, "input_alt", "size")
-		input_height = text2num(splittext(input_height, "x")[2])
-
-		winset(src, "input_alt", "is-visible=false;is-disabled=true;is-default=false")
-		winset(src, "hotkey_toggle_alt", "is-visible=false;is-disabled=true;is-default=false")
-		winset(src, "saybutton_alt", "is-visible=false;is-disabled=true;is-default=false")
-
-		winset(src, "input", "is-visible=true;is-disabled=false;is-default=true")
-		winset(src, "hotkey_toggle", "is-visible=true;is-disabled=false;is-default=true")
-		winset(src, "saybutton", "is-visible=true;is-disabled=false;is-default=true")
-
-		var/current_size = splittext(winget(src, "outputwindow.output", "size"), "x")
-		var/new_size = "[current_size[1]]x[text2num(current_size[2]) + input_height]"
-		winset(src, "outputwindow.output", "size=[new_size]")
-		winset(src, "outputwindow.browseroutput", "size=[new_size]")
-
-		current_size = splittext(winget(src, "mainwindow.mainvsplit", "size"), "x")
-		new_size = "[current_size[1]]x[text2num(current_size[2]) - input_height]"
-		winset(src, "mainwindow.mainvsplit", "size=[new_size]")
 
 /client/proc/toggle_fullscreen(new_value)
 	if((new_value == GLOB.PREF_BASIC) || (new_value == GLOB.PREF_FULL))

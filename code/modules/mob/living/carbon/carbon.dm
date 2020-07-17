@@ -31,11 +31,6 @@
 	set_hydration(400)
 	..()
 
-/mob/living/carbon/get_ai_type()
-	if(ispath(species?.ai))
-		return species.ai
-	return ..()
-
 /mob/living/carbon/Move(NewLoc, direct)
 	. = ..()
 	if(!.)
@@ -159,6 +154,13 @@
 		else
 			hud_used.l_hand_hud_object.icon_state = "l_hand_inactive"
 			hud_used.r_hand_hud_object.icon_state = "r_hand_active"
+
+	if(using_alt_hud) //Luna hud.
+		if(hud_used.swaphands_hud_object)
+			if(hand)	//This being 1 means the left hand is in use
+				hud_used.swaphands_hud_object.dir = 2
+			else
+				hud_used.swaphands_hud_object.dir = 1
 	var/obj/item/I = get_active_hand()
 	if(istype(I))
 		I.on_active_hand()
@@ -317,11 +319,10 @@
 
 	if(!src.lastarea)
 		src.lastarea = get_area(src.loc)
-	if(!check_space_footing())
+	if((istype(src.loc, /turf/space)) || (src.lastarea.has_gravity == 0))
 		if(prob((itemsize * itemsize * 10) * MOB_SIZE_MEDIUM/src.mob_size))
-			var/direction = get_dir(target, src)
-			step(src,direction)
-			space_drift(direction)
+			src.inertia_dir = get_dir(target, src)
+			step(src, inertia_dir)
 
 	item.throw_at(target, throw_range, item.throw_speed * skill_mod, src)
 
@@ -368,7 +369,8 @@
 	..()
 
 /mob/living/carbon/slip(slipped_on, stun_duration = 8)
-	if(!has_gravity())
+	var/area/A = get_area(src)
+	if(!A.has_gravity())
 		return FALSE
 	if(buckled)
 		return FALSE
@@ -478,6 +480,9 @@
 /mob/living/carbon/get_sex()
 	return species.get_sex(src)
 
+/mob/living/carbon/proc/get_ingested_reagents()
+	return reagents
+
 /mob/living/carbon/proc/set_nutrition(var/amt)
 	nutrition = Clamp(amt, 0, initial(nutrition))
 
@@ -499,7 +504,7 @@
 		if(!source_string)
 			source_string = source.name
 		to_chat(src, "<span class='notice'>You are now running on internals from \the [source_string].</span>")
-		playsound(src, 'sound/effects/internals.ogg', 50, 0)
+		playsound(src, 'sound/effects/valve_creak.ogg', 50, 0)
 	if(old_internal && !internal)
 		to_chat(src, "<span class='warning'>You are no longer running on internals.</span>")
 	if(internals)
@@ -508,9 +513,31 @@
 /mob/living/carbon/has_dexterity(var/dex_level)
 	. = ..() && (species.get_manual_dexterity() >= dex_level)
 
-/mob/living/carbon/fluid_act(var/datum/reagents/fluids)
-	var/saturation =  min(fluids.total_volume, round(mob_size * 1.5 * reagent_permeability()) - touching.total_volume)
-	if(saturation > 0)
-		fluids.trans_to_holder(touching, saturation)
-	if(fluids.total_volume)
-		..()
+/mob/living/carbon/human/swap_hand()
+	..()
+	update_aim_icon()
+
+/mob/proc/update_aim_icon()
+	if(!client)
+		return
+	if(istype(get_active_hand(),/obj/item/gun))
+		if(dispersion_mouse_display_number > 0 && dispersion_mouse_display_number < 2)
+			client.mouse_pointer_icon = 'icons/effects/standard/standard2.dmi'
+		else if(dispersion_mouse_display_number >= 2 && dispersion_mouse_display_number < 4)
+			client.mouse_pointer_icon = 'icons/effects/standard/standard3.dmi'
+		else if(dispersion_mouse_display_number >= 4 && dispersion_mouse_display_number < 6)
+			client.mouse_pointer_icon = 'icons/effects/standard/standard4.dmi'
+		else if(dispersion_mouse_display_number >= 6 && dispersion_mouse_display_number < 10)
+			client.mouse_pointer_icon = 'icons/effects/standard/standard5.dmi'
+		else if(dispersion_mouse_display_number >= 10)
+			client.mouse_pointer_icon = 'icons/effects/standard/standard6.dmi'
+		else
+			client.mouse_pointer_icon = 'icons/effects/standard/standard1.dmi'
+		if(dispersion_mouse_display_number > 2)
+			dispersion_mouse_display_number = 2
+		if(dispersion_mouse_display_number <= 0)
+			dispersion_mouse_display_number = 0
+		dispersion_mouse_display_number -= 1
+	else
+		if(client)
+			client.mouse_pointer_icon = null

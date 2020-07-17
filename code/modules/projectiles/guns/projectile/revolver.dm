@@ -2,9 +2,8 @@
 	name = "revolver"
 	desc = "The al-Maliki & Mosley Magnum Double Action is a choice revolver for when you absolutely, positively need to put a hole in the other guy."
 	icon = 'icons/obj/guns/revolvers.dmi'
-	on_mob_icon = 'icons/obj/guns/revolvers.dmi'
-	icon_state = ICON_STATE_WORLD
-	safety_icon = "safety"
+	icon_state = "revolver"
+	item_state = "revolver"
 	caliber = CALIBER_PISTOL_MAGNUM
 	origin_tech = "{'combat':2,'materials':2}"
 	handle_casings = CYCLE_CASINGS
@@ -46,25 +45,43 @@
 	chamber_offset = 0
 	return ..()
 
+/obj/item/gun/projectile/revolver/medium
+	name = "revolver"
+	icon_state = "medium"
+	safety_icon = "medium_safety"
+	caliber = CALIBER_PISTOL
+	ammo_type = /obj/item/ammo_casing/pistol
+	desc = "The Lumoco Arms' Solid is a rugged revolver for people who don't keep their guns well-maintained."
+	accuracy = 1
+	bulk = 0
+	fire_delay = 9
+
+/obj/item/gun/projectile/revolver/holdout
+	name = "holdout revolver"
+	desc = "The al-Maliki & Mosley Partner is a concealed-carry revolver made for people who do not trust automatic pistols any more than the people they're dealing with."
+	icon_state = "holdout"
+	item_state = "pen"
+	caliber = CALIBER_PISTOL_SMALL
+	ammo_type = /obj/item/ammo_casing/pistol/small
+	w_class = ITEM_SIZE_SMALL
+	accuracy = 1
+	one_hand_penalty = 0
+	bulk = 0
+	fire_delay = 7
+
 /obj/item/gun/projectile/revolver/capgun
 	name = "cap gun"
 	desc = "Looks almost like the real thing! Ages 8 and up."
+	icon_state = "revolver-toy"
 	caliber = CALIBER_CAPS
 	origin_tech = "{'combat':1,'materials':1}"
 	ammo_type = /obj/item/ammo_casing/cap
-	var/cap = TRUE
-
-/obj/item/gun/projectile/revolver/capgun/on_update_icon()
-	. = ..()
-	if(cap)
-		overlays += image(icon, "[icon_state]-toy")
 
 /obj/item/gun/projectile/revolver/capgun/attackby(obj/item/wirecutters/W, mob/user)
-	if(!istype(W) || !cap)
+	if(!istype(W) || icon_state == "revolver")
 		return ..()
 	to_chat(user, "<span class='notice'>You snip off the toy markings off the [src].</span>")
 	name = "revolver"
+	icon_state = "revolver"
 	desc += " Someone snipped off the barrel's toy mark. How dastardly."
-	cap = FALSE
-	update_icon()
 	return 1

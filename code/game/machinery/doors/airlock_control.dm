@@ -91,10 +91,9 @@
 	return door.locked ? "locked" : "unlocked"
 
 /obj/machinery/airlock_sensor
-	name = "airlock sensor"
 	icon = 'icons/obj/airlock_machines.dmi'
 	icon_state = "airlock_sensor_off"
-	layer = ABOVE_WINDOW_LAYER
+	name = "airlock sensor"
 
 	anchored = 1
 	power_channel = ENVIRON

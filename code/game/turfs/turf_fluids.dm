@@ -9,10 +9,15 @@
 				break
 	return fluid_can_pass
 
+/turf/proc/add_fluid(var/amount, var/fluid)
+	if(!flooded)
+		var/obj/effect/fluid/F = locate() in src
+		if(!F) F = new(src)
+		SET_FLUID_DEPTH(F, F.fluid_amount + amount)
+
 /turf/proc/remove_fluid(var/amount = 0)
 	var/obj/effect/fluid/F = locate() in src
-	if(F)
-		F.reagents.remove_any(amount)
+	if(F) LOSE_FLUID(F, amount)
 
 /turf/return_fluid()
 	return (locate(/obj/effect/fluid) in contents)
@@ -36,7 +41,7 @@
 		return FLUID_MAX_DEPTH
 	var/obj/effect/fluid/F = return_fluid()
 	if(istype(F))
-		return F.reagents.total_volume
+		return F.fluid_amount
 	var/obj/structure/glass_tank/aquarium = locate() in contents
 	if(aquarium && aquarium.reagents && aquarium.reagents.total_volume)
 		return aquarium.reagents.total_volume * TANK_WATER_MULTIPLIER

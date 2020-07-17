@@ -8,7 +8,9 @@
 	speak_chance = 1
 	health = 50
 	maxHealth = 50
-	natural_weapon = /obj/item/natural_weapon/drone_slicer
+	melee_damage_lower = 5
+	melee_damage_upper = 8
+	attacktext = "sliced"
 	faction = "silicon"
 	min_gas = null
 	max_gas = null

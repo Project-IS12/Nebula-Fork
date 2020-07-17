@@ -17,5 +17,3 @@
 		bio = ARMOR_BIO_SHIELDED, 
 		rad = ARMOR_RAD_SMALL
 		)
-	item_icons = list(slot_head_str = 'mods/corporate/icons/mob/onmob_head.dmi')
-	icon = 'mods/corporate/icons/obj/clothing/obj_head.dmi'

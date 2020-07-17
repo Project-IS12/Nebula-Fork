@@ -14,7 +14,9 @@
 	response_help  = "puts their hand through"
 	response_disarm = "flails at"
 	response_harm   = "punches"
-	natural_weapon = /obj/item/natural_weapon/shade
+	melee_damage_lower = 5
+	melee_damage_upper = 15
+	attacktext = "drained the life from"
 	minbodytemp = 0
 	maxbodytemp = 4000
 	min_gas = null
@@ -34,12 +36,6 @@
 	bone_amount =   0
 	skin_material = null
 	skin_amount =   0
-
-/obj/item/natural_weapon/shade
-	name = "foul touch"
-	attack_verb = list("drained")
-	damtype = BURN
-	force = 10
 
 /mob/living/simple_animal/shade/cultify()
 	return

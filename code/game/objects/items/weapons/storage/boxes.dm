@@ -22,7 +22,6 @@
 /obj/item/storage/box
 	name = "box"
 	desc = "It's just an ordinary box."
-	icon = 'icons/obj/items/storage/box.dmi'
 	icon_state = "box"
 	item_state = "syringe_kit"
 	max_storage_space = DEFAULT_BOX_STORAGE
@@ -69,9 +68,9 @@
 	to_chat(user, "<span class='notice'>You fold [src] flat.</span>")
 	if(ispath(foldable, /obj/item/stack))
 		var/stack_amt = max(2**(w_class - 3), 1)
-		new foldable(get_turf(src), stack_amt, /decl/material/solid/cardboard)
+		new foldable(get_turf(src), stack_amt, MAT_CARDBOARD)
 	else
-		new foldable(get_turf(src), /decl/material/solid/cardboard)
+		new foldable(get_turf(src), MAT_CARDBOARD)
 	qdel(src)
 
 /obj/item/storage/box/make_exact_fit()
@@ -89,7 +88,7 @@
 					/obj/item/flashlight/flare/glowstick = 1,
 					/obj/item/chems/food/snacks/candy/proteinbar = 1,
 					/obj/item/oxycandle = 1,
-					/obj/item/crowbar/cheap = 1)
+					/obj/item/crowbar/prybar/cheap = 1)
 
 /obj/item/storage/box/vox/
 	name = "vox survival kit"
@@ -153,7 +152,6 @@
 
 /obj/item/storage/box/ammo
 	name = "ammo box"
-	icon = 'icons/obj/items/storage/ammobox.dmi'
 	icon_state = "ammo"
 	desc = "A sturdy metal box with several warning symbols on the front.<br>WARNING: Live ammunition. Misuse may result in serious injury or death."
 	use_sound = 'sound/effects/closet_open.ogg'
@@ -242,12 +240,6 @@
 	desc = "A box containing 5 highly experimental supermatter grenades."
 	icon_state = "radbox"
 	startswith = list(/obj/item/grenade/supermatter = 5)
-
-/obj/item/storage/box/decompilers
-	name = "box of decompiler grenades"
-	desc = "A box containing 5 experimental decompiler grenades."
-	icon_state = "flashbang"
-	startswith = list(/obj/item/grenade/decompiler = 5)
 
 /obj/item/storage/box/trackimp
 	name = "boxed tracking implant kit"
@@ -338,6 +330,7 @@
 /obj/item/storage/box/mousetraps
 	name = "box of Pest-B-Gon rat traps"
 	desc = "<B><FONT color='red'>WARNING:</FONT></B> <I>Keep out of reach of children</I>."
+	icon_state = "rat traps"
 	startswith = list(/obj/item/assembly/mousetrap = 6)
 
 /obj/item/storage/box/mousetraps/empty
@@ -359,7 +352,7 @@
 /obj/item/storage/box/matches
 	name = "matchbox"
 	desc = "A small box of 'Space-Proof' premium matches."
-	icon = 'icons/obj/items/storage/matches/matchbox.dmi'
+	icon = 'icons/obj/cigarettes.dmi'
 	icon_state = "matchbox"
 	item_state = "zippo"
 	w_class = ITEM_SIZE_TINY
@@ -371,7 +364,7 @@
 	if(istype(W) && !W.lit && !W.burnt)
 		W.lit = 1
 		W.damtype = "burn"
-		W.update_icon()
+		W.icon_state = "match_lit"
 		START_PROCESSING(SSobj, W)
 		playsound(src.loc, 'sound/items/match.ogg', 60, 1, -4)
 		user.visible_message("<span class='notice'>[user] strikes the match on the matchbox.</span>")
@@ -387,6 +380,7 @@
 
 /obj/item/storage/box/lights
 	name = "box of replacement bulbs"
+	icon = 'icons/obj/storage.dmi'
 	icon_state = "light"
 	desc = "This box is shaped on the inside so that only light tubes and bulbs fit."
 	item_state = "syringe_kit"
@@ -442,7 +436,7 @@
 /obj/item/storage/box/freezer
 	name = "portable freezer"
 	desc = "This nifty shock-resistant device will keep your 'groceries' nice and non-spoiled."
-	icon = 'icons/obj/items/storage/portafreezer.dmi'
+	icon = 'icons/obj/storage.dmi'
 	icon_state = "portafreezer"
 	item_state = "medicalpack"
 	foldable = null
@@ -518,7 +512,6 @@
 /obj/item/storage/box/detergent
 	name = "detergent pods bag"
 	desc = "A bag full of juicy, yummy detergent pods. This bag has been labeled: Tod Pods, a Waffle Co. product."
-	icon = 'icons/obj/items/storage/detergent.dmi'
 	icon_state = "detergent"
 	startswith = list(/obj/item/chems/pill/detergent = 10)
 

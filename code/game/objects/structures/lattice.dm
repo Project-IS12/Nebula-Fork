@@ -1,14 +1,14 @@
 /obj/structure/lattice
 	name = "lattice"
 	desc = "A lightweight support lattice."
-	icon = 'icons/obj/structures/smoothlattice.dmi'
+	icon = 'icons/obj/smoothlattice.dmi'
 	icon_state = "lattice0"
 	density = 0
 	anchored = 1
 	w_class = ITEM_SIZE_NORMAL
 	layer = LATTICE_LAYER
 	color = COLOR_STEEL
-	material = /decl/material/solid/metal/steel
+	material = MAT_STEEL
 	obj_flags = OBJ_FLAG_NOFALL
 	material_alteration = MAT_FLAG_ALTERATION_ALL
 
@@ -28,9 +28,9 @@
 
 /obj/structure/lattice/update_material_desc()
 	if(material)
-		desc = "A lightweight support [material.solid_name] lattice."
+		desc = "A lightweight support [material.display_name] lattice."
 	else
-		desc = "A lightweight support [material.solid_name] lattice."
+		desc = "A lightweight support [material.display_name] lattice."
 
 /obj/structure/lattice/Destroy()
 	var/turf/old_loc = get_turf(src)
@@ -46,10 +46,9 @@
 		if(L)
 			L.update_icon()
 
-/obj/structure/lattice/explosion_act(severity)
-	..()
-	if(!QDELETED(src) && severity <= 2)
-		physically_destroyed()
+/obj/structure/lattice/ex_act(severity)
+	if(severity <= 2)
+		qdel(src)
 
 /obj/structure/lattice/proc/deconstruct(var/mob/user)
 	to_chat(user, SPAN_NOTICE("Slicing lattice joints..."))
@@ -81,12 +80,11 @@
 			return TRUE
 
 		var/obj/item/stack/material/rods/R = C
-		if(locate(/obj/structure/catwalk) in get_turf(src))
-			to_chat(user, SPAN_WARNING("There is already a catwalk here."))
-			return
-		else if(R.use(2))
+		if(R.use(2))
+			src.alpha = 0
 			playsound(src, 'sound/weapons/Genhit.ogg', 50, 1)
-			new /obj/structure/catwalk(src.loc, R.material.type)
+			new /obj/structure/catwalk(src.loc)
+			qdel(src)
 			return
 		else
 			to_chat(user, SPAN_WARNING("You require at least two rods to complete the catwalk."))

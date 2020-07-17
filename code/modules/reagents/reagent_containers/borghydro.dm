@@ -13,22 +13,22 @@
 	var/charge_tick = 0
 	var/recharge_time = 5 //Time it takes for shots to recharge (in seconds)
 
-	var/list/reagent_ids = list(/decl/material/liquid/regenerator, /decl/material/liquid/stabilizer, /decl/material/liquid/antibiotics)
+	var/list/reagent_ids = list(/datum/reagent/regenerator, /datum/reagent/adrenaline, /datum/reagent/antibiotics)
 	var/list/reagent_volumes = list()
 	var/list/reagent_names = list()
 
 /obj/item/chems/borghypo/surgeon
-	reagent_ids = list(/decl/material/liquid/brute_meds, /decl/material/liquid/oxy_meds, /decl/material/liquid/painkillers)
+	reagent_ids = list(/datum/reagent/brute_meds, /datum/reagent/oxy_meds, /datum/reagent/painkillers)
 
 /obj/item/chems/borghypo/crisis
-	reagent_ids = list(/decl/material/liquid/regenerator, /decl/material/liquid/stabilizer, /decl/material/liquid/painkillers)
+	reagent_ids = list(/datum/reagent/regenerator, /datum/reagent/adrenaline, /datum/reagent/painkillers)
 
 /obj/item/chems/borghypo/Initialize()
 	. = ..()
 
 	for(var/T in reagent_ids)
 		reagent_volumes[T] = volume
-		var/decl/material/R = T
+		var/datum/reagent/R = T
 		reagent_names += initial(R.name)
 
 /obj/item/chems/borghypo/Initialize()
@@ -98,7 +98,7 @@
 		if(index > 0 && index <= reagent_ids.len)
 			playsound(loc, 'sound/effects/pop.ogg', 50, 0)
 			mode = index
-			var/decl/material/R = reagent_ids[mode]
+			var/datum/reagent/R = reagent_ids[mode]
 			to_chat(usr, "<span class='notice'>Synthesizer is now producing '[initial(R.name)]'.</span>")
 		return TOPIC_REFRESH
 
@@ -107,7 +107,7 @@
 	if(distance > 2)
 		return
 
-	var/decl/material/R = reagent_ids[mode]
+	var/datum/reagent/R = reagent_ids[mode]
 	to_chat(user, "<span class='notice'>It is currently producing [initial(R.name)] and has [reagent_volumes[reagent_ids[mode]]] out of [volume] units left.</span>")
 
 /obj/item/chems/borghypo/service
@@ -120,38 +120,39 @@
 	volume = 60
 	possible_transfer_amounts = @"[5,10,20,30]"
 	reagent_ids = list(
-		/decl/material/liquid/ethanol/beer,
-		/decl/material/liquid/ethanol/coffee/kahlua,
-		/decl/material/liquid/ethanol/whiskey,
-		/decl/material/liquid/ethanol/wine,
-		/decl/material/liquid/ethanol/vodka,
-		/decl/material/liquid/ethanol/gin,
-		/decl/material/liquid/ethanol/rum,
-		/decl/material/liquid/ethanol/tequilla,
-		/decl/material/liquid/ethanol/vermouth,
-		/decl/material/liquid/ethanol/cognac,
-		/decl/material/liquid/ethanol/ale,
-		/decl/material/liquid/ethanol/mead,
-		/decl/material/liquid/water,
-		/decl/material/liquid/nutriment/sugar,
-		/decl/material/solid/ice,
-		/decl/material/liquid/drink/tea/black,
-		/decl/material/liquid/drink/cola,
-		/decl/material/liquid/drink/citrussoda,
-		/decl/material/liquid/drink/cherrycola,
-		/decl/material/liquid/drink/lemonade,
-		/decl/material/liquid/drink/tonic,
-		/decl/material/liquid/drink/sodawater,
-		/decl/material/liquid/drink/lemon_lime,
-		/decl/material/liquid/drink/juice/orange,
-		/decl/material/liquid/drink/juice/lime,
-		/decl/material/liquid/drink/juice/watermelon,
-		/decl/material/liquid/drink/coffee,
-		/decl/material/liquid/drink/hot_coco,
-		/decl/material/liquid/drink/tea/green,
-		/decl/material/liquid/drink/citrussoda,
-		/decl/material/liquid/ethanol/beer,
-		/decl/material/liquid/ethanol/coffee/kahlua
+		/datum/reagent/ethanol/beer,
+		/datum/reagent/ethanol/coffee/kahlua,
+		/datum/reagent/ethanol/whiskey,
+		/datum/reagent/ethanol/wine,
+		/datum/reagent/ethanol/vodka,
+		/datum/reagent/ethanol/gin,
+		/datum/reagent/ethanol/rum,
+		/datum/reagent/ethanol/tequilla,
+		/datum/reagent/ethanol/vermouth,
+		/datum/reagent/ethanol/cognac,
+		/datum/reagent/ethanol/ale,
+		/datum/reagent/ethanol/mead,
+		/datum/reagent/water,
+		/datum/reagent/nutriment/sugar,
+		/datum/reagent/drink/ice,
+		/datum/reagent/drink/tea,
+		/datum/reagent/drink/tea/icetea,
+		/datum/reagent/drink/cola,
+		/datum/reagent/drink/citrussoda,
+		/datum/reagent/drink/cherrycola,
+		/datum/reagent/drink/lemonade,
+		/datum/reagent/drink/tonic,
+		/datum/reagent/drink/sodawater,
+		/datum/reagent/drink/lemon_lime,
+		/datum/reagent/drink/juice/orange,
+		/datum/reagent/drink/juice/lime,
+		/datum/reagent/drink/juice/watermelon,
+		/datum/reagent/drink/coffee,
+		/datum/reagent/drink/hot_coco,
+		/datum/reagent/drink/tea/green,
+		/datum/reagent/drink/citrussoda,
+		/datum/reagent/ethanol/beer,
+		/datum/reagent/ethanol/coffee/kahlua
 		)
 
 /obj/item/chems/borghypo/service/attack(var/mob/M, var/mob/user)
@@ -168,7 +169,7 @@
 		to_chat(user, "<span class='notice'>[src] is out of this reagent, give it some time to refill.</span>")
 		return
 
-	if(!REAGENTS_FREE_SPACE(target.reagents))
+	if(!target.reagents.get_free_space())
 		to_chat(user, "<span class='notice'>[target] is full.</span>")
 		return
 

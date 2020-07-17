@@ -18,7 +18,7 @@
 	turn_delay = 7
 	power_use = 150
 	color = COLOR_WHITE
-	material = /decl/material/solid/metal/steel
+	material = MAT_STEEL
 
 /obj/item/mech_component/chassis/pod
 	name = "spherical exosuit chassis"
@@ -32,8 +32,4 @@
 	power_use = 5
 	has_hardpoints = list(HARDPOINT_BACK)
 	desc = "The Katamari series cockpits won a massive government tender a few years back. No one is sure why, but these terrible things keep popping up on every government-run facility."
-	material = /decl/material/solid/metal/steel
-
-/obj/item/mech_component/chassis/pod/prebuild()
-	. = ..()
-	m_armour = new /obj/item/robot_parts/robot_component/armour/exosuit/radproof(src)
+	material = MAT_STEEL

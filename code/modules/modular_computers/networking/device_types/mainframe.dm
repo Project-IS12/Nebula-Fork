@@ -2,7 +2,6 @@ GLOBAL_LIST_INIT(all_mainframe_roles, list(MF_ROLE_SOFTWARE, MF_ROLE_FILESERVER,
 
 /datum/extension/network_device/mainframe
 	connection_type = NETWORK_CONNECTION_WIRED
-	expected_type = /obj/machinery
 	var/max_log_count = 100
 	var/list/roles = list()
 
@@ -14,7 +13,7 @@ GLOBAL_LIST_INIT(all_mainframe_roles, list(MF_ROLE_SOFTWARE, MF_ROLE_FILESERVER,
 	update_roles()
 
 /datum/extension/network_device/mainframe/proc/update_roles()
-	var/datum/computer_network/net = SSnetworking.networks[network_id]
+	var/datum/computer_network/net = GLOB.computer_networks[network_id]
 	if(!net)
 		return FALSE
 	if(!check_connection())

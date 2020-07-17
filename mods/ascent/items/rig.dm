@@ -26,12 +26,11 @@
 	boot_type =  /obj/item/clothing/shoes/magboots/rig/mantid
 	glove_type = /obj/item/clothing/gloves/rig/mantid
 	update_visible_name = TRUE
-	icon = 'mods/ascent/icons/rig/inventory.dmi'
-	on_mob_icon = 'mods/ascent/icons/rig/inventory.dmi'
+	icon_override = 'mods/ascent/icons/species/mantid/onmob_back_alate.dmi'
 	sprite_sheets = list(
-		BODYTYPE_MANTID_LARGE = 'mods/ascent/icons/rig/gyne.dmi',
-		BODYTYPE_MANTID_SMALL = 'mods/ascent/icons/rig/alate.dmi',
-		BODYTYPE_SNAKE =        'mods/ascent/icons/rig/serpentid.dmi'
+		BODYTYPE_MANTID_LARGE = 'mods/ascent/icons/species/mantid/onmob_back_gyne.dmi',
+		BODYTYPE_MANTID_SMALL = 'mods/ascent/icons/species/mantid/onmob_back_alate.dmi',
+		BODYTYPE_SNAKE =        'mods/ascent/icons/species/serpentid/onmob_back_serpentid.dmi'
 		)
 	initial_modules = list(
 		/obj/item/rig_module/vision/thermal,
@@ -54,7 +53,7 @@
 	desc = "A fusion-powered blade nanofabricator of Ascent design."
 	interface_name = "nanoblade projector"
 	interface_desc = "A fusion-powered blade nanofabricator of Ascent design."
-	icon = 'mods/ascent/icons/ascent.dmi'
+	icon = 'icons/obj/ascent.dmi'
 	icon_state = "blade"
 	interface_name = "nanoblade"
 	usable = FALSE
@@ -65,7 +64,7 @@
 	desc = "A flechette nanofabricator and launch system of Ascent design."
 	interface_name = "flechette rifle"
 	interface_desc = "A flechette nanofabricator and launch system of Ascent design."
-	icon = 'mods/ascent/icons/ascent.dmi'
+	icon = 'icons/obj/ascent.dmi'
 	icon_state = "rifle"
 	gun = /obj/item/gun/magnetic/railgun/flechette/ascent
 
@@ -74,7 +73,7 @@
 	desc = "A mounted particle rifle of Ascent design."
 	interface_name = "particle rifle"
 	interface_desc = "A mounted particle rifle of Ascent design."
-	icon = 'mods/ascent/icons/ascent.dmi'
+	icon = 'icons/obj/ascent.dmi'
 	icon_state = "rifle"
 	gun = /obj/item/gun/energy/particle
 
@@ -84,7 +83,7 @@
 	interface_name = "multitool"
 	interface_desc = "A limited-sentience integrated multitool capable of interfacing with any number of systems."
 	device = /obj/item/multitool/mantid
-	icon = 'mods/ascent/icons/ascent.dmi'
+	icon = 'icons/obj/ascent.dmi'
 	icon_state = "multitool"
 	usable = FALSE
 	selectable = TRUE
@@ -98,7 +97,7 @@
 	interface_name = "cable fabricator"
 	interface_desc = "A cable nanofabricator of Ascent design."
 	device = /obj/item/stack/cable_coil/fabricator
-	icon = 'mods/ascent/icons/ascent.dmi'
+	icon = 'icons/obj/ascent.dmi'
 	icon_state = "cablecoil"
 	usable = FALSE
 	selectable = TRUE
@@ -108,7 +107,7 @@
 	desc = "An electrical cutting torch of Ascent design."
 	interface_name = "welding arm"
 	interface_desc = "An electrical cutting torch of Ascent design."
-	icon = 'mods/ascent/icons/ascent.dmi'
+	icon = 'icons/obj/ascent.dmi'
 	icon_state = "welder1"
 	engage_string = "Toggle Welder"
 	device = /obj/item/weldingtool/electric/mantid
@@ -120,7 +119,7 @@
 	desc = "A complex assembly of self-guiding, modular heads capable of performing most manual tasks."
 	interface_name = "modular clustertool"
 	interface_desc = "A complex assembly of self-guiding, modular heads capable of performing most manual tasks."
-	icon = 'mods/ascent/icons/ascent.dmi'
+	icon = 'icons/obj/ascent.dmi'
 	icon_state = "clustertool"
 	engage_string = "Select Mode"
 	device = /obj/item/clustertool
@@ -147,7 +146,7 @@
 	volume = 180
 
 /obj/item/tank/mantid/methyl_bromide
-	starting_pressure = list(/decl/material/gas/methyl_bromide = 6 * ONE_ATMOSPHERE)
+	starting_pressure = list(MAT_METHYL_BROMIDE = 6 * ONE_ATMOSPHERE)
 
 /obj/item/tank/mantid/oxygen
 	name = "mantid oxygen tank"
@@ -163,12 +162,12 @@
 		BODYTYPE_SNAKE =        'mods/ascent/icons/species/serpentid/onmob_back_serpentid.dmi'
 	)
 	icon_state = "maneuvering_pack"
-	var/refill_gas_type = /decl/material/gas/methyl_bromide
+	var/refill_gas_type = MAT_METHYL_BROMIDE
 	var/gas_regen_amount = 0.03
 	var/gas_regen_cap = 30
 
 /obj/item/tank/jetpack/ascent/Initialize()
-	starting_pressure = list(refill_gas_type = 6 * ONE_ATMOSPHERE)
+	starting_pressure = list("[refill_gas_type]" = 6 * ONE_ATMOSPHERE)
 	. = ..()
 
 /obj/item/tank/jetpack/ascent/Process()
@@ -180,7 +179,7 @@
 	name = "mantid gas reactor"
 	desc = "A mantid gas processing plant that continuously synthesises 'breathable' atmosphere."
 	var/charge_cost = 12
-	var/refill_gas_type = /decl/material/gas/methyl_bromide
+	var/refill_gas_type = MAT_METHYL_BROMIDE
 	var/gas_regen_amount = 0.05
 	var/gas_regen_cap = 50
 
@@ -190,7 +189,7 @@
 
 /obj/item/tank/mantid/reactor/oxygen
 	name = "serpentid gas reactor"
-	refill_gas_type = /decl/material/gas/oxygen
+	refill_gas_type = MAT_OXYGEN
 	distribute_pressure = 31
 
 /obj/item/tank/mantid/reactor/Process()
@@ -205,13 +204,13 @@
 	desc = "A compact chemical dispenser of mantid design."
 	interface_name = "mantid chemical injector"
 	interface_desc = "A compact chemical dispenser of mantid design."
-	icon = 'mods/ascent/icons/ascent.dmi'
+	icon = 'icons/obj/ascent.dmi'
 	icon_state = "injector"
 	charges = list(
-		list("bromide",             "bromide",             /decl/material/liquid/bromide, 80),
-		list("crystallizing agent", "crystallizing agent", /decl/material/liquid/crystal_agent,       80),
-		list("antibiotics",         "antibiotics",         /decl/material/liquid/antibiotics,   80),
-		list("painkillers",         "painkillers",         /decl/material/liquid/painkillers,   80)
+		list("bromide",             "bromide",             /datum/reagent/toxin/bromide, 80),
+		list("crystallizing agent", "crystallizing agent", /datum/reagent/crystal,       80),
+		list("antibiotics",         "antibiotics",         /datum/reagent/antibiotics,   80),
+		list("painkillers",         "painkillers",         /datum/reagent/painkillers,   80)
 	)
 
 // Rig definitions.
@@ -226,6 +225,7 @@
 		bio = ARMOR_BIO_SHIELDED,
 		rad = ARMOR_RAD_SHIELDED
 	)
+	icon_override = 'mods/ascent/icons/species/mantid/onmob_back_gyne.dmi'
 	mantid_caste = SPECIES_MANTID_GYNE
 	initial_modules = list(
 		/obj/item/rig_module/vision/thermal,
@@ -245,6 +245,7 @@
 
 /obj/item/rig/mantid/serpentid
 	name = "serpentid support exosuit"
+	icon_override = 'mods/ascent/icons/species/serpentid/onmob_back_serpentid.dmi'
 	mantid_caste = SPECIES_SERPENTID
 	air_type =   /obj/item/tank/mantid/reactor/oxygen
 	chest_type = /obj/item/clothing/suit/space/rig/mantid/serpentid
@@ -265,10 +266,20 @@
 	light_color = "#00ffff"
 	desc = "More like a torpedo casing than a helmet."
 	bodytype_restricted = list(BODYTYPE_MANTID_LARGE, BODYTYPE_MANTID_SMALL)
+	sprite_sheets = list(
+		BODYTYPE_MANTID_LARGE = 'mods/ascent/icons/species/mantid/onmob_head_gyne.dmi',
+		BODYTYPE_MANTID_SMALL = 'mods/ascent/icons/species/mantid/onmob_head_alate.dmi',
+		BODYTYPE_SNAKE =        'mods/ascent/icons/species/serpentid/onmob_head_serpentid.dmi'
+		)
 
 /obj/item/clothing/suit/space/rig/mantid
 	desc = "It's closer to a mech than a suit."
 	bodytype_restricted = list(BODYTYPE_MANTID_LARGE, BODYTYPE_MANTID_SMALL)
+	sprite_sheets = list(
+		BODYTYPE_MANTID_LARGE = 'mods/ascent/icons/species/mantid/onmob_suit_gyne.dmi',
+		BODYTYPE_MANTID_SMALL = 'mods/ascent/icons/species/mantid/onmob_suit_alate.dmi',
+		BODYTYPE_MANTID_SNAKE = 'mods/ascent/icons/species/serpentid/onmob_suit_serpentid.dmi'
+		)
 	allowed = list(
 		/obj/item/clustertool,
 		/obj/item/gun/energy/particle/small,
@@ -281,7 +292,16 @@
 /obj/item/clothing/shoes/magboots/rig/mantid
 	desc = "It's like a highly advanced forklift."
 	bodytype_restricted = list(BODYTYPE_MANTID_LARGE, BODYTYPE_MANTID_SMALL)
+	sprite_sheets = list(
+		BODYTYPE_MANTID_LARGE = 'mods/ascent/icons/species/mantid/onmob_shoes_gyne.dmi',
+		BODYTYPE_MANTID_SMALL = 'mods/ascent/icons/species/mantid/onmob_shoes_alate.dmi'
+	)
 
 /obj/item/clothing/gloves/rig/mantid
 	desc = "They look like a cross between a can opener and a Swiss army knife the size of a shoebox."
 	bodytype_restricted = list(BODYTYPE_MANTID_LARGE, BODYTYPE_MANTID_SMALL)
+	sprite_sheets = list(
+		BODYTYPE_MANTID_LARGE = 'mods/ascent/icons/species/mantid/onmob_gloves_gyne.dmi',
+		BODYTYPE_MANTID_SMALL = 'mods/ascent/icons/species/mantid/onmob_gloves_alate.dmi',
+		BODYTYPE_SNAKE =        'mods/ascent/icons/species/serpentid/onmob_hands_serpentid.dmi'
+	)

@@ -1,7 +1,7 @@
 /obj/item/clothing/head/fated
 	name = "strange key"
 	desc = "A glowing key, uncomfortably hot to the touch."
-	icon_state = ICON_STATE_WORLD
+	icon_state = "world"
 	icon = 'icons/clothing/head/fated_key.dmi'
 	on_mob_icon = 'icons/clothing/head/fated_key.dmi'
 	body_parts_covered = 0
@@ -93,7 +93,7 @@
 	. = ..()
 	var/turf/T = get_turf(src)
 	if(T)
-		T.explosion_act(2)
+		T.ex_act(2)
 		var/firecount = rand(5,8)
 		while(firecount)
 			firecount--

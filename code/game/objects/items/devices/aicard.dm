@@ -1,13 +1,13 @@
 /obj/item/aicard
 	name = "inteliCard"
-	icon = 'icons/obj/items/device/ai_card.dmi'
+	icon = 'icons/obj/pda.dmi'
 	icon_state = "aicard" // aicard-full
 	item_state = "electronic"
 	w_class = ITEM_SIZE_SMALL
 	slot_flags = SLOT_BELT
 	origin_tech = "{'programming':4,'materials':4}"
-	material = /decl/material/solid/glass
-	matter = list(/decl/material/solid/metal/gold = MATTER_AMOUNT_REINFORCEMENT)
+	material = MAT_GLASS
+	matter = list(MAT_GOLD = MATTER_AMOUNT_REINFORCEMENT)
 
 	var/flush
 	var/mob/living/silicon/ai/carded_ai
@@ -75,7 +75,7 @@
 	overlays.Cut()
 	if(carded_ai)
 		if (!carded_ai.control_disabled)
-			overlays += image(icon, "aicard-on")
+			overlays += image('icons/obj/pda.dmi', "aicard-on")
 		if(carded_ai.stat)
 			icon_state = "aicard-404"
 		else

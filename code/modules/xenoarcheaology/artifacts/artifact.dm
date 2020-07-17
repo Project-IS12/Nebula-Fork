@@ -99,12 +99,15 @@
 	visible_message(SPAN_WARNING("\The [P] hits \the [src]!"))
 	check_triggers(/datum/artifact_trigger/proc/on_hit, P)
 
-/obj/structure/artifact/explosion_act(severity)
-	SHOULD_CALL_PARENT(FALSE)
+/obj/structure/artifact/ex_act(severity)
 	if(check_triggers(/datum/artifact_trigger/proc/on_explosion, severity))
 		return
-	if(severity == 1 || (severity == 2 && prob(50)))
-		physically_destroyed()
+	switch(severity)
+		if(1) 
+			qdel(src)
+		if(2)
+			if (prob(50))
+				qdel(src)
 
 /obj/structure/artifact/Move()
 	..()

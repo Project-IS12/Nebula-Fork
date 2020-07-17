@@ -4,7 +4,7 @@
 /obj/structure/wall_frame
 	name = "low wall"
 	desc = "A low wall section which serves as the base of windows, amongst other things."
-	icon = 'icons/obj/structures/wall_frame.dmi'
+	icon = 'icons/obj/wall_frame.dmi'
 	icon_state = "frame"
 	atom_flags = ATOM_FLAG_NO_TEMP_CHANGE | ATOM_FLAG_CLIMBABLE
 	anchored = 1
@@ -99,24 +99,24 @@
 	overlays.Cut()
 	var/image/I
 
-	var/new_color = (paint_color ? paint_color : material.color)
+	var/new_color = (paint_color ? paint_color : material.icon_colour)
 	color = new_color
 
 	for(var/i = 1 to 4)
 		var/conn = connections ? connections[i] : "0"
 		if(other_connections && other_connections[i] != "0")
-			I = image(icon, "frame_other[conn]", dir = 1<<(i-1))
+			I = image('icons/obj/wall_frame.dmi', "frame_other[conn]", dir = 1<<(i-1))
 		else
-			I = image(icon, "frame[conn]", dir = 1<<(i-1))
+			I = image('icons/obj/wall_frame.dmi', "frame[conn]", dir = 1<<(i-1))
 		overlays += I
 
 	if(stripe_color)
 		for(var/i = 1 to 4)
 			var/conn = connections ? connections[i] : "0"
 			if(other_connections && other_connections[i] != "0")
-				I = image(icon, "stripe_other[conn]", dir = 1<<(i-1))
+				I = image('icons/obj/wall_frame.dmi', "stripe_other[conn]", dir = 1<<(i-1))
 			else
-				I = image(icon, "stripe[conn]", dir = 1<<(i-1))
+				I = image('icons/obj/wall_frame.dmi', "stripe[conn]", dir = 1<<(i-1))
 			I.color = stripe_color
 			overlays += I
 
@@ -159,7 +159,7 @@
 	paint_color = COLOR_WALL_GUNMETAL
 
 /obj/structure/wall_frame/titanium
-	material = /decl/material/solid/metal/plasteel/titanium
+	material = MAT_TITANIUM
 
 /obj/structure/wall_frame/hull
 	paint_color = COLOR_HULL

@@ -9,27 +9,9 @@
 	var/tmp/list/datum/lighting_corner/corners
 	var/opaque_counter
 
-/turf/set_opacity(new_opacity)
-	if(opacity == new_opacity)
-		return FALSE
-
-	opacity = new_opacity
-	return RecalculateOpacity()
-
-/turf/proc/RecalculateOpacity()
-	var/old_opaque_counter = opaque_counter
-
-	opaque_counter = opacity
-	for(var/a in src)
-		var/atom/A = a
-		opaque_counter += A.opacity
-
-	// If the counter changed and was or became 0 then lift event/reconsider lights
-	if(opaque_counter != old_opaque_counter && (!opaque_counter || !old_opaque_counter))
-		GLOB.opacity_set_event.raise_event(src, !opaque_counter, !!opaque_counter)
-		reconsider_lights()
-		return TRUE
-	return FALSE
+/turf/set_opacity()
+	. = ..()
+	handle_opacity_change(src)
 
 // Causes any affecting light sources to be queued for a visibility update, for example a door got opened.
 /turf/proc/reconsider_lights()
@@ -82,15 +64,17 @@
 	return CLAMP01(totallums)
 
 // If an opaque movable atom moves around we need to potentially update visibility.
-/turf/Entered(var/atom/movable/AM, var/atom/OldLoc)
+/turf/Entered(var/atom/movable/Obj, var/atom/OldLoc)
 	. = ..()
-	if(AM?.opacity)
-		RecalculateOpacity()
+	if(Obj && Obj.opacity)
+		if(!opaque_counter++)
+			reconsider_lights()
 
-/turf/Exited(var/atom/movable/AM, var/atom/newloc)
+/turf/Exited(var/atom/movable/Obj, var/atom/newloc)
 	. = ..()
-	if(AM?.opacity)
-		RecalculateOpacity()
+	if(Obj && Obj.opacity)
+		if(!(--opaque_counter))
+			reconsider_lights()
 
 /turf/proc/get_corners()
 	if(opaque_counter)
@@ -108,3 +92,17 @@
 			continue
 
 		corners[i] = new /datum/lighting_corner(src, LIGHTING_CORNER_DIAGONAL[i])
+
+/turf/proc/handle_opacity_change(var/atom/opacity_changer)
+	if(opacity_changer)
+		if(opacity_changer.opacity)
+			if(!opaque_counter)
+				reconsider_lights()
+			opaque_counter++
+		else
+			var/old_counter = opaque_counter
+			opaque_counter--
+			if(old_counter && !opaque_counter)
+				reconsider_lights()
+		if(opaque_counter < 2) //went 0->1 or 1->0
+			GLOB.opacity_set_event.raise_event(src, opaque_counter > 1, !!opaque_counter)

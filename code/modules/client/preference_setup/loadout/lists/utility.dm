@@ -9,7 +9,7 @@
 
 /datum/gear/utility/clipboard
 	display_name = "clipboard"
-	path = /obj/item/clipboard
+	path = /obj/item/material/clipboard
 
 /datum/gear/utility/folder
 	display_name = "folders"
@@ -19,16 +19,15 @@
 	display_name = "tape recorder"
 	path = /obj/item/taperecorder
 
-/datum/gear/utility/folder/get_gear_tweak_options()
-	. = ..()
-	LAZYINITLIST(.[/datum/gear_tweak/path])
-	.[/datum/gear_tweak/path] |= list(
-		"blue folder" =   /obj/item/folder/blue,
-		"grey folder" =   /obj/item/folder,
-		"red folder" =    /obj/item/folder/red,
-		"cyan folder" =  /obj/item/folder/cyan,
-		"yellow folder" = /obj/item/folder/yellow
-	)
+/datum/gear/utility/folder/New()
+	..()
+	var/folders = list()
+	folders["blue folder"] = /obj/item/folder/blue
+	folders["grey folder"] = /obj/item/folder
+	folders["red folder"] = /obj/item/folder/red
+	folders["white folder"] = /obj/item/folder/white
+	folders["yellow folder"] = /obj/item/folder/yellow
+	gear_tweaks += new/datum/gear_tweak/path(folders)
 
 /datum/gear/utility/paicard
 	display_name = "personal AI device"
@@ -85,8 +84,9 @@ modular computers
 	path = /obj/item/modular_computer/tablet
 	cost = 4
 
-/datum/gear/utility/customtablet/get_gear_tweak_options()
-	. = ..() | /datum/gear_tweak/tablet
+/datum/gear/utility/customtablet/New()
+	..()
+	gear_tweaks += new /datum/gear_tweak/tablet()
 
 /datum/gear/utility/cheaplaptop
 	display_name = "laptop computer, cheap"

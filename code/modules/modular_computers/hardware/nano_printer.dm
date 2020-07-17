@@ -6,7 +6,7 @@
 	critical = 0
 	icon_state = "printer"
 	hardware_size = 1
-	material = /decl/material/solid/metal/steel
+	material = MAT_STEEL
 
 	var/stored_paper = 50
 	var/max_paper = 50

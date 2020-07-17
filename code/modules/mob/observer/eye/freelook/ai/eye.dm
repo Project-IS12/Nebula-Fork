@@ -16,7 +16,6 @@
 	name = "Inactive AI Eye"
 	name_sufix = "AI Eye"
 	icon_state = "AI-eye"
-	living_eye = FALSE
 
 /mob/observer/eye/freelook/aiEye/Initialize()
 	. = ..()

@@ -1,6 +1,7 @@
 /client
 	// * Black magic things *
 	parent_type = /datum
+	show_popup_menus = FALSE
 
 	// * Admin things *
 	var/datum/admins/holder = null
@@ -50,3 +51,15 @@
 
 	//So admins know why it isn't working - Used to determine what other accounts previously logged in from this computer id
 	var/related_accounts_cid = "Requires database"
+
+	var/lastping = 0
+	var/avgping = 0
+	var/connection_time //world.time they connected
+	var/connection_realtime //world.realtime they connected
+	var/connection_timeofday //world.timeofday they connected
+
+	var/datum/chatOutput/chatOutput
+
+	// Transparent image for maptext tooltip
+	var/obj/screen/tooltip = null
+

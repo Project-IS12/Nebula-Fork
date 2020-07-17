@@ -42,7 +42,7 @@
 /obj/item/storage/bag/trash
 	name = "trash bag"
 	desc = "It's the heavy-duty black polymer kind. Time to take out the trash!"
-	icon = 'icons/obj/items/storage/trashbag.dmi'
+	icon = 'icons/obj/janitor.dmi'
 	icon_state = "trashbag"
 	item_state = "trashbag"
 
@@ -67,11 +67,11 @@
 	max_storage_space = 56
 	desc = "The latest and greatest in custodial convenience, a trashbag that is capable of holding vast quantities of garbage."
 	icon_state = "bluetrashbag"
-	material = /decl/material/solid/plastic
+	material = MAT_PLASTIC
 	matter = list(
-		/decl/material/solid/metal/gold = MATTER_AMOUNT_REINFORCEMENT,
-		/decl/material/solid/metal/uranium = MATTER_AMOUNT_TRACE,
-		/decl/material/solid/phoron = MATTER_AMOUNT_TRACE
+		MAT_GOLD = MATTER_AMOUNT_REINFORCEMENT,
+		MAT_URANIUM = MATTER_AMOUNT_TRACE,
+		MAT_PHORON = MATTER_AMOUNT_TRACE
 	)
 
 /obj/item/storage/bag/trash/bluespace/attackby(obj/item/W, mob/user)
@@ -88,7 +88,7 @@
 /obj/item/storage/bag/plasticbag
 	name = "plastic bag"
 	desc = "It's a very flimsy, very noisy alternative to a bag."
-	icon = 'icons/obj/items/storage/plasticbag.dmi'
+	icon = 'icons/obj/trash.dmi'
 	icon_state = "plasticbag"
 	item_state = "plasticbag"
 
@@ -103,7 +103,7 @@
 
 /obj/item/storage/bag/cash
 	name = "cash bag"
-	icon = 'icons/obj/items/storage/cashbag.dmi'
+	icon = 'icons/obj/storage.dmi'
 	icon_state = "cashbag"
 	desc = "A bag for carrying lots of cash. It's got a big dollar sign printed on the front."
 	max_storage_space = 100

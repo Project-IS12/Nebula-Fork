@@ -347,7 +347,8 @@ var/list/global/tank_gauge_cache = list()
 	return removed
 
 /obj/item/tank/Process()
-	air_contents.react()
+	//Allow for reactions
+	air_contents.react() //cooking up air tanks - add phoron and oxygen, then heat above PHORON_MINIMUM_BURN_TEMPERATURE
 	check_status()
 
 /obj/item/tank/on_update_icon(var/override)
@@ -486,28 +487,45 @@ var/list/global/tank_gauge_cache = list()
 			if(integrity == maxintegrity)
 				leaking = 0
 
-/obj/item/tank/onetankbomb/Initialize()
-	. = ..()
+/////////////////////////////////
+///Prewelded tanks
+/////////////////////////////////
 
-	// Set up appearance/strings.
-	var/obj/item/tank/tank_copy = pick(typesof(/obj/item/tank/oxygen) + typesof(/obj/item/tank/hydrogen) + /obj/item/tank/phoron)
-	name = initial(tank_copy.name)
-	desc = initial(tank_copy.desc)
-	icon = initial(tank_copy.icon)
-	icon_state = initial(tank_copy.icon_state)
-	volume = initial(tank_copy.volume)
+/obj/item/tank/phoron/welded
+	valve_welded = 1
+/obj/item/tank/oxygen/welded
+	valve_welded = 1
 
-	// Set up explosive mix.
-	air_contents.gas[DEFAULT_GAS_ACCELERANT] = 4 + rand(4)
-	air_contents.gas[DEFAULT_GAS_OXIDIZER] = 6 + rand(8)
+/////////////////////////////////
+///Onetankbombs (added as actual items)
+/////////////////////////////////
+
+/obj/item/tank/proc/onetankbomb()
+	var/phoron_amt = 4 + rand(4)
+	var/oxygen_amt = 6 + rand(8)
+
+	air_contents.gas[MAT_PHORON] = phoron_amt
+	air_contents.gas[MAT_OXYGEN] = oxygen_amt
 	air_contents.update_values()
-	air_contents.temperature = FLAMMABLE_GAS_MINIMUM_BURN_TEMPERATURE-1
-	valve_welded = TRUE
-	wired = TRUE
-	proxyassembly.assembly = new /obj/item/assembly_holder(src)
-	proxyassembly.assembly.master = proxyassembly
-	proxyassembly.assembly.update_icon()
+	valve_welded = 1
+	air_contents.temperature = PHORON_MINIMUM_BURN_TEMPERATURE-1
+
+	wired = 1
+
+	var/obj/item/assembly_holder/H = new(src)
+	proxyassembly.assembly = H
+	H.master = proxyassembly
+
+	H.update_icon()
 	update_icon(TRUE)
+
+/obj/item/tank/phoron/onetankbomb/Initialize()
+	. = ..()
+	onetankbomb()
+
+/obj/item/tank/oxygen/onetankbomb/Initialize()
+	. = ..()
+	onetankbomb()
 
 /////////////////////////////////
 ///Pulled from rewritten bomb.dm

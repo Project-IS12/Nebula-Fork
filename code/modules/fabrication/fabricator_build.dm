@@ -15,10 +15,7 @@
 	update_icon()
 
 /obj/machinery/fabricator/proc/do_build(var/datum/fabricator_recipe/recipe, var/amount)
-	. = recipe.build(get_turf(src), amount)
-	if(output_dir)
-		for(var/atom/movable/product in .)
-			step(product, output_dir)
+	recipe.build(get_turf(src), amount)
 
 /obj/machinery/fabricator/proc/start_building()
 	if(!(fab_status_flags & FAB_BUSY) && is_functioning())
@@ -47,7 +44,7 @@
 /obj/machinery/fabricator/proc/try_queue_build(var/datum/fabricator_recipe/recipe, var/multiplier)
 
 	// Do some basic sanity checking.
-	if(!is_functioning() || !istype(recipe) || !(recipe in design_cache))
+	if(!is_functioning() || !istype(recipe) || !(recipe in SSfabrication.get_recipes(fabricator_class)))
 		return
 	multiplier = sanitize_integer(multiplier, 1, 100, 1)
 	if(!ispath(recipe, /obj/item/stack) && multiplier > 1)

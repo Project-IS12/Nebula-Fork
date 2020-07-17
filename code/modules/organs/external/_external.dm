@@ -34,11 +34,11 @@
 	var/model                          // Used when caching robolimb icons.
 	var/force_icon                     // Used to force override of species-specific limb icons (for prosthetics).
 	var/icon/mob_icon                  // Cached icon for use in mob overlays.
-	var/skin_tone                      // Skin tone.
-	var/skin_base = ""                 // Skin base.
-	var/skin_colour                    // skin colour
-	var/skin_blend = ICON_ADD          // How the skin colour is applied.
-	var/hair_colour                    // hair colour
+	var/s_tone                         // Skin tone.
+	var/s_base = ""                    // Skin base.
+	var/list/s_col                     // skin colour
+	var/s_col_blend = ICON_ADD         // How the skin colour is applied.
+	var/list/h_col                     // hair colour
 	var/body_hair                      // Icon blend for body hair if any.
 	var/list/markings = list()         // Markings (body_markings) to apply to the icon
 
@@ -152,8 +152,8 @@
 
 /obj/item/organ/external/set_dna(var/datum/dna/new_dna)
 	..()
-	skin_blend = species.limb_blend
-	skin_base =  new_dna.skin_base
+	s_col_blend = species.limb_blend
+	s_base = new_dna.s_base
 
 /obj/item/organ/external/emp_act(severity)
 
@@ -511,6 +511,7 @@ This function completely restores a damaged organ to perfect condition.
 			if(compatible_wounds.len)
 				var/datum/wound/W = pick(compatible_wounds)
 				W.open_wound(damage)
+				/*
 				if(prob(25))
 					if(BP_IS_CRYSTAL(src))
 						owner.visible_message("<span class='danger'>The cracks in \the [owner]'s [name] spread.</span>",\
@@ -524,6 +525,7 @@ This function completely restores a damaged organ to perfect condition.
 						owner.visible_message("<span class='danger'>The wound on \the [owner]'s [name] widens with a nasty ripping noise.</span>",\
 						"<span class='danger'>The wound on your [name] widens with a nasty ripping noise.</span>",\
 						"<span class='danger'>You hear a nasty ripping noise, as if flesh is being torn apart.</span>")
+				*/
 				return W
 
 	//Creating wound
@@ -641,7 +643,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	if(germ_level < INFECTION_LEVEL_TWO)
 		return ..()
 
-	var/antibiotics = REAGENT_VOLUME(owner.reagents, /decl/material/liquid/antibiotics)
+	var/antibiotics = owner.reagents.get_reagent_amount(/datum/reagent/antibiotics)
 
 	if(germ_level >= INFECTION_LEVEL_TWO)
 		//spread the infection to internal organs
@@ -891,7 +893,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 		victim.updatehealth()
 		victim.UpdateDamageIcon()
 		victim.regenerate_icons()
-		set_dir(SOUTH, TRUE)
+		dir = 2
 
 	switch(disintegrate)
 		if(DROPLIMB_EDGE)
@@ -905,7 +907,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 				// Throw limb around.
 				if(src && istype(loc,/turf))
 					throw_at(get_edge_target_turf(src,pick(GLOB.alldirs)),rand(1,3),30)
-				set_dir(SOUTH, TRUE)
+				dir = 2
 		if(DROPLIMB_BURN)
 			new /obj/effect/decal/cleanable/ash(get_turf(victim))
 			for(var/obj/item/I in src)
@@ -915,7 +917,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 		if(DROPLIMB_BLUNT)
 			var/obj/gore
 			if(BP_IS_CRYSTAL(src))
-				gore = new /obj/item/shard(get_turf(victim), /decl/material/solid/gemstone/crystal)
+				gore = new /obj/item/material/shard(get_turf(victim), MAT_CRYSTAL)
 			else if(BP_IS_PROSTHETIC(src))
 				gore = new /obj/effect/decal/cleanable/blood/gibs/robot(get_turf(victim))
 			else
@@ -1053,7 +1055,7 @@ obj/item/organ/external/proc/remove_clamps()
 
 	playsound(src.loc, "fracture", 100, 1, -2)
 	status |= ORGAN_BROKEN
-	broken_description = pick("broken","fracture","hairline fracture")
+	broken_description = "broken"//pick("broken","fracture","hairline fracture")
 
 	// Fractures have a chance of getting you out of restraints
 	if (prob(25))

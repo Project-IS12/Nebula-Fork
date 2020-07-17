@@ -177,7 +177,7 @@
 		return
 
 	if(direction_mode == IC_REAGENTS_INJECT)
-		if(!reagents.total_volume || !AM.reagents || !REAGENTS_FREE_SPACE(AM.reagents))
+		if(!reagents.total_volume || !AM.reagents || !AM.reagents.get_free_space())
 			activate_pin(3)
 			return
 
@@ -420,8 +420,7 @@
 	switch(ord)
 		if(1)
 			var/cont[0]
-			for(var/rtype in reagents.reagent_volumes)
-				var/decl/material/RE = decls_repository.get_decl(rtype)
+			for(var/datum/reagent/RE in reagents.reagent_list)
 				cont += RE.name
 			set_pin_data(IC_OUTPUT, 3, cont)
 			push_data()
@@ -487,8 +486,7 @@
 	if(target.reagents.maximum_volume - target.reagents.total_volume <= 0)
 		return
 
-	for(var/rtype in source.reagents.reagent_volumes)
-		var/decl/material/G = decls_repository.get_decl(rtype)
+	for(var/datum/reagent/G in source.reagents.reagent_list)
 		if(!direction_mode)
 			if(G.name in demand)
 				source.reagents.trans_type_to(target, G.type, transfer_amount)

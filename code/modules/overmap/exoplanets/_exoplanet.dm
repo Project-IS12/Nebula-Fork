@@ -1,8 +1,10 @@
 /obj/effect/overmap/visitable/sector/exoplanet
 	name = "exoplanet"
-	icon = 'icons/obj/overmap.dmi'
+	icon = 'icons/obj/overmap64.dmi'
+	bound_height = 64
+	bound_width = 64
 	icon_state = "globe"
-	sector_flags = OVERMAP_SECTOR_KNOWN
+	in_space = 0
 	free_landing = TRUE
 	var/area/planetary_area
 
@@ -220,16 +222,16 @@
 	. = ..()
 	var/list/extra_data = list("<br>")
 	if(atmosphere)
-		if(user.skill_check(SKILL_SCIENCE, SKILL_EXPERT) || user.skill_check(SKILL_ATMOS, SKILL_EXPERT))
+		if(user.skill_check(SKILL_SCIENCE, SKILL_EXPERT))
 			var/list/gases = list()
 			for(var/g in atmosphere.gas)
 				if(atmosphere.gas[g] > atmosphere.total_moles * 0.05)
-					var/decl/material/mat = decls_repository.get_decl(g)
-					gases += mat.gas_name
+					var/material/mat = SSmaterials.get_material_datum(g)
+					gases += mat.display_name
 			extra_data += "Atmosphere composition: [english_list(gases)]"
 			var/inaccuracy = rand(8,12)/10
 			extra_data += "Atmosphere pressure [atmosphere.return_pressure()*inaccuracy] kPa, temperature [atmosphere.temperature*inaccuracy] K"
-		else if(user.skill_check(SKILL_SCIENCE, SKILL_BASIC) || user.skill_check(SKILL_ATMOS, SKILL_BASIC))
+		else if(user.skill_check(SKILL_SCIENCE, SKILL_BASIC))
 			extra_data += "Atmosphere present"
 		extra_data += "<br>"
 
@@ -256,4 +258,3 @@
 	name = "\improper Planetary surface"
 	ambience = list('sound/effects/wind/wind_2_1.ogg','sound/effects/wind/wind_2_2.ogg','sound/effects/wind/wind_3_1.ogg','sound/effects/wind/wind_4_1.ogg','sound/effects/wind/wind_4_2.ogg','sound/effects/wind/wind_5_1.ogg')
 	always_unpowered = 1
-	area_flags = AREA_FLAG_IS_BACKGROUND | AREA_FLAG_EXTERNAL

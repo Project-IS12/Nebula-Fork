@@ -54,6 +54,7 @@
 	var/obj/screen/pressure = null
 	var/obj/screen/pain = null
 	var/obj/screen/up_hint = null
+	var/obj/screen/fixeye = null
 	var/obj/screen/gun/item/item_use_icon = null
 	var/obj/screen/gun/radio/radio_use_icon = null
 	var/obj/screen/gun/move/gun_move_icon = null
@@ -69,6 +70,7 @@
 	Changing this around would probably require a good look-over the pre-existing code.
 	*/
 	var/obj/screen/zone_sel/zone_sel = null
+	var/using_alt_hud = FALSE //For the lunahud.
 
 	var/use_me = 1 //Allows all mobs to use the me verb by default, will have to manually specify they cannot
 	var/damageoverlaytemp = 0
@@ -83,7 +85,7 @@
 
 	var/bhunger = 0			//Carbon
 
-	var/drugged = 0			//Carbon
+	var/druggy = 0			//Carbon
 	var/confused = 0		//Carbon
 	var/sleeping = 0		//Carbon
 	var/resting = 0			//Carbon
@@ -127,6 +129,8 @@
 	var/obj/item/storage/s_active = null//Carbon
 	var/obj/item/clothing/mask/wear_mask = null//Carbon
 	var/in_throw_mode = 0
+
+	var/inertia_dir = 0
 
 //	var/job = null//Living
 
@@ -186,5 +190,3 @@
 	var/list/additional_vision_handlers = list() //Basically a list of atoms from which additional vision data is retrieved
 
 	var/list/progressbars = null //for stacking do_after bars
-
-	var/datum/ai/ai						// Type abused. Define with path and will automagically create. Determines behaviour for clientless mobs.

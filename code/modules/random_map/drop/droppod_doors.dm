@@ -1,7 +1,7 @@
 /obj/structure/droppod_door
 	name = "pod door"
 	desc = "A drop pod door. Opens rapidly using explosive bolts."
-	icon = 'icons/obj/structures/droppod_door.dmi'
+	icon = 'icons/obj/structures.dmi'
 	icon_state = "droppod_door_closed"
 	anchored = 1
 	density = 1
@@ -20,6 +20,10 @@
 	if(!user.Adjacent(src))
 		return
 	attack_hand(user)
+
+/obj/structure/droppod_door/attack_generic(var/mob/user)
+	if(istype(user))
+		attack_hand(user)
 
 /obj/structure/droppod_door/attack_hand(var/mob/user)
 	if(deploying) return

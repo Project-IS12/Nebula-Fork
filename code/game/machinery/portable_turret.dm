@@ -59,7 +59,7 @@
 	var/wrenching = 0
 	var/last_target			//last target fired at, prevents turrets from erratically firing at all valid targets in range
 
-	initial_access = list(list(access_security, access_bridge))
+	req_access = list(list(access_security, access_bridge))
 
 /obj/machinery/porta_turret/crescent
 	enabled = 0
@@ -70,7 +70,7 @@
 	check_records = 1
 	check_weapons = 1
 	check_anomalies = 1
-	initial_access = list(access_cent_specops)
+	req_access = list(access_cent_specops)
 
 /obj/machinery/porta_turret/stationary
 	ailock = 1
@@ -120,6 +120,16 @@
 			iconholder = 1
 			eprojectile = /obj/item/projectile/beam
 
+//			if(/obj/item/gun/energy/laser/practice/sc_laser)
+//				iconholder = 1
+//				eprojectile = /obj/item/projectile/beam
+
+		if(/obj/item/gun/energy/retro)
+			iconholder = 1
+
+//			if(/obj/item/gun/energy/retro/sc_retro)
+//				iconholder = 1
+
 		if(/obj/item/gun/energy/captain)
 			iconholder = 1
 
@@ -127,6 +137,10 @@
 			iconholder = 1
 
 		if(/obj/item/gun/energy/taser)
+			eprojectile = /obj/item/projectile/beam
+			eshot_sound = 'sound/weapons/Laser.ogg'
+
+		if(/obj/item/gun/energy/stunrevolver)
 			eprojectile = /obj/item/projectile/beam
 			eshot_sound = 'sound/weapons/Laser.ogg'
 
@@ -397,14 +411,16 @@ var/list/turret_icons
 	if(disabled)
 		disabled = 0
 
-/obj/machinery/porta_turret/explosion_act(severity)
-	. = ..()
-	if(. && !QDELETED(src))
-		if(severity == 1 || (severity == 2 && prob(25)))
-			physically_destroyed(src)
-		else if(severity == 2)
-			take_damage(initial(health) * 8)
-		else
+/obj/machinery/porta_turret/ex_act(severity)
+	switch (severity)
+		if (1)
+			qdel(src)
+		if (2)
+			if (prob(25))
+				qdel(src)
+			else
+				take_damage(initial(health) * 8) //should instakill most turrets
+		if (3)
 			take_damage(initial(health) * 8 / 3)
 
 /obj/machinery/porta_turret/proc/die()	//called when the turret dies, ie, health <= 0
@@ -464,8 +480,8 @@ var/list/turret_icons
 	if(get_dist(src, L) > 7)	//if it's too far away, why bother?
 		return TURRET_NOT_TARGET
 
-	if(!check_trajectory(L, src))	//check if we have true line of sight
-		return TURRET_NOT_TARGET
+	//if(!check_trajectory(L, src))	//check if we have true line of sight
+	//	return TURRET_NOT_TARGET
 
 	if(emagged)		// If emagged not even the dead get a rest
 		return L.stat ? TURRET_SECONDARY_TARGET : TURRET_PRIORITY_TARGET
@@ -672,7 +688,7 @@ var/list/turret_icons
 				return
 
 		if(1)
-			if(istype(I, /obj/item/stack/material) && I.get_material_type() == /decl/material/solid/metal/steel)
+			if(istype(I, /obj/item/stack/material) && I.get_material_type() == MAT_STEEL)
 				var/obj/item/stack/M = I
 				if(M.use(2))
 					to_chat(user, "<span class='notice'>You add some metal armor to the interior frame.</span>")
@@ -760,7 +776,7 @@ var/list/turret_icons
 			//attack_hand() removes the prox sensor
 
 		if(6)
-			if(istype(I, /obj/item/stack/material) && I.get_material_type() == /decl/material/solid/metal/steel)
+			if(istype(I, /obj/item/stack/material) && I.get_material_type() == MAT_STEEL)
 				var/obj/item/stack/M = I
 				if(M.use(2))
 					to_chat(user, "<span class='notice'>You add some metal armor to the exterior frame.</span>")

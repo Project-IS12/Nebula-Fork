@@ -3,7 +3,7 @@
 /turf/space,
 /area/space)
 "ab" = (
-/turf/simulated/wall/natural,
+/turf/simulated/mineral,
 /area/space)
 "ac" = (
 /turf/unsimulated/mineral,
@@ -28,7 +28,7 @@
 /area/map_template/syndicate_mothership/raider_base)
 "ah" = (
 /obj/structure/table/reinforced,
-/obj/item/storage/tray{
+/obj/item/tray{
 	pixel_y = 5
 	},
 /turf/unsimulated/floor{
@@ -172,7 +172,7 @@
 	},
 /area/map_template/syndicate_mothership/raider_base)
 "aC" = (
-/turf/simulated/wall/natural,
+/turf/simulated/mineral,
 /area/map_template/syndicate_mothership/raider_base)
 "aD" = (
 /obj/machinery/door/airlock/hatch,
@@ -646,7 +646,7 @@
 	},
 /area/map_template/syndicate_mothership/raider_base)
 "bz" = (
-/obj/item/cat_hide,
+/obj/item/xenos_claw,
 /turf/unsimulated/floor{
 	icon_state = "asteroid"
 	},
@@ -748,7 +748,7 @@
 /area/map_template/syndicate_mothership/raider_base)
 "bL" = (
 /obj/structure/table/woodentable,
-/obj/item/storage/tray{
+/obj/item/tray{
 	pixel_y = 5
 	},
 /obj/item/storage/backpack,
@@ -868,7 +868,7 @@
 /area/map_template/syndicate_mothership/raider_base)
 "cb" = (
 /obj/structure/table/woodentable,
-/obj/item/ashtray,
+/obj/item/material/ashtray/bronze,
 /obj/item/trash/cigbutt/cigarbutt,
 /turf/unsimulated/floor{
 	icon_state = "wood"
@@ -885,7 +885,8 @@
 "cd" = (
 /obj/machinery/vending/cigarette{
 	name = "hacked cigarette machine";
-	markup = 0products = list(/obj/item/storage/fancy/cigarettes = 10, /obj/item/storage/box/matches = 10, /obj/item/flame/lighter/zippo/random = 4, /obj/item/clothing/mask/smokable/cigarette/cigar/havana = 2)
+	markup = 0
+	products = list(/obj/item/storage/fancy/cigarettes = 10, /obj/item/storage/box/matches = 10, /obj/item/flame/lighter/zippo/random = 4, /obj/item/clothing/mask/smokable/cigarette/cigar/havana = 2)
 	},
 /turf/unsimulated/floor{
 	icon_state = "dark"
@@ -1269,7 +1270,7 @@
 /obj/item/tank/oxygen,
 /obj/random/voidsuit,
 /obj/random/voidhelmet,
-/obj/item/harpoon,
+/obj/item/material/harpoon,
 /obj/random/energy,
 /turf/simulated/floor/plating,
 /area/map_template/skipjack_station/start)
@@ -1285,7 +1286,7 @@
 /obj/item/seeds/potatoseed,
 /obj/item/seeds/potatoseed,
 /obj/item/seeds/ambrosiavulgarisseed,
-/obj/item/minihoe,
+/obj/item/material/minihoe,
 /obj/item/beartrap,
 /obj/structure/table/steel,
 /turf/simulated/floor/plating,
@@ -1296,9 +1297,9 @@
 /area/map_template/skipjack_station/start)
 "de" = (
 /obj/structure/table/rack,
-/obj/item/energy_blade/sword/pirate,
-/obj/item/clothing/suit/armor/pirate,
-/obj/item/clothing/suit/armor/pirate,
+/obj/item/melee/energy/sword/pirate,
+/obj/item/clothing/suit/space/pirate,
+/obj/item/clothing/suit/space/pirate,
 /obj/item/tank/oxygen,
 /obj/item/clothing/shoes/magboots,
 /obj/random/voidsuit,
@@ -1311,9 +1312,9 @@
 /area/map_template/skipjack_station/start)
 "df" = (
 /obj/structure/table/rack,
-/obj/item/energy_blade/sword/pirate,
-/obj/item/clothing/suit/armor/pirate,
-/obj/item/clothing/suit/armor/pirate,
+/obj/item/melee/energy/sword/pirate,
+/obj/item/clothing/suit/space/pirate,
+/obj/item/clothing/suit/space/pirate,
 /obj/item/tank/oxygen,
 /obj/item/clothing/shoes/magboots,
 /obj/random/voidsuit,
@@ -1815,7 +1816,7 @@
 /area/map_template/skipjack_station/start)
 "eA" = (
 /obj/structure/closet/crate,
-/obj/item/clothing/suit/armor/pirate,
+/obj/item/clothing/suit/space/pirate,
 /obj/item/clothing/under/rank/medical/scrubs/black,
 /turf/simulated/floor/shuttle/red,
 /area/map_template/skipjack_station/start)
@@ -1850,7 +1851,7 @@
 /obj/machinery/light/small{
 	dir = 4
 	},
-/obj/item/baton/cattleprod,
+/obj/item/melee/baton/cattleprod,
 /turf/simulated/floor/shuttle/white,
 /area/map_template/skipjack_station/start)
 "eE" = (

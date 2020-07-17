@@ -113,10 +113,9 @@
 		to_chat(M, "<span class='warning'>Your chameleon-projector deactivates.</span>")
 	master.disrupt()
 
-/obj/effect/dummy/chameleon/explosion_act()
-	SHOULD_CALL_PARENT(FALSE)
+/obj/effect/dummy/chameleon/ex_act()
 	for(var/mob/M in src)
-		to_chat(M, SPAN_DANGER("Your chameleon-projector deactivates."))
+		to_chat(M, "<span class='warning'>Your chameleon-projector deactivates.</span>")
 	master.disrupt()
 
 /obj/effect/dummy/chameleon/bullet_act()
@@ -126,8 +125,8 @@
 	master.disrupt()
 
 /obj/effect/dummy/chameleon/relaymove(var/mob/user, direction)
-	if(!has_gravity())
-		return //No magical space movement!
+	var/area/A = get_area(src)
+	if(!A || !A.has_gravity()) return //No magical space movement!
 
 	if(can_move)
 		can_move = 0

@@ -60,7 +60,7 @@
 	dir = 1
 	},
 /obj/effect/decal/cleanable/blood,
-/obj/item/gun/projectile/revolver,
+/obj/item/gun/projectile/revolver/medium,
 /turf/simulated/floor/tiled/techfloor/grid,
 /area/map_template/marooned)
 "an" = (
@@ -324,7 +324,7 @@
 	pixel_x = -7;
 	pixel_y = 0
 	},
-/obj/item/baton/cattleprod{
+/obj/item/melee/baton/cattleprod{
 	desc = "Metal rod with wire attached to it.";
 	name = "jury-rigged antenna";
 	pixel_x = 5;
@@ -356,7 +356,7 @@
 /turf/template_noop,
 /area/template_noop)
 "aY" = (
-/obj/item/baton/cattleprod{
+/obj/item/melee/baton/cattleprod{
 	desc = "Metal rod with wire attached to it.";
 	name = "jury-rigged antenna";
 	pixel_x = 5;

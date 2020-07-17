@@ -14,11 +14,13 @@
 /obj/item/clothing/head/welding
 	name = "welding helmet"
 	desc = "A head-mounted face cover designed to protect the wearer completely from space-arc eye."
-	icon_state = ICON_STATE_WORLD
-	icon = 'icons/clothing/head/welding/default.dmi'
-	on_mob_icon = 'icons/clothing/head/welding/default.dmi'
-	material = /decl/material/solid/metal/steel
-	matter = list(/decl/material/solid/glass = MATTER_AMOUNT_REINFORCEMENT)
+	icon_state = "welding"
+	item_state_slots = list(
+		slot_l_hand_str = "welding",
+		slot_r_hand_str = "welding",
+		)
+	material = MAT_STEEL
+	matter = list(MAT_GLASS = MATTER_AMOUNT_REINFORCEMENT)
 	armor = list(
 		melee = ARMOR_MELEE_SMALL
 		)
@@ -37,6 +39,7 @@
 		base_state = icon_state
 	toggle()
 
+
 /obj/item/clothing/head/welding/verb/toggle()
 	set category = "Object"
 	set name = "Adjust welding mask"
@@ -49,6 +52,8 @@
 			flags_inv |= (HIDEMASK|HIDEEARS|HIDEEYES|HIDEFACE)
 			flash_protection = initial(flash_protection)
 			tint = initial(tint)
+			icon_state = base_state
+			item_state = base_state
 			to_chat(usr, "You flip the [src] down to protect your eyes.")
 		else
 			src.up = !src.up
@@ -56,48 +61,53 @@
 			flash_protection = FLASH_PROTECTION_NONE
 			tint = TINT_NONE
 			flags_inv &= ~(HIDEMASK|HIDEEARS|HIDEEYES|HIDEFACE)
+			icon_state = "[base_state]up"
+			item_state = "[base_state]up"
 			to_chat(usr, "You push the [src] up out of your face.")
-		update_icon()
+		update_clothing_icon()	//so our mob-overlays
 		update_vision()
 		usr.update_action_buttons()
-
-/obj/item/clothing/head/welding/on_update_icon()
-	..()
-	icon_state = get_world_inventory_state()
-	if(up && check_state_in_icon("[icon_state]_up", icon))
-		icon_state = "[icon_state]_up"
-	update_clothing_icon()	//so our mob-overlays
-
-/obj/item/clothing/head/welding/experimental_mob_overlay()
-	var/image/ret = ..()
-	if(up && check_state_in_icon("[ret.icon_state]_up", icon))
-		ret.icon_state = "[ret.icon_state]_up"
-	return ret
 
 /obj/item/clothing/head/welding/demon
 	name = "demonic welding helmet"
 	desc = "A painted welding helmet, this one has a demonic face on it."
-	on_mob_icon = 'icons/clothing/head/welding/demon.dmi'
+	icon_state = "demonwelding"
+	item_state_slots = list(
+		slot_l_hand_str = "demonwelding",
+		slot_r_hand_str = "demonwelding",
+		)
 
 /obj/item/clothing/head/welding/knight
 	name = "knightly welding helmet"
 	desc = "A painted welding helmet, this one looks like a knights helmet."
-	on_mob_icon = 'icons/clothing/head/welding/knight.dmi'
+	icon_state = "knightwelding"
 
 /obj/item/clothing/head/welding/fancy
 	name = "fancy welding helmet"
 	desc = "A painted welding helmet, the black and gold make this one look very fancy."
-	on_mob_icon = 'icons/clothing/head/welding/fancy.dmi'
+	icon_state = "fancywelding"
+	item_state_slots = list(
+		slot_l_hand_str = "fancywelding",
+		slot_r_hand_str = "fancywelding",
+		)
 
 /obj/item/clothing/head/welding/engie
 	name = "engineering welding helmet"
 	desc = "A painted welding helmet, this one has been painted the engineering colours."
-	on_mob_icon = 'icons/clothing/head/welding/engie.dmi'
+	icon_state = "engiewelding"
+	item_state_slots = list(
+		slot_l_hand_str = "engiewelding",
+		slot_r_hand_str = "engiewelding",
+		)
 
 /obj/item/clothing/head/welding/carp
 	name = "carp welding helmet"
 	desc = "A painted welding helmet, this one has a carp face on it."
-	on_mob_icon = 'icons/clothing/head/welding/carp.dmi'
+	icon_state = "carpwelding"
+	item_state_slots = list(
+		slot_l_hand_str = "carpwelding",
+		slot_r_hand_str = "carpwelding",
+		)
 
 /*
  * Cakehat
@@ -190,13 +200,13 @@
 	siemens_coefficient = 1.5
 	item_icons = list()
 
-/obj/item/clothing/head/kitty/on_update_icon(var/mob/living/carbon/human/user)
-	if(!istype(user)) return
-	var/icon/ears = new/icon("icon" = 'icons/mob/onmob/onmob_head.dmi', "icon_state" = "kitty")
-	ears.Blend(user.hair_colour, ICON_ADD)
+	update_icon(var/mob/living/carbon/human/user)
+		if(!istype(user)) return
+		var/icon/ears = new/icon("icon" = 'icons/mob/onmob/onmob_head.dmi', "icon_state" = "kitty")
+		ears.Blend(rgb(user.r_hair, user.g_hair, user.b_hair), ICON_ADD)
 
-	var/icon/earbit = new/icon("icon" = 'icons/mob/onmob/onmob_head.dmi', "icon_state" = "kittyinner")
-	ears.Blend(earbit, ICON_OVERLAY)
+		var/icon/earbit = new/icon("icon" = 'icons/mob/onmob/onmob_head.dmi', "icon_state" = "kittyinner")
+		ears.Blend(earbit, ICON_OVERLAY)
 
 /obj/item/clothing/head/richard
 	name = "chicken mask"

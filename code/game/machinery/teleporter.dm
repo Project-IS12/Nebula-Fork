@@ -14,6 +14,8 @@
 	. = ..()
 
 	id = "[random_id(/obj/machinery/computer/teleporter, 1000, 9999)]"
+	underlays.Cut()
+	underlays += image('icons/obj/stationobjs.dmi', icon_state = "telecomp-wires")
 
 	station = locate(/obj/machinery/teleport/station, get_step(src, turn(dir, 90)))
 	if(station)
@@ -185,7 +187,7 @@
 
 /obj/machinery/teleport
 	name = "teleport"
-	icon = 'icons/obj/machines/teleporter.dmi'
+	icon = 'icons/obj/stationobjs.dmi'
 	density = 1
 	anchored = 1.0
 	var/lockeddown = 0
@@ -195,10 +197,15 @@
 	name = "teleporter hub"
 	desc = "The teleporter hub handles all of the impossibly complex busywork required in instant matter transmission."
 	icon_state = "tele0"
-	dir = EAST
+	dir = 4
 	idle_power_usage = 10
 	active_power_usage = 2000
 	var/obj/machinery/computer/teleporter/com
+
+/obj/machinery/teleport/hub/Initialize()
+	. = ..()
+	underlays.Cut()
+	underlays += image('icons/obj/stationobjs.dmi', icon_state = "tele-wires")
 
 /obj/machinery/teleport/hub/Bumped(var/atom/movable/M)
 	spawn()
@@ -221,12 +228,17 @@
 	name = "projector"
 	desc = "This machine is capable of projecting a miniature wormhole leading directly to its provided target."
 	icon_state = "controller"
-	dir = EAST
+	dir = 4
 	var/engaged = 0
 	idle_power_usage = 10
 	active_power_usage = 2000
 	var/obj/machinery/computer/teleporter/com
 	var/obj/machinery/teleport/hub/hub
+
+/obj/machinery/teleport/station/Initialize()
+	. = ..()
+	overlays.Cut()
+	overlays += image('icons/obj/stationobjs.dmi', icon_state = "controller-wires")
 
 /obj/machinery/teleport/station/attackby(var/obj/item/W, var/mob/user)
 	attack_hand(user)
@@ -288,6 +300,6 @@
 
 /obj/machinery/teleport/station/on_update_icon()
 	if(stat & NOPOWER)
-		icon_state = panel_open ? "controller-o" : "controller-p"
+		icon_state = "controller-p"
 	else
 		icon_state = "controller"

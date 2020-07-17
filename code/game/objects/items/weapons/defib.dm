@@ -215,7 +215,6 @@
 	var/chargecost = 100 //units of charge
 	var/burn_damage_amt = 5
 
-	var/wielded = 0
 	var/cooldown = 0
 	var/busy = 0
 

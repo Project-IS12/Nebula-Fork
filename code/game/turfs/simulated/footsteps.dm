@@ -49,11 +49,11 @@
 		return
 
 	 //every other turf makes a sound
-	if((step_count % 2) && !MOVING_DELIBERATELY(src))
+	if((step_count % 2) && (!MOVING_QUICKLY(src)))
 		return
 
 	// don't need to step as often when you hop around
-	if((step_count % 3) && !has_gravity())
+	if((step_count % 3) && !has_gravity(src))
 		return
 
 	var/turf/simulated/T = get_turf(src)

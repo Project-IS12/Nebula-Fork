@@ -19,7 +19,9 @@
 	stop_automated_movement_when_pulled = 0
 	maxHealth = 60
 	health = 60
-	natural_weapon = /obj/item/natural_weapon/claws/strong
+	melee_damage_lower = 20
+	melee_damage_upper = 30
+	melee_damage_flags = DAM_SHARP
 	can_escape = TRUE
 	faction = "russian"
 
@@ -32,7 +34,7 @@
 	meat_amount = 10
 	bone_amount = 20
 	skin_amount = 20
-	skin_material = /decl/material/solid/skin/fur/heavy
+	skin_material = MAT_SKIN_FUR_HEAVY
 
 	var/stance_step = 0
 

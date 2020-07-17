@@ -1,14 +1,11 @@
 /obj/item/gun/launcher
 	name = "launcher"
 	desc = "A device that launches things."
-	on_mob_icon = 'icons/obj/guns/launcher/grenade.dmi'
-	icon = 'icons/obj/guns/launcher/grenade.dmi'
-	icon_state = ICON_STATE_WORLD
+	icon = 'icons/obj/guns/launchers.dmi'
+	icon_state = "riotgun"
 	w_class = ITEM_SIZE_HUGE
 	obj_flags =  OBJ_FLAG_CONDUCTIBLE
 	slot_flags = SLOT_BACK
-	screen_shake = 1
-	space_recoil = 1
 
 	var/release_force = 0
 	var/throw_distance = 10

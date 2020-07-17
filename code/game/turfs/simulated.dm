@@ -1,6 +1,6 @@
 /turf/simulated
 	name = "station"
-	initial_gas = list(/decl/material/gas/oxygen = MOLES_O2STANDARD, /decl/material/gas/nitrogen = MOLES_N2STANDARD)
+	initial_gas = list(MAT_OXYGEN = MOLES_O2STANDARD, MAT_NITROGEN = MOLES_N2STANDARD)
 	var/wet = 0
 	var/image/wet_overlay = null
 	var/has_resources //Mining resources (for the large drills).
@@ -122,6 +122,10 @@
 				for(var/i = 1 to slip_dist)
 					step(M, M.dir)
 					sleep(1)
+			else
+				M.inertia_dir = 0
+		else
+			M.inertia_dir = 0
 
 //returns 1 if made bloody, returns 0 otherwise
 /turf/simulated/add_blood(mob/living/carbon/human/M)
@@ -137,7 +141,7 @@
 				var/datum/extension/forensic_evidence/forensics = get_or_create_extension(B, /datum/extension/forensic_evidence)
 				forensics.add_data(/datum/forensics/blood_dna, M.dna.unique_enzymes)
 			return 1 //we bloodied the floor
-		blood_splatter(src, M, 1)
+		blood_splatter(src,M.get_blood(M.vessel),1)
 		return 1 //we bloodied the floor
 	return 0
 

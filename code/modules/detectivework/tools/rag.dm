@@ -50,7 +50,7 @@
 		remove_contents(user)
 
 /obj/item/chems/glass/rag/attackby(obj/item/W, mob/user)
-	if(W.isflamesource())
+	if(isflamesource(W))
 		if(on_fire)
 			to_chat(user, SPAN_WARNING("\The [src] is already blazing merrily!"))
 			return
@@ -142,7 +142,7 @@
 		return
 
 	if(istype(A, /obj/structure/reagent_dispensers))
-		if(!REAGENTS_FREE_SPACE(reagents))
+		if(!reagents.get_free_space())
 			to_chat(user, "<span class='warning'>\The [src] is already soaked.</span>")
 			return
 
@@ -172,9 +172,8 @@
 	var/total_volume = 0
 	if(reagents)
 		total_volume += reagents.total_volume
-		for(var/rtype in reagents.reagent_volumes)
-			var/decl/material/R = decls_repository.get_decl(rtype)
-			total_fuel = REAGENT_VOLUME(reagents, rtype) * R.fuel_value
+		for(var/datum/reagent/R in reagents.reagent_list)
+			total_fuel = R.volume * R.fuel_value
 	. = (total_fuel >= 2 && total_fuel >= total_volume*0.5)
 
 /obj/item/chems/glass/rag/proc/ignite()
@@ -184,10 +183,10 @@
 		return
 
 	//also copied from matches
-	if(REAGENT_VOLUME(reagents, /decl/material/solid/phoron)) // the phoron explodes when exposed to fire
+	if(reagents.get_reagent_amount(/datum/reagent/toxin/phoron)) // the phoron explodes when exposed to fire
 		visible_message(SPAN_DANGER("\The [src] explodes!"))
 		var/datum/effect/effect/system/reagents_explosion/e = new()
-		e.set_up(round(REAGENT_VOLUME(reagents, /decl/material/solid/phoron) / 2.5, 1), get_turf(src), 0, 0)
+		e.set_up(round(reagents.get_reagent_amount(/datum/reagent/toxin/phoron) / 2.5, 1), get_turf(src), 0, 0)
 		e.start()
 		qdel(src)
 		return
@@ -231,6 +230,6 @@
 		qdel(src)
 		return
 
-	reagents.remove_reagent(/decl/material/liquid/fuel, reagents.maximum_volume/25)
+	reagents.remove_reagent(/datum/reagent/fuel, reagents.maximum_volume/25)
 	update_name()
 	burn_time--

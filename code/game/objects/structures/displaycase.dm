@@ -1,6 +1,6 @@
 /obj/structure/displaycase
 	name = "display case"
-	icon = 'icons/obj/structures/displaycase.dmi'
+	icon = 'icons/obj/stationobjs.dmi'
 	icon_state = "glassbox"
 	desc = "A display case for prized possessions. It taunts you to kick it."
 	density = 1
@@ -24,16 +24,19 @@
 	if(contents.len)
 		to_chat(user, "Inside you see [english_list(contents)].")
 
-/obj/structure/displaycase/explosion_act(severity)
-	..()
-	if(!QDELETED(src))
-		if(severity == 1)
-			new /obj/item/shard(loc)
+/obj/structure/displaycase/ex_act(severity)
+	switch(severity)
+		if (1)
+			new /obj/item/material/shard(loc)
 			for(var/atom/movable/AM in src)
 				AM.dropInto(loc)
 			qdel(src)
-		else if(prob(50))
-			take_damage(20 - (severity * 5))
+		if (2)
+			if (prob(50))
+				take_damage(15)
+		if (3)
+			if (prob(50))
+				take_damage(5)
 
 /obj/structure/displaycase/bullet_act(var/obj/item/projectile/Proj)
 	..()
@@ -52,20 +55,17 @@
 			matter -= mat
 	UNSETEMPTY(matter)
 
-/obj/structure/displaycase/dismantle()
-	SHOULD_CALL_PARENT(FALSE)
-	. = TRUE
-
-/obj/structure/displaycase/physically_destroyed()
+/obj/structure/displaycase/destroyed()
 	if(destroyed)
 		return
-	. = ..()
-	if(.)
-		set_density(0)
-		destroyed = TRUE
-		subtract_matter(new /obj/item/shard(get_turf(src), material?.type))
-		playsound(src, "shatter", 70, 1)
-		update_icon()
+	set_density(0)
+	destroyed = TRUE
+	
+	subtract_matter(new /obj/item/material/shard(get_turf(src), material?.type))
+	for(var/atom/movable/AM in src)
+		AM.dropInto(loc)
+	playsound(src, "shatter", 70, 1)
+	update_icon()
 
 /obj/structure/displaycase/on_update_icon()
 	if(destroyed)

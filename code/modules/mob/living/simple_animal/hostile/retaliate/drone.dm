@@ -62,7 +62,7 @@
 	ion_trail.set_up(src)
 	ion_trail.start()
 
-/mob/living/simple_animal/hostile/retaliate/malf_drone/Process_Spacemove()
+/mob/living/simple_animal/hostile/retaliate/malf_drone/Allow_Spacemove(var/check_drift = 0)
 	return 1
 
 /mob/living/simple_animal/hostile/retaliate/malf_drone/proc/Haywire()
@@ -177,16 +177,16 @@
 		var/obj/O
 
 		//shards
-		O = new /obj/item/shard(src.loc)
+		O = new /obj/item/material/shard(src.loc)
 		step_to(O, get_turf(pick(view(7, src))))
 		if(prob(75))
-			O = new /obj/item/shard(src.loc)
+			O = new /obj/item/material/shard(src.loc)
 			step_to(O, get_turf(pick(view(7, src))))
 		if(prob(50))
-			O = new /obj/item/shard(src.loc)
+			O = new /obj/item/material/shard(src.loc)
 			step_to(O, get_turf(pick(view(7, src))))
 		if(prob(25))
-			O = new /obj/item/shard(src.loc)
+			O = new /obj/item/material/shard(src.loc)
 			step_to(O, get_turf(pick(view(7, src))))
 
 		//rods
@@ -265,7 +265,7 @@
 		if(spawnees & 128)
 			C = new(src.loc)
 			C.SetName("Drone phoron overcharge counter")
-			C.origin_tech = "{'[TECH_EXOTIC_MATTER]':[rand(3, 6)]}"
+			C.origin_tech = "{'[TECH_PHORON]':[rand(3, 6)]}"
 
 		if(spawnees & 256)
 			C = new(src.loc)

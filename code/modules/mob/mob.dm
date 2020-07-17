@@ -11,7 +11,6 @@
 		QDEL_NULL(skillset)
 	QDEL_NULL_LIST(grabbed_by)
 	clear_fullscreen()
-	QDEL_NULL(ai)
 	if(client)
 		remove_screen_obj_references()
 		for(var/atom/movable/AM in client.screen)
@@ -53,14 +52,7 @@
 		move_intent = move_intents[1]
 	if(ispath(move_intent))
 		move_intent = decls_repository.get_decl(move_intent)
-	var/ai_type = get_ai_type()
-	if(ai_type)
-		ai = new ai_type(src)
 	START_PROCESSING(SSmobs, src)
-
-/mob/proc/get_ai_type()
-	if (ispath(ai))
-		return ai
 
 /mob/proc/show_message(msg, type, alt, alt_type)//Message, type of message (1 or 2), alternative message, alt message type (1 or 2)
 	if(!client)	return
@@ -244,9 +236,6 @@
 	return incapacitated(INCAPACITATION_KNOCKDOWN)
 
 /mob/proc/incapacitated(var/incapacitation_flags = INCAPACITATION_DEFAULT)
-	if(status_flags & ENABLE_AI)
-		return 1
-
 	if ((incapacitation_flags & INCAPACITATION_STUNNED) && stunned)
 		return 1
 
@@ -603,10 +592,15 @@
 	else
 		lying = incapacitated(INCAPACITATION_KNOCKDOWN)
 
+	if(ishuman(src))//Check if they're a human.
+		if(lying && lying != lying_prev)//Check if they fell over.
+			if(!istype(src.loc, /turf/space))//Check if they're not in space.
+				playsound(src, "fallsound", 50)//Good now play fallsound.
+
 	if(lying)
 		set_density(0)
-		if(l_hand) unEquip(l_hand)
-		if(r_hand) unEquip(r_hand)
+		//if(l_hand) unEquip(l_hand)
+		//if(r_hand) unEquip(r_hand)
 	else
 		set_density(initial(density))
 	reset_layer()
@@ -656,10 +650,16 @@
 	set hidden = 1
 	return facedir(client.client_dir(SOUTH))
 
+/mob/proc/KnockDown()//This will knock you down, and knock the item out of your hand. Use this instead of calling stun and weaken individually.
+	Stun(1)
+	Weaken(1)
+
 /mob/proc/Stun(amount)
 	if(status_flags & CANSTUN)
 		facing_dir = null
 		stunned = max(max(stunned,amount),0) //can't go below 0, getting a low amount of stun doesn't lower your current stun
+		if(l_hand) unEquip(l_hand)
+		if(r_hand) unEquip(r_hand)
 		UpdateLyingBuckledAndVerbStatus()
 	return
 
@@ -698,6 +698,8 @@
 	if(status_flags & CANPARALYSE)
 		facing_dir = null
 		paralysis = max(max(paralysis,amount),0)
+		if(l_hand) unEquip(l_hand)
+		if(r_hand) unEquip(r_hand)
 	return
 
 /mob/proc/SetParalysis(amount)
@@ -713,6 +715,8 @@
 /mob/proc/Sleeping(amount)
 	facing_dir = null
 	sleeping = max(max(sleeping,amount),0)
+	if(l_hand) unEquip(l_hand)
+	if(r_hand) unEquip(r_hand)
 	return
 
 /mob/proc/SetSleeping(amount)
@@ -850,18 +854,20 @@
 /mob/on_update_icon()
 	return update_icons()
 
-/mob/verb/face_direction()
+/mob/verb/set_fixeye()//For macros.
+	set name = "set-fixeye"
+	set hidden = TRUE
+	face_direction()
 
-	set name = "Face Direction"
-	set category = "IC"
-	set src = usr
-
+/mob/proc/face_direction()
 	set_face_dir()
-
-	if(!facing_dir)
-		to_chat(usr, "You are now not facing anything.")
+	if(!fixeye)
+		return
+	//Ok we have the fixeye icon...
+	if(facing_dir)
+		fixeye.icon_state = "fixeye_on"
 	else
-		to_chat(usr, "You are now facing [dir2text(facing_dir)].")
+		fixeye.icon_state = "fixeye"
 
 /mob/proc/set_face_dir(var/newdir)
 	if(!isnull(facing_dir) && newdir == facing_dir)
@@ -1046,7 +1052,7 @@
 /mob/proc/handle_reading_literacy(var/mob/user, var/text_content, var/skip_delays)
 	if(!skip_delays)
 		to_chat(src, SPAN_WARNING("You can't make heads or tails of the words."))
-	. = stars(text_content, 5)
+	. = uh(text_content)//stars(text_content, 5)
 
 /mob/proc/handle_writing_literacy(var/mob/user, var/text_content, var/skip_delays)
 	if(!skip_delays)
@@ -1056,25 +1062,16 @@
 // mobs do not have mouths by default
 /mob/proc/check_has_mouth()
 	return FALSE
-
 /mob/proc/check_has_eyes()
 	return TRUE
 
+
+proc/uh(var/S)
+	var/regex/upper = new("\[A-Z\]", "g")
+	var/regex/lower = new("\[a-z\]", "g")
+	S = upper.Replace(S,"U")	 //All uppercases become "U"
+	S = lower.Replace(S, "h")	 //replaces all lowercase letters with "h"
+	S = replacetext(S," h"," u") //makes it so we words start with "u" most of the time.
+	return S
 /mob/proc/handle_pre_transformation()
 	return
-
-/mob/get_mass()
-	return mob_size
-
-/mob/physically_destroyed()
-	SHOULD_CALL_PARENT(FALSE)
-	gib()
-	
-/mob/explosion_act()
-	. = ..()
-	if(!blinded)
-		flash_eyes()
-
-/mob/proc/adjust_drugged(var/amt, var/maxamt = 100)
-	drugged = Clamp(drugged + amt, 0, maxamt)
-	. = drugged

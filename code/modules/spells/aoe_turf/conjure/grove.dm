@@ -58,7 +58,7 @@
 	name = "merlin tears"
 	seed_name = "merlin tears"
 	display_name = "merlin tears"
-	chems = list(/decl/material/liquid/brute_meds = list(3,7), /decl/material/liquid/burn_meds = list(3,7), /decl/material/liquid/antitoxins = list(3,7), /decl/material/liquid/regenerator = list(3,7), /decl/material/liquid/neuroannealer = list(1,2), /decl/material/liquid/eyedrops = list(1,2))
+	chems = list(/datum/reagent/brute_meds = list(3,7), /datum/reagent/burn_meds = list(3,7), /datum/reagent/antitoxins = list(3,7), /datum/reagent/regenerator = list(3,7), /datum/reagent/neuroannealer = list(1,2), /datum/reagent/eyedrops = list(1,2))
 	kitchen_tag = "berries"
 
 /datum/seed/merlin_tear/New()

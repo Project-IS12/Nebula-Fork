@@ -1,14 +1,14 @@
 /obj/item/gun/projectile/shotgun/pump
 	name = "shotgun"
 	desc = "The mass-produced W-T Remmington 29x shotgun is a favourite of police and security forces on many worlds. Useful for sweeping alleys."
-	on_mob_icon = 'icons/obj/guns/shotgun/pump.dmi'
-	icon = 'icons/obj/guns/shotgun/pump.dmi'
-	icon_state = ICON_STATE_WORLD
-	max_shells = 4
+	icon = 'icons/obj/guns/shotguns.dmi'
+	icon_state = "shotgun"
+	item_state = "shotgun"
+	max_shells = 5
 	w_class = ITEM_SIZE_HUGE
 	force = 10
 	obj_flags =  OBJ_FLAG_CONDUCTIBLE
-	slot_flags = SLOT_BACK
+	slot_flags = SLOT_BACK|SLOT_S_STORE
 	caliber = CALIBER_SHOTGUN
 	origin_tech = "{'combat':4,'materials':2}"
 	load_method = SINGLE_CASING
@@ -17,13 +17,37 @@
 	one_hand_penalty = 8
 	bulk = 6
 	var/recentpump = 0 // to prevent spammage
-	load_sound = 'sound/weapons/guns/interaction/shotgun_instert.ogg'
+	var/pumpsound = 'sound/weapons/shotgunpump.ogg'
+	var/backsound = 'sound/weapons/guns/interaction/shotgun_back.ogg'
+	var/forwardsound = 'sound/weapons/guns/interaction/shotgun_forward.ogg'
+	var/empty_icon = "shotgun-empty"
+	wielded_item_state = "shotgun-wielded"
+	load_sound = 'sound/weapons/guns/interaction/shotgun_insert.ogg'
 
-/obj/item/gun/projectile/shotgun/update_base_icon()
-	if(length(loaded))
-		icon_state = get_world_inventory_state()
+/obj/item/gun/projectile/shotgun/pump/Initialize()
+	. = ..()
+	pump(null, TRUE)//Chamber it when it's created.
+
+/obj/item/gun/projectile/shotgun/pump/on_update_icon()
+	. = ..()
+	if(empty_icon)
+		if(!chambered && !loaded.len)//If there's an empty icon then use it.
+			icon_state = empty_icon
+		else if(!chambered && loaded.len)
+			icon_state = empty_icon
+		else
+			icon_state = initial(icon_state)
+
+/obj/item/gun/projectile/shotgun/pump/examine(mob/user, distance)
+	. = ..()
+	if(chambered)
+		if(chambered.BB)
+			to_chat(user, "There is a <span class='notice'><b>LIVE</b></span> one in the chamber.")
+		else
+			to_chat(user, "There is a <span class='danger'><b>SPENT</b></span> one in the chamber.")
 	else
-		icon_state = "[get_world_inventory_state()]-empty"
+		to_chat(user, "<span class='danger'>The chamber is <b>EMPTY</b>.")
+
 
 /obj/item/gun/projectile/shotgun/pump/consume_next_projectile()
 	if(chambered)
@@ -35,8 +59,18 @@
 		pump(user)
 		recentpump = world.time
 
-/obj/item/gun/projectile/shotgun/pump/proc/pump(mob/M)
-	playsound(M, 'sound/weapons/shotgunpump.ogg', 60, 1)
+/obj/item/gun/projectile/shotgun/pump/proc/pump(mob/M, silent = FALSE)
+	if(chambered && loaded.len)
+		pumpsound = initial(pumpsound)
+
+	else if(!chambered && loaded.len)
+		pumpsound = forwardsound
+
+	if(!chambered && !loaded.len)//If there's an empty icon then use it.
+		pumpsound = null
+		if(M)
+			to_chat(M, "<span class='warning'>It's empty.</span>")
+		return
 
 	if(chambered)//We have a shell in the chamber
 		chambered.dropInto(loc)//Eject casing
@@ -49,12 +83,32 @@
 		loaded -= AC //Remove casing from loaded list.
 		chambered = AC
 
+	if(!chambered && !loaded.len)
+		pumpsound = backsound
+
+	if(!silent)
+		playsound(src, pumpsound, 60, 1)
+
 	update_icon()
+
+/obj/item/gun/projectile/shotgun/pump/combat
+	name = "combat shotgun"
+	desc = "Built for close quarters combat, the KS-40 is widely regarded as a weapon of choice for repelling boarders."
+	icon_state = "cshotgun"
+	item_state = "cshotgun"
+	wielded_item_state = "cshotgun-wielded"
+	empty_icon = "cshotgun-empty"
+	max_shells = 7 //match the ammo box capacity, also it can hold a round in the chamber anyways, for a total of 8.
+	ammo_type = /obj/item/ammo_casing/shotgun
+	one_hand_penalty = 8
 
 /obj/item/gun/projectile/shotgun/doublebarrel
 	name = "double-barreled shotgun"
 	desc = "A true classic."
-	on_mob_icon = 'icons/obj/guns/shotgun/doublebarrel.dmi'
+	icon = 'icons/obj/guns/shotguns.dmi'
+	icon_state = "dshotgun"
+	item_state = "dshotgun"
+	wielded_item_state = "dshotgun-wielded"
 	//SPEEDLOADER because rapid unloading.
 	//In principle someone could make a speedloader for it, so it makes sense.
 	load_method = SINGLE_CASING|SPEEDLOADER
@@ -68,6 +122,7 @@
 	origin_tech = "{'combat':3,'materials':1}"
 	ammo_type = /obj/item/ammo_casing/shotgun/beanbag
 	one_hand_penalty = 2
+	wielded_item_state = "gun_wielded"
 
 	burst_delay = 0
 	firemodes = list(
@@ -75,12 +130,20 @@
 		list(mode_name="fire both barrels at once", burst=2),
 		)
 
+/obj/item/gun/projectile/shotgun/doublebarrel/pellet
+	ammo_type = /obj/item/ammo_casing/shotgun/pellet
+
+/obj/item/gun/projectile/shotgun/doublebarrel/flare
+	name = "signal shotgun"
+	desc = "A double-barreled shotgun meant to fire signal flash shells."
+	ammo_type = /obj/item/ammo_casing/shotgun/flash
+
 /obj/item/gun/projectile/shotgun/doublebarrel/unload_ammo(user, allow_dump)
 	..(user, allow_dump=1)
 
 //this is largely hacky and bad :(	-Pete
 /obj/item/gun/projectile/shotgun/doublebarrel/attackby(var/obj/item/A, mob/user)
-	if(w_class > ITEM_SIZE_NORMAL && (istype(A, /obj/item/circular_saw) || istype(A, /obj/item/energy_blade) || istype(A, /obj/item/gun/energy/plasmacutter)))
+	if(w_class > ITEM_SIZE_NORMAL && (istype(A, /obj/item/circular_saw) || istype(A, /obj/item/melee/energy) || istype(A, /obj/item/gun/energy/plasmacutter)))
 		if(istype(A, /obj/item/gun/energy/plasmacutter))
 			var/obj/item/gun/energy/plasmacutter/cutter = A
 			if(!cutter.slice(user))
@@ -103,7 +166,9 @@
 /obj/item/gun/projectile/shotgun/doublebarrel/sawn
 	name = "sawn-off shotgun"
 	desc = "Omar's coming!"
-	on_mob_icon = 'icons/obj/guns/shotgun/sawnoff.dmi'
+	icon_state = "sawnshotgun"
+	item_state = "sawnshotgun"
+	wielded_item_state = "sawnshotgun-wielded"
 	slot_flags = SLOT_BELT|SLOT_HOLSTER
 	ammo_type = /obj/item/ammo_casing/shotgun/pellet
 	w_class = ITEM_SIZE_NORMAL

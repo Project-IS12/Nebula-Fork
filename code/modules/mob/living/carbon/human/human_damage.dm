@@ -345,7 +345,7 @@ This function restores the subjects blood to max.
 	if(!should_have_organ(BP_HEART))
 		return
 	if(vessel.total_volume < species.blood_volume)
-		vessel.add_reagent(species.blood_reagent, species.blood_volume - vessel.total_volume)
+		vessel.add_reagent(/datum/reagent/blood, species.blood_volume - vessel.total_volume)
 
 /*
 This function restores all organs.
@@ -365,6 +365,7 @@ This function restores all organs.
 	else
 		return 0
 	return
+
 
 /mob/living/carbon/human/get_organ(var/zone)
 	return organs_by_name[check_zone(zone)]
@@ -407,7 +408,7 @@ This function restores all organs.
 		return 0
 
 	if(damage > 15 && prob(damage*4) && organ.can_feel_pain())
-		make_reagent(round(damage/10), /decl/material/liquid/adrenaline)
+		make_reagent(round(damage/10), /datum/reagent/adrenaline)
 	var/datum/wound/created_wound
 	damageoverlaytemp = 20
 	switch(damagetype)

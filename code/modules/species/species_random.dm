@@ -5,7 +5,7 @@
 		return;\
 	}\
 	var/decl/color_generator/CG = decls_repository.get_decl(pickweight(random_##Y));\
-	return CG && CG.generate_random_colour();\
+	return CG && CG.GenerateRGB();\
 }
 
 #define SETUP_RANDOM_COLOR_SETTER(X, Y)\
@@ -13,9 +13,9 @@
 	if(!species){\
 		return;\
 	}\
-	var/colour = species.get_random_##X();\
-	if(colour){\
-		Y(colour);\
+	var/colors = species.get_random_##X();\
+	if(colors){\
+		Y(colors[1], colors[2], colors[3]);\
 	}\
 }
 

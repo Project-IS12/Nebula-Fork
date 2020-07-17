@@ -1,22 +1,18 @@
 /datum/reagents/proc/get_color()
-	if(!LAZYLEN(reagent_volumes))
+	if(!reagent_list || !reagent_list.len)
 		return "#ffffffff"
-	if(LAZYLEN(reagent_volumes) == 1) // It's pretty common and saves a lot of work
-		var/decl/material/R = decls_repository.get_decl(reagent_volumes[1])
-		return R.color + num2hex(R.opacity * 255)
+	if(reagent_list.len == 1) // It's pretty common and saves a lot of work
+		var/datum/reagent/R = reagent_list[1]
+		return R.color + num2hex(R.alpha)
 
 	var/list/colors = list(0, 0, 0, 0)
 	var/tot_w = 0
-	for(var/rtype in reagent_volumes)
-		var/decl/material/R = decls_repository.get_decl(rtype)
-		if(R.color_weight <= 0)
-			continue
-		var/hex = uppertext(R.color) + num2hex(R.opacity * 255)
-		var/mod = REAGENT_VOLUME(src, rtype) * R.color_weight
-		colors[1] += HEX_RED(hex)   * mod
-		colors[2] += HEX_GREEN(hex) * mod
-		colors[3] += HEX_BLUE(hex)  * mod
-		colors[4] += HEX_ALPHA(hex) * mod
-		tot_w += mod
+	for(var/datum/reagent/R in reagent_list)
+		var/hex = uppertext(R.color) + num2hex(R.alpha)
+		colors[1] += hex2num(copytext(hex, 2, 4)) * R.volume * R.color_weight
+		colors[2] += hex2num(copytext(hex, 4, 6)) * R.volume * R.color_weight
+		colors[3] += hex2num(copytext(hex, 6, 8)) * R.volume * R.color_weight
+		colors[4] += hex2num(copytext(hex, 8, 10)) * R.volume * R.color_weight
+		tot_w += R.volume * R.color_weight
 
 	return rgb(colors[1] / tot_w, colors[2] / tot_w, colors[3] / tot_w, colors[4] / tot_w)

@@ -42,6 +42,7 @@
 	dir = 8
 	},
 /obj/structure/window/reinforced{
+	icon_state = "rwindow";
 	dir = 4
 	},
 /obj/machinery/door/window/brigdoor/southleft,
@@ -177,7 +178,7 @@
 /area/outpost/abandoned)
 "aO" = (
 /obj/effect/decal/cleanable/blood,
-/obj/item/shard,
+/obj/item/material/shard,
 /turf/simulated/floor/tiled/freezer,
 /area/outpost/abandoned)
 "aP" = (
@@ -223,14 +224,16 @@
 /turf/simulated/floor/tiled/white,
 /area/outpost/abandoned)
 "aX" = (
-/obj/machinery/fabricator/imprinter{
+/obj/machinery/r_n_d/circuit_imprinter{
+	icon_state = "circuit_imprinter_t";
 	stat = 1
 	},
 /obj/effect/floor_decal/corner/paleblue/diagonal,
 /turf/simulated/floor/tiled/white,
 /area/outpost/abandoned)
 "aY" = (
-/obj/machinery/fabricator/protolathe{
+/obj/machinery/r_n_d/protolathe{
+	icon_state = "protolathe_t";
 	stat = 1
 	},
 /obj/effect/floor_decal/corner/paleblue/diagonal,
@@ -1079,7 +1082,7 @@
 "dE" = (
 /obj/effect/decal/remains,
 /obj/structure/table,
-/obj/item/shard{
+/obj/item/material/shard{
 	icon_state = "shardlarge"
 	},
 /obj/effect/decal/cleanable/dirt,
@@ -1087,7 +1090,7 @@
 /area/outpost/abandoned)
 "dF" = (
 /obj/structure/table,
-/obj/item/shard{
+/obj/item/material/shard{
 	icon_state = "shardsmall"
 	},
 /obj/effect/floor_decal/corner/paleblue{
@@ -1118,18 +1121,18 @@
 /turf/simulated/floor/tiled/airless,
 /area/outpost/abandoned)
 "dJ" = (
-/obj/effect/fluid_mapped/fuel,
+/obj/effect/decal/cleanable/liquid_fuel,
 /obj/structure/table/steel,
 /obj/random/bomb_supply,
 /turf/simulated/floor/tiled/airless,
 /area/outpost/abandoned)
 "dK" = (
-/obj/effect/fluid_mapped/fuel,
+/obj/effect/decal/cleanable/liquid_fuel,
 /obj/structure/bed/chair,
 /turf/simulated/floor/tiled/airless,
 /area/outpost/abandoned)
 "dL" = (
-/obj/effect/fluid_mapped/fuel,
+/obj/effect/decal/cleanable/liquid_fuel,
 /obj/structure/bed/chair,
 /obj/machinery/light/small/emergency{
 	icon_state = "bulb1";
@@ -1170,7 +1173,7 @@
 /turf/simulated/floor/carpet/blue,
 /area/outpost/abandoned)
 "dS" = (
-/obj/item/shard{
+/obj/item/material/shard{
 	icon_state = "splinterslarge"
 	},
 /turf/simulated/floor/carpet/blue,
@@ -1213,7 +1216,7 @@
 /turf/simulated/floor/tiled/white/airless,
 /area/outpost/abandoned)
 "dZ" = (
-/obj/effect/fluid_mapped/fuel,
+/obj/effect/decal/cleanable/liquid_fuel,
 /obj/structure/sign/directions/medical{
 	dir = 8
 	},
@@ -1221,8 +1224,8 @@
 /area/outpost/abandoned)
 "ea" = (
 /obj/effect/decal/cleanable/dirt,
-/obj/effect/fluid_mapped/fuel,
-/obj/effect/fluid_mapped/fuel,
+/obj/effect/decal/cleanable/liquid_fuel,
+/obj/effect/decal/cleanable/liquid_fuel,
 /turf/simulated/floor/tiled/airless,
 /area/outpost/abandoned)
 "eb" = (
@@ -1234,11 +1237,11 @@
 /area/outpost/abandoned)
 "ec" = (
 /obj/effect/decal/cleanable/dirt,
-/obj/effect/fluid_mapped/fuel,
+/obj/effect/decal/cleanable/liquid_fuel,
 /turf/simulated/floor/tiled/airless,
 /area/outpost/abandoned)
 "ed" = (
-/obj/effect/fluid_mapped/fuel,
+/obj/effect/decal/cleanable/liquid_fuel,
 /obj/effect/decal/cleanable/blood/oil,
 /turf/simulated/floor/tiled/airless,
 /area/outpost/abandoned)
@@ -1324,26 +1327,27 @@
 /turf/simulated/floor/tiled/white/airless,
 /area/outpost/abandoned)
 "et" = (
-/obj/effect/fluid_mapped/fuel,
+/obj/effect/decal/cleanable/liquid_fuel,
 /obj/structure/table,
 /obj/structure/window/reinforced{
+	icon_state = "rwindow";
 	dir = 1
 	},
-/obj/item/shard,
+/obj/item/material/shard,
 /obj/effect/decal/cleanable/dirt,
 /obj/effect/decal/cleanable/dirt,
 /obj/effect/decal/cleanable/dirt,
 /turf/simulated/floor/tiled/white/airless,
 /area/outpost/abandoned)
 "eu" = (
-/obj/effect/fluid_mapped/fuel,
+/obj/effect/decal/cleanable/liquid_fuel,
 /obj/effect/decal/cleanable/dirt,
 /obj/effect/decal/cleanable/dirt,
 /mob/living/bot/medbot,
 /turf/simulated/floor/tiled/white/airless,
 /area/outpost/abandoned)
 "ev" = (
-/obj/effect/fluid_mapped/fuel,
+/obj/effect/decal/cleanable/liquid_fuel,
 /turf/simulated/floor/tiled/white/airless,
 /area/outpost/abandoned)
 "ex" = (
@@ -1352,7 +1356,7 @@
 /turf/simulated/floor/tiled/airless,
 /area/outpost/abandoned)
 "ey" = (
-/obj/effect/fluid_mapped/fuel,
+/obj/effect/decal/cleanable/liquid_fuel,
 /obj/effect/floor_decal/corner/paleblue{
 	icon_state = "corner_white";
 	dir = 9
@@ -1421,7 +1425,7 @@
 /turf/simulated/floor/plating,
 /area/outpost/abandoned)
 "eJ" = (
-/obj/item/shard{
+/obj/item/material/shard{
 	icon_state = "shardsmall"
 	},
 /obj/effect/decal/cleanable/dirt,
@@ -1429,7 +1433,7 @@
 /turf/simulated/floor/tiled/dark,
 /area/outpost/abandoned)
 "eK" = (
-/obj/item/shard{
+/obj/item/material/shard{
 	icon_state = "piecesmall"
 	},
 /obj/effect/decal/cleanable/dirt,
@@ -1451,6 +1455,7 @@
 "eO" = (
 /obj/structure/table/glass,
 /obj/structure/window/reinforced{
+	icon_state = "rwindow";
 	dir = 4
 	},
 /obj/structure/window/reinforced,
@@ -1519,7 +1524,7 @@
 "eW" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/effect/decal/cleanable/dirt,
-/obj/effect/fluid_mapped/fuel,
+/obj/effect/decal/cleanable/liquid_fuel,
 /obj/machinery/atmospherics/pipe/simple/hidden/green{
 	icon_state = "intact";
 	dir = 4
@@ -2310,7 +2315,7 @@
 /area/outpost/abandoned)
 "hc" = (
 /obj/structure/table/steel,
-/obj/item/ashtray/glass,
+/obj/item/material/ashtray/glass,
 /obj/effect/decal/cleanable/cobweb2,
 /obj/effect/floor_decal/industrial/warning{
 	icon_state = "warning";
@@ -2391,7 +2396,7 @@
 /area/outpost/abandoned)
 "hp" = (
 /obj/effect/decal/cleanable/dirt,
-/obj/effect/fluid_mapped/fuel,
+/obj/effect/decal/cleanable/liquid_fuel,
 /turf/simulated/floor/plating,
 /area/outpost/abandoned)
 "hq" = (
@@ -2510,13 +2515,13 @@
 "hD" = (
 /obj/random/junk,
 /obj/effect/decal/cleanable/dirt,
-/obj/effect/fluid_mapped/fuel,
+/obj/effect/decal/cleanable/liquid_fuel,
 /turf/simulated/floor/plating,
 /area/outpost/abandoned)
 "hE" = (
 /obj/structure/table/reinforced,
 /obj/random/material,
-/obj/effect/fluid_mapped/fuel,
+/obj/effect/decal/cleanable/liquid_fuel,
 /turf/simulated/floor/plating,
 /area/outpost/abandoned)
 "hF" = (
@@ -2525,7 +2530,7 @@
 /turf/simulated/floor/plating,
 /area/outpost/abandoned)
 "hG" = (
-/obj/effect/fluid_mapped/fuel,
+/obj/effect/decal/cleanable/liquid_fuel,
 /obj/structure/closet/crate/radiation,
 /obj/random/voidsuit,
 /obj/random/voidhelmet,
@@ -2533,7 +2538,7 @@
 /area/outpost/abandoned)
 "hH" = (
 /obj/structure/reagent_dispensers/fueltank,
-/obj/effect/fluid_mapped/fuel,
+/obj/effect/decal/cleanable/liquid_fuel,
 /turf/simulated/floor/plating,
 /area/outpost/abandoned)
 "hL" = (

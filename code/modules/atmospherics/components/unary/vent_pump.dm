@@ -110,7 +110,6 @@
 	QDEL_NULL(sound_token)
 	var/area/A = get_area(src)
 	if(A)
-		GLOB.name_set_event.unregister(A, src, .proc/change_area_name)
 		A.air_vent_info -= id_tag
 		A.air_vent_names -= id_tag
 	. = ..()
@@ -245,22 +244,14 @@
 
 /obj/machinery/atmospherics/unary/vent_pump/Initialize()
 	if (!id_tag)
-		id_tag = "[sequential_id("obj/machinery")]"
+		id_tag = num2text(sequential_id("obj/machinery"))
 	if(controlled)
 		var/area/A = get_area(src)
 		if(A && !A.air_vent_names[id_tag])
 			var/new_name = "[A.name] Vent Pump #[A.air_vent_names.len+1]"
 			A.air_vent_names[id_tag] = new_name
 			SetName(new_name)
-			GLOB.name_set_event.register(A, src, .proc/change_area_name)
 	. = ..()
-
-/obj/machinery/atmospherics/unary/vent_pump/proc/change_area_name(var/area/A, var/old_area_name, var/new_area_name)
-	if(get_area(src) != A)
-		return
-	var/new_name = replacetext(A.air_vent_names[id_tag], old_area_name, new_area_name)
-	SetName(new_name)
-	A.air_vent_names[id_tag] = new_name
 
 /obj/machinery/atmospherics/unary/vent_pump/proc/purge()
 	pressure_checks &= ~PRESSURE_CHECK_EXTERNAL
@@ -550,13 +541,14 @@
 /obj/machinery/atmospherics/unary/vent_pump/engine/Initialize()
 	. = ..()
 	air_contents.volume = ATMOS_DEFAULT_VOLUME_PUMP + 500 //meant to match air injector
-	
+
 /obj/machinery/atmospherics/unary/vent_pump/power_change()
 	. = ..()
 	if(.)
 		update_sound()
 
 /obj/machinery/atmospherics/unary/vent_pump/proc/update_sound()
+	return
 	if(!sound_id)
 		sound_id = "[sequential_id("vent_z[z]")]"
 	if(can_pump())

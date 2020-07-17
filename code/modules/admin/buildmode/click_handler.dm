@@ -1,6 +1,6 @@
 /datum/click_handler/build_mode
 	flags = CLICK_HANDLER_REMOVE_ON_MOB_LOGOUT | CLICK_HANDLER_REMOVE_IF_NOT_TOP
-	var/direction
+	var/dir
 
 	var/list/build_modes
 	var/list/build_buttons

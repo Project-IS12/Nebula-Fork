@@ -66,7 +66,7 @@
 		if(src)//Do not add to this if() statement, otherwise the meteor won't delete them
 			if(A)
 
-				A.explosion_act(2)
+				A.ex_act(2)
 				playsound(src.loc, 'sound/effects/meteorimpact.ogg', 40, 1)
 
 				for(var/mob/M in range(10, src))
@@ -168,7 +168,7 @@
 	. = ..()
 	var/mob/living/L = target
 	if(L.reagents)
-		L.reagents.add_reagent(/decl/material/liquid/venom, 5)
+		L.reagents.add_reagent(/datum/reagent/toxin/venom, 5)
 
 /obj/item/missile
 	icon = 'icons/obj/grenade.dmi'
@@ -189,7 +189,7 @@
 	icon_state = null
 	damage_type = BURN
 	damage_flags = 0
-	life_span = 3
+	range = 3
 	silenced = TRUE
 
 /obj/item/projectile/hotgas/on_hit(atom/target, blocked, def_zone)

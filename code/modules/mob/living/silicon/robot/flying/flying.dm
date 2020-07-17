@@ -44,11 +44,11 @@
 	if(!QDELETED(src) && stat == DEAD)
 		stop_flying()
 
-/mob/living/silicon/robot/flying/Process_Spacemove()
+/mob/living/silicon/robot/flying/Allow_Spacemove()
 	return (pass_flags & PASS_FLAG_TABLE) || ..()
 
 /mob/living/silicon/robot/flying/can_fall(var/anchor_bypass = FALSE, var/turf/location_override = loc)
-	return !Process_Spacemove()
+	return !Allow_Spacemove()
 
 /mob/living/silicon/robot/flying/can_overcome_gravity()
-	return Process_Spacemove()
+	return Allow_Spacemove()

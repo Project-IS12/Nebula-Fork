@@ -2,7 +2,7 @@
 	name = "gun"
 	icon = 'icons/mob/screen1.dmi'
 	master = null
-	dir = SOUTH
+	dir = 2
 
 /obj/screen/gun/Click(location, control, params)
 	if(!usr)

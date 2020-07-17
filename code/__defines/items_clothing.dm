@@ -18,7 +18,8 @@
 #define SLOT_DENYPOCKET 0x1000  // This is to  deny items with a w_class of 2 or 1 from fitting in pockets.
 #define SLOT_TWOEARS    0x2000
 #define SLOT_TIE        0x4000
-#define SLOT_HOLSTER	0x8000 //16th bit - higher than this will overflow
+#define SLOT_S_STORE 	0x8000
+#define SLOT_HOLSTER	0x1600 //16th bit - higher than this will overflow
 
 #define ACCESSORY_SLOT_UTILITY  "Utility"
 #define ACCESSORY_SLOT_HOLSTER	"Holster"
@@ -234,9 +235,11 @@ var/list/default_onmob_icons = list(
 		slot_w_uniform_str = 'icons/mob/onmob/onmob_under.dmi',
 		slot_wear_suit_str = 'icons/mob/onmob/onmob_suit.dmi',
 		slot_head_str = 'icons/mob/onmob/onmob_head.dmi',
+		slot_shoes_str = 'icons/mob/onmob/onmob_feet.dmi',
 		slot_wear_mask_str = 'icons/mob/onmob/onmob_mask.dmi',
 		slot_handcuffed_str = 'icons/mob/onmob/onmob_cuff.dmi',
 		slot_legcuffed_str = 'icons/mob/onmob/onmob_cuff.dmi',
+		slot_gloves_str = 'icons/mob/onmob/onmob_hands.dmi',
 		slot_s_store_str = 'icons/mob/onmob/onmob_belt_mirror.dmi',
 		slot_tie_str = 'icons/mob/onmob/onmob_accessories.dmi'
 		)

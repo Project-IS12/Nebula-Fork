@@ -13,10 +13,10 @@
 	desc = "It looks pretty sciency."
 	icon = 'icons/obj/rig_modules.dmi'
 	icon_state = "module"
-	material = /decl/material/solid/metal/steel
+	material = MAT_STEEL
 	matter = list(
-		/decl/material/solid/plastic = MATTER_AMOUNT_REINFORCEMENT,
-		/decl/material/solid/glass = MATTER_AMOUNT_TRACE
+		MAT_PLASTIC = MATTER_AMOUNT_REINFORCEMENT,
+		MAT_GLASS = MATTER_AMOUNT_TRACE
 	)
 
 	var/damage = 0
@@ -164,7 +164,7 @@
 		to_chat(usr, "<span class='warning'>The suit is not initialized.</span>")
 		return 0
 
-	if(usr.lying || usr.stat || usr.stunned || usr.paralysis || usr.weakened)
+	if(usr.lying || usr.stat || usr.stunned || usr.paralysis)
 		to_chat(usr, "<span class='warning'>You cannot use the suit in this state.</span>")
 		return 0
 
@@ -325,10 +325,9 @@
 
 /stat_rig_module/activate/New(var/obj/item/rig_module/module)
 	..()
-	if(module)
-		name = module.activate_string
-		if(module.active_power_cost)
-			name += " ([module.active_power_cost*10]A)"
+	name = module.activate_string
+	if(module.active_power_cost)
+		name += " ([module.active_power_cost*10]A)"
 	module_mode = "activate"
 
 /stat_rig_module/activate/CanUse()
@@ -336,11 +335,11 @@
 
 /stat_rig_module/deactivate/New(var/obj/item/rig_module/module)
 	..()
-	if(module)
-		name = module.deactivate_string
-		// Show cost despite being 0, if it means changing from an active cost.
-		if(module.active_power_cost || module.passive_power_cost)
-			name += " ([module.passive_power_cost*10]P)"
+	name = module.deactivate_string
+	// Show cost despite being 0, if it means changing from an active cost.
+	if(module.active_power_cost || module.passive_power_cost)
+		name += " ([module.passive_power_cost*10]P)"
+
 	module_mode = "deactivate"
 
 /stat_rig_module/deactivate/CanUse()
@@ -348,10 +347,9 @@
 
 /stat_rig_module/engage/New(var/obj/item/rig_module/module)
 	..()
-	if(module)
-		name = module.engage_string
-		if(module.use_power_cost)
-			name += " ([module.use_power_cost*10]E)"
+	name = module.engage_string
+	if(module.use_power_cost)
+		name += " ([module.use_power_cost*10]E)"
 	module_mode = "engage"
 
 /stat_rig_module/engage/CanUse()

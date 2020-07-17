@@ -91,20 +91,20 @@
 	icon_state = "star_traitor"
 	flags_inv = HIDEEARS | BLOCKHAIR
 
-/obj/item/knife/ritual/shadow
+/obj/item/material/knife/ritual/shadow
 	name = "black death"
 	desc = "An obsidian dagger. The singed remains of a green cloth are wrapped around the 'handle.'"
 	material_force_multiplier = 0.3
 	var/charge = 5
 
-/obj/item/knife/ritual/shadow/apply_hit_effect(var/mob/living/target, var/mob/living/user, var/hit_zone)
+/obj/item/material/knife/ritual/shadow/apply_hit_effect(var/mob/living/target, var/mob/living/user, var/hit_zone)
 	. = ..()
 	if(charge)
 		if(target.getBruteLoss() > 15)
 			var/datum/reagents/R = target.reagents
 			if(!R)
 				return
-			R.add_reagent(/decl/material/liquid/venom, 5)
+			R.add_reagent(/datum/reagent/toxin/bromide, 5)
 			new /obj/effect/temporary(get_turf(target),3, 'icons/effects/effects.dmi', "fire_goon")
 			charge--
 	else
@@ -123,25 +123,25 @@
 	projectile_type = /obj/item/projectile/energy/flash
 	required_antag_type = MODE_GODCULTIST
 
-/obj/item/sword/blazing
+/obj/item/material/sword/blazing
 	name = "blazing blade"
-	on_mob_icon = 'icons/obj/items/weapon/swords/flaming.dmi'
 	damtype = BURN
+	icon_state = "fireblade"
+	item_state = "fireblade"
 	applies_material_colour = FALSE
-	applies_material_name = FALSE
 	var/last_near_structure = 0
 	var/mob/living/deity/linked
 
-/obj/item/sword/blazing/Initialize(var/maploading, var/material, var/deity)
+/obj/item/material/sword/blazing/Initialize(var/maploading, var/material, var/deity)
 	. = ..()
 	START_PROCESSING(SSobj, src)
 	linked = deity
 
-/obj/item/sword/blazing/Destroy()
+/obj/item/material/sword/blazing/Destroy()
 	STOP_PROCESSING(SSobj, src)
 	. = ..()
 
-/obj/item/sword/blazing/Process()
+/obj/item/material/sword/blazing/Process()
 	if(!linked || last_near_structure + 10 SECONDS > world.time)
 		return
 

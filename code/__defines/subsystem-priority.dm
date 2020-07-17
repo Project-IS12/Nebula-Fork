@@ -14,10 +14,9 @@
 #define SS_PRIORITY_TICKER         100 // Gameticker.
 #define SS_PRIORITY_MOB            95  // Mob Life().
 #define SS_PRIORITY_MACHINERY      95  // Machinery + powernet ticks.
+#define SS_PRIORITY_CHAT           95  // Goonchat queue
 #define SS_PRIORITY_AIR            80  // ZAS processing.
-#define SS_PRIORITY_THROWING       75  // Throwing calculation and constant checks
-#define SS_PRIORITY_MATERIALS      60  // Multi-tick chemical reactions.
-#define SS_PRIORITY_SPACEDRIFT     40  // Drifting things
+#define SS_PRIORITY_CHEMISTRY      60  // Multi-tick chemical reactions.
 #define SS_PRIORITY_ALARM          20  // Alarm processing.
 #define SS_PRIORITY_EVENT          20  // Event processing and queue handling.
 #define SS_PRIORITY_SHUTTLE        20  // Shuttle movement.
@@ -31,7 +30,9 @@
 #define SS_PRIORITY_SUPPLY         10  // Supply point accumulation.
 #define SS_PRIORITY_TRADE          10  // Adds/removes traders.
 #define SS_PRIORITY_GHOST_IMAGES   10  // Updates ghost client images.
+#define SS_PRIORITY_PING           10	// Client ping.
 #define SS_PRIORITY_ZCOPY          10  // Builds appearances for Z-Mimic.
+#define SS_PRIORITY_PROJECTILES    10	// Projectile processing!
 
 // SS_BACKGROUND
 #define SS_PRIORITY_OBJECTS       100  // processing_objects processing.
@@ -39,14 +40,12 @@
 #define SS_PRIORITY_PLANTS        90   // Plant processing, slow ticks.
 #define SS_PRIORITY_VINES         50   // Spreading vine effects.
 #define SS_PRIORITY_PSYCHICS      45   // Psychic complexus processing.
-#define SS_PRIORITY_AI            45   // Artificial Intelligence on mobs processing.
 #define SS_PRIORITY_NANO          40   // Updates to nanoui uis.
 #define SS_PRIORITY_TURF          30   // Radioactive walls/blob.
 #define SS_PRIORITY_EVAC          30   // Processes the evac controller.
 #define SS_PRIORITY_CIRCUIT       30   // Processing Circuit's ticks and all that
 #define SS_PRIORITY_GRAPH         30   // Merging and splitting of graphs
 #define SS_PRIORITY_CHAR_SETUP    25   // Writes player preferences to savefiles.
-#define SS_PRIORITY_COMPUTER_NETS 25   // Handles computer network devices hookups
 #define SS_PRIORITY_GARBAGE       20   // Garbage collection.
 
 

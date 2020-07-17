@@ -33,8 +33,7 @@
 /obj/item/clothing/shoes/dress/caretakershoes
 	name = "black leather shoes"
 	desc = "Dress shoes. These aren't as shiny as usual."
-	inset_color = COLOR_SKY_BLUE
-	shine = 30
+	icon_state = "caretakershoes"
 	armor = list(
 		rad = ARMOR_RAD_SHIELDED
 	)

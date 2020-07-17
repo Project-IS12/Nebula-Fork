@@ -35,7 +35,9 @@
 							/mob/living/carbon/human                                                   = TRADER_ALL
 							)
 
-	possible_trading_items = list(/obj/item/gun/projectile/automatic                            = TRADER_SUBTYPES_ONLY
+	possible_trading_items = list(/obj/item/gun/projectile/automatic                            = TRADER_SUBTYPES_ONLY,
+							/obj/item/gun/projectile/automatic/machine_pistol/usi                     = TRADER_BLACKLIST,
+							/obj/item/gun/projectile/automatic/l6_saw/mag                       = TRADER_BLACKLIST
 							)
 
 	blacklisted_trade_items = null
@@ -92,7 +94,7 @@
 	name_language = TRADER_DEFAULT_NAME
 
 	possible_wanted_items = list(/mob/living/simple_animal/construct            = TRADER_SUBTYPES_ONLY,
-								/obj/item/sword/cultblade                = TRADER_THIS_TYPE,
+								/obj/item/melee/cultblade                = TRADER_THIS_TYPE,
 								/obj/item/clothing/head/culthood                = TRADER_ALL,
 								/obj/item/clothing/suit/space/cult              = TRADER_ALL,
 								/obj/item/clothing/suit/cultrobes               = TRADER_ALL,

@@ -8,7 +8,7 @@ var/global/list/rad_collectors = list()
 	icon_state = "ca"
 	anchored = 0
 	density = 1
-	initial_access = list(access_engine_equip)
+	req_access = list(access_engine_equip)
 	var/obj/item/tank/phoron/P = null
 
 	var/health = 100
@@ -63,11 +63,11 @@ var/global/list/rad_collectors = list()
 			receive_pulse(12.5*(last_rads/max_rads)/(0.3+(last_rads/max_rads)))
 
 	if(P)
-		if(P.air_contents.gas[/decl/material/solid/phoron] == 0)
+		if(P.air_contents.gas[MAT_PHORON] == 0)
 			investigate_log("<font color='red'>out of fuel</font>.","singulo")
 			eject()
 		else
-			P.air_adjust_gas(/decl/material/solid/phoron, -0.01*drainratio*min(last_rads,max_rads)/max_rads) //fuel cost increases linearly with incoming radiation
+			P.air_adjust_gas(MAT_PHORON, -0.01*drainratio*min(last_rads,max_rads)/max_rads) //fuel cost increases linearly with incoming radiation
 
 /obj/machinery/power/rad_collector/CanUseTopic(mob/user)
 	if(!anchored)
@@ -84,7 +84,7 @@ var/global/list/rad_collectors = list()
 		toggle_power()
 		user.visible_message("[user.name] turns the [src.name] [active? "on":"off"].", \
 		"You turn the [src.name] [active? "on":"off"].")
-		investigate_log("turned [active?"<font color='green'>on</font>":"<font color='red'>off</font>"] by [user.key]. [P?"Fuel: [round(P.air_contents.gas[/decl/material/solid/phoron]/0.29)]%":"<font color='red'>It is empty</font>"].","singulo")
+		investigate_log("turned [active?"<font color='green'>on</font>":"<font color='red'>off</font>"] by [user.key]. [P?"Fuel: [round(P.air_contents.gas[MAT_PHORON]/0.29)]%":"<font color='red'>It is empty</font>"].","singulo")
 	else
 		to_chat(user, "<span class='warning'>The controls are locked!</span>")
 
@@ -142,10 +142,11 @@ var/global/list/rad_collectors = list()
 		to_chat(user, "The meter indicates that \the [src] is collecting [last_power] W.")
 		return 1
 
-/obj/machinery/power/rad_collector/explosion_act(severity)
-	if(severity != 1)
-		eject()
-	. = ..()
+/obj/machinery/power/rad_collector/ex_act(severity)
+	switch(severity)
+		if(2, 3)
+			eject()
+	return ..()
 
 /obj/machinery/power/rad_collector/proc/collector_break()
 	if(P && P.air_contents)
@@ -184,7 +185,7 @@ var/global/list/rad_collectors = list()
 /obj/machinery/power/rad_collector/proc/receive_pulse(var/pulse_strength)
 	if(P && active)
 		var/power_produced = 0
-		power_produced = min(100*P.air_contents.gas[/decl/material/solid/phoron]*pulse_strength*pulse_coeff,max_power)
+		power_produced = min(100*P.air_contents.gas[MAT_PHORON]*pulse_strength*pulse_coeff,max_power)
 		add_avail(power_produced)
 		last_power_new = power_produced
 		return

@@ -67,7 +67,7 @@
 
 	update_growth_stages()
 
-	uid = "[sequential_id(/datum/seed/)]"
+	uid = sequential_id(/datum/seed/)
 
 /datum/seed/proc/get_trait(var/trait)
 	return traits["[trait]"]
@@ -182,9 +182,9 @@
 		return
 	if(!(light_supplied) || !(get_trait(TRAIT_REQUIRES_WATER)))
 		return
-	if(environment.get_gas(/decl/material/gas/carbon_dioxide) >= req_CO2_moles)
-		environment.adjust_gas(/decl/material/gas/carbon_dioxide, -req_CO2_moles, 1)
-		environment.adjust_gas(/decl/material/gas/oxygen, req_CO2_moles, 1)
+	if(environment.get_gas(MAT_CO2) >= req_CO2_moles)
+		environment.adjust_gas(MAT_CO2, -req_CO2_moles, 1)
+		environment.adjust_gas(MAT_OXYGEN, req_CO2_moles, 1)
 
 //Splatter a turf.
 /datum/seed/proc/splatter(var/turf/T,var/obj/item/thrown)
@@ -336,7 +336,7 @@
 			health_change += rand(1,3) * HYDRO_SPEED_MULTIPLIER
 
 	for(var/obj/effect/effect/smoke/chem/smoke in range(1, current_turf))
-		if(smoke.reagents.has_reagent(/decl/material/liquid/weedkiller))
+		if(smoke.reagents.has_reagent(/datum/reagent/toxin/plantbgone))
 			return 100
 
 	// Pressure and temperature are needed as much as water and light.
@@ -447,40 +447,38 @@
 
 	if(prob(5))
 		consume_gasses = list()
-		var/gas = pick(/decl/material/gas/oxygen,/decl/material/gas/nitrogen,/decl/material/solid/phoron,/decl/material/gas/carbon_dioxide)
+		var/gas = pick(MAT_OXYGEN,MAT_NITROGEN,MAT_PHORON,MAT_CO2)
 		consume_gasses[gas] = rand(3,9)
 
 	if(prob(5))
 		exude_gasses = list()
-		var/gas = pick(/decl/material/gas/oxygen,/decl/material/gas/nitrogen,/decl/material/solid/phoron,/decl/material/gas/carbon_dioxide)
+		var/gas = pick(MAT_OXYGEN,MAT_NITROGEN,MAT_PHORON,MAT_CO2)
 		exude_gasses[gas] = rand(3,9)
 
 	chems = list()
 	if(prob(80))
-		chems[/decl/material/liquid/nutriment] = list(rand(1,10),rand(10,20))
+		chems[/datum/reagent/nutriment] = list(rand(1,10),rand(10,20))
 
 	var/additional_chems = rand(0,5)
 
 	if(additional_chems)
 		var/list/banned_chems = list(
-			/decl/material/liquid/adminordrazine,
-			/decl/material/liquid/nutriment,
-			/decl/material/liquid/weedkiller
+			/datum/reagent/adminordrazine,
+			/datum/reagent/nutriment,
+			/datum/reagent/water/holywater,
+			/datum/reagent/toxin/plantbgone
 			)
-		banned_chems += subtypesof(/decl/material/liquid/ethanol)
-		banned_chems += subtypesof(/decl/material/solid/tobacco)
-		banned_chems += typesof(/decl/material/liquid/drink)
-		banned_chems += typesof(/decl/material/liquid/nutriment)
-		banned_chems += typesof(/decl/material/liquid/fertilizer)
+		banned_chems += subtypesof(/datum/reagent/ethanol)
+		banned_chems += subtypesof(/datum/reagent/tobacco)
+		banned_chems += typesof(/datum/reagent/drink)
+		banned_chems += typesof(/datum/reagent/nutriment)
+		banned_chems += typesof(/datum/reagent/toxin/fertilizer)
+		banned_chems += typesof(/datum/reagent/pigment/crayon_dust)
 
-		if(prob(30))
-			for(var/R in subtypesof(/decl/material))
-				var/decl/material/mat = decls_repository.get_decl(R)
-				if(mat.toxicity)
-					banned_chems |= R
+		if(prob(30))	banned_chems |= typesof(/datum/reagent/toxin)
 
 		for(var/x=1;x<=additional_chems;x++)
-			var/new_chem = pick(subtypesof(/decl/material))
+			var/new_chem = pick(subtypesof(/datum/reagent))
 			if(new_chem in banned_chems)
 				x--
 				continue
@@ -832,19 +830,19 @@
 
 /datum/seed/proc/get_icon(growth_stage)
 	var/plant_icon = get_trait(TRAIT_PLANT_ICON)
-	var/image/res = image('icons/obj/hydroponics/hydroponics_growing.dmi', "[plant_icon]-[growth_stage]")
+	var/image/res = image('icons/obj/hydroponics_growing.dmi', "[plant_icon]-[growth_stage]")
 	if(get_growth_type())
 		res.icon_state = "[get_growth_type()]-[growth_stage]"
 	else
 		res.icon_state = "[plant_icon]-[growth_stage]"
 
 	if(get_growth_type())
-		res.icon = 'icons/obj/hydroponics/hydroponics_vines.dmi'
+		res.icon = 'icons/obj/hydroponics_vines.dmi'
 
 	res.color = get_trait(TRAIT_PLANT_COLOUR)
 
 	if(get_trait(TRAIT_LARGE))
-		res.icon = 'icons/obj/hydroponics/hydroponics_large.dmi'
+		res.icon = 'icons/obj/hydroponics_large.dmi'
 		res.pixel_x = -8
 		res.pixel_y = -16
 

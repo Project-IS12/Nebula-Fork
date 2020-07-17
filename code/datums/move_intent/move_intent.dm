@@ -15,22 +15,23 @@
 	return TRUE
 
 /decl/move_intent/creep
-	name = "Creep"
+	name = "Walk"
 	flags = MOVE_INTENT_DELIBERATE
-	hud_icon_state = "creeping"
+	hud_icon_state = "walking"//"creeping"
 
 /decl/move_intent/creep/Initialize()
 	. = ..()
 	move_delay = config.creep_delay
 
 /decl/move_intent/walk
-	name = "Walk"
-	hud_icon_state = "walking"
+	name = "Run"
+	hud_icon_state = "running"//"walking"
 
 /decl/move_intent/walk/Initialize()
 	. = ..()
 	move_delay = config.walk_delay
 
+//Fuck this fucking run shit. If I could remove it entirely without breaking everything I would.
 /decl/move_intent/run
 	name = "Run"
 	flags = MOVE_INTENT_EXERTIVE | MOVE_INTENT_QUICK

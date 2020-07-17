@@ -3,8 +3,10 @@
 /// (Mixing)Glass.
 ////////////////////////////////////////////////////////////////////////////////
 /obj/item/chems/glass
-	name = ""
+	name = " "
+	var/base_name = " "
 	desc = ""
+	icon = 'icons/obj/chemical.dmi'
 	icon_state = "null"
 	item_state = "null"
 	amount_per_transfer_from_this = 10
@@ -36,12 +38,16 @@
 		/obj/machinery/radiocarbon_spectrometer
 	)
 
+/obj/item/chems/glass/Initialize()
+	. = ..()
+	base_name = name
+
 /obj/item/chems/glass/examine(mob/user, distance)
 	. = ..()
 	if(distance > 2)
 		return
 	
-	if(reagents?.total_volume)
+	if(reagents && reagents.reagent_list.len)
 		to_chat(user, "<span class='notice'>It contains [reagents.total_volume] units of liquid.</span>")
 	else
 		to_chat(user, "<span class='notice'>It is empty.</span>")
@@ -76,8 +82,8 @@
 /obj/item/chems/glass/self_feed_message(var/mob/user)
 	to_chat(user, "<span class='notice'>You swallow a gulp from \the [src].</span>")
 	if(user.has_personal_goal(/datum/goal/achievement/specific_object/drink))
-		for(var/R in reagents.reagent_volumes)
-			user.update_personal_goal(/datum/goal/achievement/specific_object/drink, R)
+		for(var/datum/reagent/R in reagents.reagent_list)
+			user.update_personal_goal(/datum/goal/achievement/specific_object/drink, R.type)
 
 /obj/item/chems/glass/afterattack(var/obj/target, var/mob/user, var/proximity)
 	if(!ATOM_IS_OPEN_CONTAINER(src) || !proximity) //Is the container open & are they next to whatever they're clicking?
@@ -98,29 +104,171 @@
 			return 1
 	..()
 
+/obj/item/chems/glass/beaker
+	name = "beaker"
+	desc = "A beaker."
+	icon = 'icons/obj/chemical.dmi'
+	icon_state = "beaker"
+	item_state = "beaker"
+	center_of_mass = @"{'x':15,'y':10}"
+	material = MAT_GLASS
+	applies_material_name = TRUE
+	material_force_multiplier = 0.25
+
+/obj/item/chems/glass/beaker/Initialize()
+	. = ..()
+	desc += " It can hold up to [volume] units."
+
+/obj/item/chems/glass/beaker/on_reagent_change()
+	update_icon()
+
+/obj/item/chems/glass/beaker/pickup(mob/user)
+	..()
+	update_icon()
+
+/obj/item/chems/glass/beaker/dropped(mob/user)
+	..()
+	update_icon()
+
+/obj/item/chems/glass/beaker/attack_hand()
+	..()
+	update_icon()
+
+/obj/item/chems/glass/beaker/on_update_icon()
+	overlays.Cut()
+
+	if(reagents.total_volume)
+		var/image/filling = image('icons/obj/reagentfillings.dmi', src, "[icon_state]10")
+
+		var/percent = round((reagents.total_volume / volume) * 100)
+		switch(percent)
+			if(0 to 9)		filling.icon_state = "[icon_state]-10"
+			if(10 to 24) 	filling.icon_state = "[icon_state]10"
+			if(25 to 49)	filling.icon_state = "[icon_state]25"
+			if(50 to 74)	filling.icon_state = "[icon_state]50"
+			if(75 to 79)	filling.icon_state = "[icon_state]75"
+			if(80 to 90)	filling.icon_state = "[icon_state]80"
+			if(91 to INFINITY)	filling.icon_state = "[icon_state]100"
+
+		filling.color = reagents.get_color()
+		overlays += filling
+
+	if (!ATOM_IS_OPEN_CONTAINER(src))
+		var/image/lid = image(icon, src, "lid_[initial(icon_state)]")
+		overlays += lid
+
+/obj/item/chems/glass/beaker/large
+	name = "large beaker"
+	desc = "A large beaker."
+	icon_state = "beakerlarge"
+	center_of_mass = @"{'x':16,'y':10}"
+	volume = 120
+	amount_per_transfer_from_this = 10
+	possible_transfer_amounts = @"[5,10,15,25,30,60,120]"
+	atom_flags = ATOM_FLAG_OPEN_CONTAINER
+	material_force_multiplier = 0.5
+
+/obj/item/chems/glass/beaker/bowl
+	name = "mixing bowl"
+	desc = "A large mixing bowl."
+	icon = 'icons/obj/kitchen.dmi'
+	icon_state = "mixingbowl"
+	center_of_mass = @"{'x':16,'y':10}"
+	volume = 180
+	amount_per_transfer_from_this = 10
+	possible_transfer_amounts = @"[5,10,15,25,30,60,180]"
+	atom_flags = ATOM_FLAG_OPEN_CONTAINER
+	unacidable = 0
+	material = MAT_STEEL
+	material_force_multiplier = 0.2
+
+/obj/item/chems/glass/beaker/noreact
+	name = "cryostasis beaker"
+	desc = "A cryostasis beaker that allows for chemical storage without reactions."
+	icon_state = "beakernoreact"
+	center_of_mass = @"{'x':16,'y':8}"
+	volume = 60
+	amount_per_transfer_from_this = 10
+	atom_flags = ATOM_FLAG_NO_TEMP_CHANGE | ATOM_FLAG_OPEN_CONTAINER | ATOM_FLAG_NO_REACT
+	material = null
+	material = MAT_STEEL
+
+/obj/item/chems/glass/beaker/bluespace
+	name = "bluespace beaker"
+	desc = "A bluespace beaker, powered by experimental bluespace technology."
+	icon_state = "beakerbluespace"
+	center_of_mass = @"{'x':16,'y':10}"
+	volume = 300
+	amount_per_transfer_from_this = 10
+	possible_transfer_amounts = @"[5,10,15,25,30,60,120,150,200,250,300]"
+	atom_flags = ATOM_FLAG_OPEN_CONTAINER
+	material_force_multiplier = 2.5
+	material = MAT_STEEL
+	matter = list(
+		MAT_PHORON = MATTER_AMOUNT_REINFORCEMENT,
+		MAT_DIAMOND = MATTER_AMOUNT_TRACE
+	)
+
+/obj/item/chems/glass/beaker/vial
+	name = "vial"
+	desc = "A small glass vial."
+	icon_state = "vial"
+	center_of_mass = @"{'x':15,'y':8}"
+	volume = 30
+	w_class = ITEM_SIZE_TINY //half the volume of a bottle, half the size
+	amount_per_transfer_from_this = 10
+	possible_transfer_amounts = @"[5,10,15,30]"
+	atom_flags = ATOM_FLAG_OPEN_CONTAINER
+	material_force_multiplier = 0.1
+
+/obj/item/chems/glass/beaker/insulated
+	name = "insulated beaker"
+	desc = "A glass beaker surrounded with black insulation."
+	icon_state = "insulated"
+	center_of_mass = @"{'x':15,'y':8}"
+	material = MAT_GLASS
+	matter = list(MAT_PLASTIC = MATTER_AMOUNT_REINFORCEMENT)
+	possible_transfer_amounts = @"[5,10,15,30]"
+	atom_flags = null
+	temperature_coefficient = 1
+	material = null
+
+/obj/item/chems/glass/beaker/insulated/large
+	name = "large insulated beaker"
+	icon_state = "insulatedlarge"
+	center_of_mass = @"{'x':16,'y':10}"
+	material = MAT_GLASS
+	matter = list(MAT_PLASTIC = MATTER_AMOUNT_REINFORCEMENT)
+	volume = 120
+
+/obj/item/chems/glass/beaker/sulphuric/Initialize()
+	. = ..()
+	reagents.add_reagent(/datum/reagent/acid, 60)
+	update_icon()
+
 /obj/item/chems/glass/bucket
 	name = "bucket"
 	desc = "It's a bucket."
-	icon = 'icons/obj/items/bucket.dmi'
-	on_mob_icon = 'icons/obj/items/bucket.dmi'
-	icon_state = ICON_STATE_WORLD
+	icon = 'icons/obj/janitor.dmi'
+	icon_state = "bucket"
+	item_state = "bucket"
 	center_of_mass = @"{'x':16,'y':9}"
 	w_class = ITEM_SIZE_NORMAL
 	amount_per_transfer_from_this = 20
 	possible_transfer_amounts = @"[10,20,30,60,120,150,180]"
 	volume = 180
-	atom_flags = ATOM_FLAG_OPEN_CONTAINER | ATOM_FLAG_SHOW_REAGENT_NAME
+	atom_flags = ATOM_FLAG_OPEN_CONTAINER
 	unacidable = 0
-	material = /decl/material/solid/plastic
+	material = MAT_PLASTIC
 	material_force_multiplier = 0.2
-	slot_flags = SLOT_HEAD
 
 /obj/item/chems/glass/bucket/wood
+	name = "bucket"
 	desc = "It's a wooden bucket. How rustic."
-	icon = 'icons/obj/items/wooden_bucket.dmi'
-	on_mob_icon = 'icons/obj/items/wooden_bucket.dmi'
+	icon_state = "wbucket"
+	item_state = "wbucket"
 	volume = 200
-	material = /decl/material/solid/wood
+	material = MAT_WOOD
 
 /obj/item/chems/glass/bucket/attackby(var/obj/D, mob/user)
 	if(istype(D, /obj/item/mop))

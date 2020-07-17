@@ -1,11 +1,11 @@
 /obj/structure/railing
 	name = "railing"
 	desc = "A simple bar railing designed to protect against careless trespass."
-	icon = 'icons/obj/structures/railing.dmi'
+	icon = 'icons/obj/railing.dmi'
 	icon_state = "railing0-1"
 	density = 1
 	throwpass = 1
-	layer = OBJ_LAYER
+	layer = ABOVE_HUMAN_LAYER //This looks weird underneath people.
 	climb_speed_mult = 0.25
 	anchored = FALSE
 	atom_flags = ATOM_FLAG_NO_TEMP_CHANGE | ATOM_FLAG_CHECKS_BORDER | ATOM_FLAG_CLIMBABLE
@@ -53,7 +53,7 @@
 
 /obj/structure/railing/update_material_desc(override_desc)
 	if(material)
-		desc = "A simple [material.solid_name] railing designed to protect against careless trespass."
+		desc = "A simple [material.display_name] railing designed to protect against careless trespass."
 	else
 		..()
 
@@ -61,7 +61,7 @@
 	anchored = FALSE
 	atom_flags &= ~ATOM_FLAG_CHECKS_BORDER
 	broken = TRUE
-	for(var/thing in RANGE_TURFS(src, 1))
+	for(var/thing in trange(1, src))
 		var/turf/T = thing
 		for(var/obj/structure/railing/R in T.contents)
 			R.update_icon()
@@ -272,10 +272,8 @@
 		return
 	. = ..()
 
-/obj/structure/railing/explosion_act(severity)
-	..()
-	if(!QDELETED(src))
-		qdel(src)
+/obj/structure/railing/ex_act(severity)
+	qdel(src)
 
 /obj/structure/railing/can_climb(var/mob/living/user, post_climb_check=0)
 	. = ..()

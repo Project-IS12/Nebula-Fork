@@ -1,12 +1,12 @@
 /obj/machinery/psi_monitor
 	name = "psionic implant monitor"
-	icon = 'mods/psionics/icons/psimeter.dmi'
+	icon = 'icons/obj/machines/psimeter.dmi'
 	icon_state = "meter_on"
 	use_power = POWER_USE_ACTIVE
 	anchored = TRUE
 	density = TRUE
 	opacity = FALSE
-	initial_access = list(list(access_psychiatrist, access_captain, access_cmo, access_hos))
+	req_access = list(list(access_psychiatrist, access_captain, access_cmo, access_hos))
 
 	var/list/psi_violations = list()
 	var/show_violations = FALSE

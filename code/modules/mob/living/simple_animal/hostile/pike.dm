@@ -17,7 +17,8 @@
 	maxHealth = 150
 
 	harm_intent_damage = 5
-	natural_weapon = /obj/item/natural_weapon/bite/pike
+	melee_damage_lower = 20
+	melee_damage_upper = 30
 	can_escape = TRUE
 
 	break_stuff_probability = 55
@@ -25,9 +26,6 @@
 	meat_amount = 10
 	bone_amount = 20
 	skin_amount = 20
-
-/obj/item/natural_weapon/bite/pike
-	force = 25
 
 /mob/living/simple_animal/hostile/carp/pike/carp_randomify()
 	return

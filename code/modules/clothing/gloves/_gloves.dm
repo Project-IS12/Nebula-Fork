@@ -4,9 +4,7 @@
 	name = "gloves"
 	gender = PLURAL //Carn: for grammarically correct text-parsing
 	w_class = ITEM_SIZE_SMALL
-	icon_state = ICON_STATE_WORLD
-	icon = 'icons/clothing/hands/gloves_generic.dmi'
-	on_mob_icon = 'icons/clothing/hands/gloves_generic.dmi'
+	icon = 'icons/obj/clothing/obj_hands.dmi'
 	siemens_coefficient = 0.75
 	body_parts_covered = HANDS
 	slot_flags = SLOT_GLOVES

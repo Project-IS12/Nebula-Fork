@@ -1,8 +1,8 @@
 // Glass shards
 
-/obj/item/shard
+/obj/item/material/shard
 	name = "shard"
-	icon = 'icons/obj/items/shards.dmi'
+	icon = 'icons/obj/shards.dmi'
 	desc = "Made of nothing. How does this even exist?" // set based on material, if this desc is visible it's a bug (shards default to being made of glass)
 	icon_state = "large"
 	randpixel = 8
@@ -10,17 +10,15 @@
 	edge = 1
 	w_class = ITEM_SIZE_SMALL
 	material_force_multiplier = 0.12 // 6 with hardness 30 (glass)
-	thrown_material_force_multiplier = 0.1 // 3 with weight 30 (glass)
+	thrown_material_force_multiplier = 0.4 // 4 with weight 15 (glass)
 	item_state = "shard-glass"
 	attack_verb = list("stabbed", "slashed", "sliced", "cut")
-	material = /decl/material/solid/glass
-	applies_material_colour = TRUE
-	applies_material_name = TRUE
+	material = MAT_GLASS
 	unbreakable = 1 //It's already broken.
 	item_flags = ITEM_FLAG_CAN_HIDE_IN_SHOES
 	var/has_handle
 
-/obj/item/shard/attack(mob/living/M, mob/living/user, var/target_zone)
+/obj/item/material/shard/attack(mob/living/M, mob/living/user, var/target_zone)
 	. = ..()
 	if(. && !has_handle)
 		var/mob/living/carbon/human/H = user
@@ -30,7 +28,7 @@
 				to_chat(H, SPAN_DANGER("You slice your hand on \the [src]!"))
 				hand.take_external_damage(rand(5,10), used_weapon = src)
 
-/obj/item/shard/set_material(var/new_material)
+/obj/item/material/shard/set_material(var/new_material)
 	..(new_material)
 	if(!istype(material))
 		return
@@ -39,8 +37,8 @@
 	update_icon()
 
 	if(material.shard_type)
-		SetName("[material.solid_name] [material.shard_type]")
-		desc = "A small piece of [material.solid_name]. It looks sharp, you wouldn't want to step on it barefoot. Could probably be used as ... a throwing weapon?"
+		SetName("[material.display_name] [material.shard_type]")
+		desc = "A small piece of [material.display_name]. It looks sharp, you wouldn't want to step on it barefoot. Could probably be used as ... a throwing weapon?"
 		switch(material.shard_type)
 			if(SHARD_SPLINTER, SHARD_SHRAPNEL)
 				gender = PLURAL
@@ -49,16 +47,16 @@
 	else
 		qdel(src)
 
-/obj/item/shard/on_update_icon()
+/obj/item/material/shard/on_update_icon()
 	if(material)
-		color = material.color
+		color = material.icon_colour
 		// 1-(1-x)^2, so that glass shards with 0.3 opacity end up somewhat visible at 0.51 opacity
 		alpha = 255 * (1 - (1 - material.opacity)*(1 - material.opacity))
 	else
 		color = "#ffffff"
 		alpha = 255
 
-/obj/item/shard/attackby(obj/item/W, mob/user)
+/obj/item/material/shard/attackby(obj/item/W, mob/user)
 	if(isWelder(W) && material.shard_can_repair)
 		var/obj/item/weldingtool/WT = W
 		if(WT.remove_fuel(0, user))
@@ -77,23 +75,23 @@
 		if(cable.use(3))
 			to_chat(user, SPAN_NOTICE("You wind some cable around the thick end of \the [src]."))
 			has_handle = cable.color
-			SetName("[material.solid_name] shank")
+			SetName("[material.display_name] shank")
 			update_icon()
 			return
 		to_chat(user, SPAN_WARNING("You need 3 or more units of cable to give \the [src] a handle."))
 		return
 	return ..()
 
-/obj/item/shard/on_update_icon()
+/obj/item/material/shard/on_update_icon()
 	overlays.Cut()
 	. = ..()
 	if(has_handle)
-		var/image/I = image(icon, "handle")
+		var/image/I = image('icons/obj/shards.dmi', "handle")
 		I.appearance_flags |= RESET_COLOR
 		I.color = has_handle
 		overlays += I
 
-/obj/item/shard/Crossed(atom/movable/AM)
+/obj/item/material/shard/Crossed(atom/movable/AM)
 	..()
 	if(isliving(AM))
 		var/mob/M = AM
@@ -129,14 +127,14 @@
 			return
 
 // Preset types - left here for the code that uses them
-/obj/item/shard/borosilicate
-	material = /decl/material/solid/glass/borosilicate
+/obj/item/material/shard/phoron/Initialize(mapload, material_key)
+	. = ..(loc, MAT_PHORON_GLASS)
 
-/obj/item/shard/shrapnel
+/obj/item/material/shard/shrapnel
 	name = "shrapnel"
-	material = /decl/material/solid/metal/steel
+	material = MAT_STEEL
 	w_class = ITEM_SIZE_TINY	//it's real small
 
-/obj/item/shard/plastic
-	material = /decl/material/solid/plastic
+/obj/item/material/shard/plastic
+	material = MAT_PLASTIC
 	w_class = ITEM_SIZE_TINY

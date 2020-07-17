@@ -51,7 +51,7 @@
 	if(dna)
 		dna.ready_dna(src)
 		dna.real_name = real_name
-		dna.skin_base = skin_base
+		dna.s_base = s_base
 		sync_organ_dna()
 	make_blood()
 
@@ -117,25 +117,29 @@
 				stat("Chemical Storage", mind.changeling.chem_charges)
 				stat("Genetic Damage Time", mind.changeling.geneticdamage)
 
-/mob/living/carbon/human/explosion_act(severity)
-	..()
+/mob/living/carbon/human/ex_act(severity)
+	if(!blinded)
+		flash_eyes()
+
 	var/b_loss = null
 	var/f_loss = null
 	switch (severity)
-		if(1)
+		if (1.0)
 			b_loss = 400
 			f_loss = 100
 			var/atom/target = get_edge_target_turf(src, get_dir(src, get_step_away(src, src)))
 			throw_at(target, 200, 4)
-		if(2)
+		if (2.0)
 			b_loss = 60
 			f_loss = 60
+
 			if (get_sound_volume_multiplier() >= 0.2)
 				ear_damage += 30
 				ear_deaf += 120
-			if(prob(70))
+			if (prob(70))
 				Paralyse(10)
-		if(3)
+
+		if(3.0)
 			b_loss = 30
 			if (get_sound_volume_multiplier() >= 0.2)
 				ear_damage += 15
@@ -150,6 +154,7 @@
 	// distribute the remaining 30% on all limbs equally (including the one already dealt damage)
 	apply_damage(0.3 * b_loss, BRUTE, null, DAM_EXPLODE | DAM_DISPERSED, used_weapon = "Explosive blast")
 	apply_damage(0.3 * f_loss, BURN, null, DAM_EXPLODE | DAM_DISPERSED, used_weapon = "Explosive blast")
+
 
 /mob/living/carbon/human/proc/implant_loyalty(mob/living/carbon/human/M, override = FALSE) // Won't override by default.
 	if(!config.use_loyalty_implants && !override) return // Nuh-uh.
@@ -189,7 +194,7 @@
 
 
 /mob/living/carbon/human/show_inv(mob/user)
-	if(user.incapacitated()  || !user.Adjacent(src) || !user.check_dexterity(DEXTERITY_SIMPLE_MACHINES))
+	if(user.incapacitated(INCAPACITATION_STUNNED) || user.incapacitated(INCAPACITATION_KNOCKOUT) || !user.Adjacent(src) || !user.check_dexterity(DEXTERITY_SIMPLE_MACHINES))
 		return
 
 	user.set_machine(src)
@@ -279,8 +284,10 @@
 /mob/living/carbon/human/proc/get_visible_name()
 	var/face_name = get_face_name()
 	var/id_name = get_id_name("")
-	if((face_name == "Unknown") && id_name && (id_name != face_name))
+	if(id_name && (id_name != face_name) && face_name != "Unknown")
 		return "[face_name] (as [id_name])"
+	else if(id_name && (id_name != face_name) && face_name == "Unknown")//If their face is covered but they're wearing an ID, just return the ID's name, not "unknown (as id name)".
+		return id_name
 	return face_name
 
 //Returns "Unknown" if facially disfigured and real_name if not. Useful for setting name when polyacided or when updating a human's name variable
@@ -710,7 +717,7 @@
 		return
 
 	if(deliberate)
-		if(incapacitated())
+		if(incapacitated(INCAPACITATION_STUNNED) || incapacitated(INCAPACITATION_KNOCKOUT))
 			to_chat(src, SPAN_WARNING("You cannot do that right now."))
 			return
 		var/datum/gender/G = gender_datums[gender]
@@ -746,25 +753,31 @@
 		src.verbs -= /mob/living/carbon/human/proc/morph
 		return
 
-	var/new_facial = input("Please select facial hair color.", "Character Generation", facial_hair_colour) as color
+	var/new_facial = input("Please select facial hair color.", "Character Generation",rgb(r_facial,g_facial,b_facial)) as color
 	if(new_facial)
-		facial_hair_colour = new_facial
+		r_facial = hex2num(copytext(new_facial, 2, 4))
+		g_facial = hex2num(copytext(new_facial, 4, 6))
+		b_facial = hex2num(copytext(new_facial, 6, 8))
 
-	var/new_hair = input("Please select hair color.", "Character Generation", hair_colour) as color
-	if(new_hair)
-		hair_colour = new_hair
+	var/new_hair = input("Please select hair color.", "Character Generation",rgb(r_hair,g_hair,b_hair)) as color
+	if(new_facial)
+		r_hair = hex2num(copytext(new_hair, 2, 4))
+		g_hair = hex2num(copytext(new_hair, 4, 6))
+		b_hair = hex2num(copytext(new_hair, 6, 8))
 
-	var/new_eyes = input("Please select eye color.", "Character Generation", eye_colour) as color
+	var/new_eyes = input("Please select eye color.", "Character Generation",rgb(r_eyes,g_eyes,b_eyes)) as color
 	if(new_eyes)
-		eye_colour = new_eyes
+		r_eyes = hex2num(copytext(new_eyes, 2, 4))
+		g_eyes = hex2num(copytext(new_eyes, 4, 6))
+		b_eyes = hex2num(copytext(new_eyes, 6, 8))
 		update_eyes()
 
-	var/new_tone = input("Please select skin tone level: 1-220 (1=albino, 35=caucasian, 150=black, 220='very' black)", "Character Generation", "[35-skin_tone]")  as text
+	var/new_tone = input("Please select skin tone level: 1-220 (1=albino, 35=caucasian, 150=black, 220='very' black)", "Character Generation", "[35-s_tone]")  as text
 
 	if (!new_tone)
 		new_tone = 35
-	skin_tone = max(min(round(text2num(new_tone)), 220), 1)
-	skin_tone = -skin_tone + 35
+	s_tone = max(min(round(text2num(new_tone)), 220), 1)
+	s_tone =  -s_tone + 35
 
 	// hair
 	var/list/all_hairs = typesof(/datum/sprite_accessory/hair) - /datum/sprite_accessory/hair
@@ -892,7 +905,7 @@
 /mob/living/carbon/human/revive()
 
 	if(should_have_organ(BP_HEART))
-		vessel.add_reagent(species.blood_reagent, species.blood_volume-vessel.total_volume)
+		vessel.add_reagent(/datum/reagent/blood,species.blood_volume-vessel.total_volume)
 		fixblood()
 
 	species.create_organs(src) // Reset our organs/limbs.
@@ -962,7 +975,7 @@
 	var/list/visible_implants = list()
 	for(var/obj/item/organ/external/organ in src.organs)
 		for(var/obj/item/O in organ.implants)
-			if(!istype(O,/obj/item/implant) && (O.w_class > class) && !istype(O,/obj/item/shard/shrapnel))
+			if(!istype(O,/obj/item/implant) && (O.w_class > class) && !istype(O,/obj/item/material/shard/shrapnel))
 				visible_implants += O
 
 	return(visible_implants)
@@ -1094,7 +1107,15 @@
 	species = get_species_by_key(new_species)
 	species.handle_pre_spawn(src)
 
-	skin_colour = (species.base_color && default_colour) ? species.base_color : COLOR_BLACK
+	if(species.base_color && default_colour)
+		//Apply colour.
+		r_skin = hex2num(copytext(species.base_color,2,4))
+		g_skin = hex2num(copytext(species.base_color,4,6))
+		b_skin = hex2num(copytext(species.base_color,6,8))
+	else
+		r_skin = 0
+		g_skin = 0
+		b_skin = 0
 
 	if(species.holder_type)
 		holder_type = species.holder_type
@@ -1145,9 +1166,9 @@
 		regenerate_icons()
 		if(vessel.total_volume < species.blood_volume)
 			vessel.maximum_volume = species.blood_volume
-			vessel.add_reagent(species.blood_reagent, species.blood_volume - vessel.total_volume)
+			vessel.add_reagent(/datum/reagent/blood, species.blood_volume - vessel.total_volume)
 		else if(vessel.total_volume > species.blood_volume)
-			vessel.remove_any(vessel.total_volume - species.blood_volume)
+			vessel.remove_reagent(/datum/reagent/blood, vessel.total_volume - species.blood_volume)
 			vessel.maximum_volume = species.blood_volume
 		fixblood()
 
@@ -1567,54 +1588,70 @@
 	if(src != M)
 		..()
 	else
-		var/datum/gender/T = gender_datums[get_gender()]
-		visible_message( \
-			"<span class='notice'>[src] examines [T.self].</span>", \
-			"<span class='notice'>You check yourself for injuries.</span>" \
-			)
-
-		for(var/obj/item/organ/external/org in organs)
-			var/list/status = list()
-
-			var/feels = 1 + round(org.pain/100, 0.1)
-			var/brutedamage = org.brute_dam * feels
-			var/burndamage = org.burn_dam * feels
-
-			switch(brutedamage)
-				if(1 to 20)
-					status += "slightly sore"
-				if(20 to 40)
-					status += "very sore"
-				if(40 to INFINITY)
-					status += "throbbing with agony"
-
-			switch(burndamage)
-				if(1 to 10)
-					status += "tingling"
-				if(10 to 40)
-					status += "stinging"
-				if(40 to INFINITY)
-					status += "burning fiercely"
-
-			if(org.is_stump())
-				status += "MISSING"
-			if(org.status & ORGAN_MUTATED)
-				status += "misshapen"
-			if(org.dislocated == 2)
-				status += "dislocated"
-			if(org.status & ORGAN_BROKEN)
-				status += "hurts when touched"
-			if(org.status & ORGAN_DEAD)
-				status += "is grey and necrotic"
-			if(!org.is_usable() || org.is_dislocated())
-				status += "dangling uselessly"
-			if(status.len)
-				src.show_message("My [org.name] is <span class='warning'>[english_list(status)].</span>",1)
-			else
-				src.show_message("My [org.name] is <span class='notice'>OK.</span>",1)
-
+		exam_self()
 		if((MUTATION_SKELETON in mutations) && (!w_uniform) && (!wear_suit))
 			play_xylophone()
+
+/mob/living/carbon/human/proc/exam_self()
+	var/datum/gender/T = gender_datums[get_gender()]
+	if(!stat)
+		visible_message("<span class='notice'>[src] examines [T.self].</span>", \
+			"<span class='info'><b>Let's see how I am doing.</b></span>" \
+			)
+	else//We don't want to spam the chat that we're checking ourselves for injuries when we're out fucking cold.
+		to_chat(src, "<span class='notice'><b>Let's see how I am doing.</b></span>")
+	if(!stat)
+		to_chat(src, "<span class='info'>I am alive and conscious.</span>")
+	if(stat == DEAD)
+		to_chat(src, "<span class='danger'>I am dead.</span>")
+	else if(sleeping || stat == UNCONSCIOUS)
+		if(!is_asystole())
+			to_chat(src, "<span class='danger'>I am unconscious, but still breathing.</span>")
+		else
+			to_chat(src, "<span class='danger'>I am dying.</span>")
+
+	for(var/obj/item/organ/external/org in organs)
+		var/list/status = list()
+
+		var/feels = 1 + round(org.pain/100, 0.1)
+		var/brutedamage = org.brute_dam * feels
+		var/burndamage = org.burn_dam * feels
+
+		switch(brutedamage)
+			if(1 to 20)
+				status += "slightly battered"
+			if(20 to 40)
+				status += "battered"
+			if(40 to INFINITY)
+				status += "badly battered"
+
+		switch(burndamage)
+			if(1 to 10)
+				status += "slightly burned"
+			if(10 to 40)
+				status += "burned"
+			if(40 to INFINITY)
+				status += "badly burned"
+
+		if(org.is_stump())
+			status += "MISSING"
+		if(org.status & ORGAN_MUTATED)
+			status += "MUTATED"
+		if(org.dislocated == 2)
+			status += "DISLOCATED"
+		if(org.status & ORGAN_BROKEN)
+			status += "BROKEN"
+		if(org.status & ORGAN_DEAD)
+			status += "NECROTIC"
+		if(org.status & ORGAN_BLEEDING)
+			status += "BLEEDING"
+		if(!org.is_usable() || org.is_dislocated())
+			status += "USELESS"
+		if(status.len)
+			to_chat(src, "My [org.name] is <span class='warning'>[english_list(status)].</span>")
+		else
+			to_chat(src, "My [org.name] is <span class='notice'>OK.</span>")
+
 
 /mob/living/carbon/human/proc/resuscitate()
 	if(!is_asystole() || !should_have_organ(BP_HEART))
@@ -1640,7 +1677,7 @@
 
 /mob/living/carbon/human/proc/make_reagent(amount, reagent_type)
 	if(stat == CONSCIOUS)
-		var/limit = max(0, reagents.get_overdose(reagent_type) - REAGENT_VOLUME(reagents, reagent_type))
+		var/limit = max(0, reagents.get_overdose(reagent_type) - reagents.get_reagent_amount(reagent_type))
 		reagents.add_reagent(reagent_type, min(amount, limit))
 
 //Get fluffy numbers
@@ -1700,13 +1737,13 @@
 				breath = new
 				breath.volume = volume_needed
 				breath.temperature = T.temperature
-			breath.adjust_gas(/decl/material/gas/oxygen, ONE_ATMOSPHERE*volume_needed/(R_IDEAL_GAS_EQUATION*T20C))
+			breath.adjust_gas(MAT_OXYGEN, ONE_ATMOSPHERE*volume_needed/(R_IDEAL_GAS_EQUATION*T20C))
 			T.show_bubbles()
 	return breath
 
-/mob/living/carbon/human/fluid_act(var/datum/reagents/fluids)
-	species.fluid_act(src, fluids)
-	..()
+/mob/living/carbon/human/water_act(var/depth)
+	species.water_act(src, depth)
+	..(depth)
 
 /mob/living/carbon/human/proc/set_cultural_value(var/token, var/decl/cultural_info/_culture, var/defer_language_update)
 	if(!istype(_culture))

@@ -1,8 +1,8 @@
 /obj/machinery/sleeper
 	name = "sleeper"
 	desc = "A suspension chamber with built-in injectors, a dialysis machine, and a limited health scanner."
-	icon = 'icons/obj/cryogenics_coffin.dmi'
-	icon_state = "med_pod_preview"
+	icon = 'icons/obj/cryogenics.dmi'
+	icon_state = "pod_preview"
 	density = TRUE
 	anchored = TRUE
 	stat_immune = 0
@@ -26,9 +26,9 @@
 	var/list/loaded_canisters
 	var/max_canister_capacity = 5
 	var/global/list/banned_chem_types = list(
-		/decl/material/liquid/bromide,
-		/decl/material/liquid/mutagenics,
-		/decl/material/liquid/acid
+		/datum/reagent/toxin,
+		/datum/reagent/mutagenics,
+		/datum/reagent/acid
 	)
 
 /obj/machinery/sleeper/standard/Initialize(mapload, d, populate_parts)
@@ -53,8 +53,8 @@
 		to_chat(user, SPAN_WARNING("\The [src] cannot accept any more chemical canisters."))
 		return FALSE
 	if(!emagged)
-		for(var/rid in canister.reagents?.reagent_volumes)
-			var/decl/material/reagent = decls_repository.get_decl(rid)
+		for(var/rid in canister.reagents?.reagent_list)
+			var/datum/reagent/reagent = canister.reagents.reagent_list[rid]
 			for(var/banned_type in banned_chem_types)
 				if(istype(reagent, banned_type))
 					to_chat(user, SPAN_WARNING("Automatic safety checking indicates the present of a prohibited substance in this canister."))
@@ -80,6 +80,7 @@
 	. = ..()
 	if(populate_parts)
 		beaker = new /obj/item/chems/glass/beaker/large(src)
+	icon = 'icons/obj/cryogenics_coffin.dmi'
 	update_icon()
 
 /obj/machinery/sleeper/examine(mob/user, distance)
@@ -105,9 +106,11 @@
 	if(filtering > 0)
 		if(beaker)
 			if(beaker.reagents.total_volume < beaker.reagents.maximum_volume)
-				var/pumped = LAZYLEN(occupant.reagents?.reagent_volumes)
-				if(pumped)
-					occupant.reagents.trans_to_obj(beaker, pump_speed * pumped)
+				var/pumped = 0
+				for(var/datum/reagent/x in occupant.reagents.reagent_list)
+					occupant.reagents.trans_to_obj(beaker, pump_speed)
+					pumped++
+				if(ishuman(occupant))
 					occupant.vessel.trans_to_obj(beaker, pumped + 1)
 		else
 			toggle_filter()
@@ -116,9 +119,8 @@
 			if(beaker.reagents.total_volume < beaker.reagents.maximum_volume)
 				var/datum/reagents/ingested = occupant.get_ingested_reagents()
 				if(ingested)
-					var/trans_amt = LAZYLEN(ingested.reagent_volumes)
-					if(trans_amt)
-						ingested.trans_to_obj(beaker, pump_speed * trans_amt)
+					for(var/datum/reagent/x in ingested.reagent_list)
+						ingested.trans_to_obj(beaker, pump_speed)
 		else
 			toggle_pump()
 
@@ -127,14 +129,14 @@
 
 /obj/machinery/sleeper/on_update_icon()
 	overlays.Cut()
-	icon_state = "med_pod"
+	icon_state = "pod"
 	if(occupant)
 		var/image/pickle = new
 		pickle.appearance = occupant
 		pickle.layer = FLOAT_LAYER
 		pickle.pixel_z = 12
 		overlays += pickle
-	var/image/I = image(icon, "med_lid[!!(occupant && !(stat & (BROKEN|NOPOWER)))]")
+	var/image/I = image(icon, "lid[!!(occupant && !(stat & (BROKEN|NOPOWER)))]")
 	overlays += I
 
 /obj/machinery/sleeper/DefaultTopicState()
@@ -173,7 +175,7 @@
 		data["occupant"] = 0
 
 	if(beaker)
-		data["beaker"] = REAGENTS_FREE_SPACE(beaker.reagents)
+		data["beaker"] = beaker.reagents.get_free_space()
 	else
 		data["beaker"] = -1
 	data["filtering"] = filtering

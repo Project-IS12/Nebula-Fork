@@ -2,41 +2,34 @@
 	expected_type = /obj/item/modular_computer
 
 /datum/extension/interactive/ntos/device/host_status()
-	if(holder)
-		var/datum/extension/assembly/assembly = get_extension(holder, /datum/extension/assembly)
-		return assembly && assembly.enabled
+	var/obj/item/modular_computer/C = holder
+	return C.enabled
 
 /datum/extension/interactive/ntos/device/get_hardware_flag()
-	if(holder)
-		var/datum/extension/assembly/modular_computer/assembly = get_extension(holder, /datum/extension/assembly)
-		return assembly && assembly.hardware_flag
+	var/obj/item/modular_computer/C = holder
+	return C.hardware_flag
 
 /datum/extension/interactive/ntos/device/get_power_usage()
-	if(holder)
-		var/datum/extension/assembly/modular_computer/assembly = get_extension(holder, /datum/extension/assembly)
-		return assembly && assembly.last_power_usage
+	var/obj/item/modular_computer/C = holder
+	return C.last_power_usage
 
 /datum/extension/interactive/ntos/device/recalc_power_usage()
-	if(holder)
-		var/datum/extension/assembly/modular_computer/assembly = get_extension(holder, /datum/extension/assembly)
-		return assembly && assembly.calculate_power_usage()
-
+	var/obj/item/modular_computer/C = holder
+	C.calculate_power_usage()
+	
 /datum/extension/interactive/ntos/device/emagged()
 	var/obj/item/modular_computer/C = holder
 	return C.computer_emagged
 
 /datum/extension/interactive/ntos/device/system_shutdown()
 	..()
-	if(holder)
-		var/datum/extension/assembly/modular_computer/assembly = get_extension(holder, /datum/extension/assembly)
-		if(assembly && assembly.enabled) 
-			assembly.shutdown_device()
+	var/obj/item/modular_computer/C = holder
+	C.enabled = FALSE
 
 /datum/extension/interactive/ntos/device/system_boot()
 	..()
-	if(holder)
-		var/datum/extension/assembly/modular_computer/assembly = get_extension(holder, /datum/extension/assembly)
-		return assembly && assembly.turn_on()
+	var/obj/item/modular_computer/C = holder
+	C.enabled = TRUE
 
 /datum/extension/interactive/ntos/device/extension_act(href, href_list, user)
 	. = ..()
@@ -56,5 +49,5 @@
 	var/datum/extension/interactive/ntos/os = get_extension(src, /datum/extension/interactive/ntos)
 	if(os)
 		return os.check_eye()
-	else
+	else 
 		return ..()

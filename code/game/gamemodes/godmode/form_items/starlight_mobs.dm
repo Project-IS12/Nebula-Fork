@@ -30,5 +30,6 @@
 
 /mob/living/starlight_soul/Destroy()
 	if(eyeobj)
+		eyeobj.release(src)
 		QDEL_NULL(eyeobj)
 	. = ..()

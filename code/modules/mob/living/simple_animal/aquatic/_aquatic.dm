@@ -1,6 +1,8 @@
 /mob/living/simple_animal/aquatic
 	icon = 'icons/mob/simple_animal/aquatic.dmi'
 	turns_per_move = 5
+	attacktext = "bitten"
+	attack_sound = 'sound/weapons/bite.ogg'
 	speed = 4
 	mob_size = MOB_SIZE_SMALL
 	emote_see = list("glubs", "blubs", "bloops")
@@ -14,8 +16,8 @@
 	meat_amount = 3
 	bone_amount = 5
 	skin_amount = 5
-	bone_material = /decl/material/solid/bone/fish
-	skin_material = /decl/material/solid/skin/fish
+	bone_material = MAT_BONE_FISH
+	skin_material = MAT_SKIN_FISH
 
 /mob/living/simple_animal/aquatic/Initialize()
 	. = ..()

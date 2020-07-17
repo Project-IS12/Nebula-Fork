@@ -268,19 +268,22 @@
 /mob/living/silicon/binarycheck()
 	return 1
 
-/mob/living/silicon/explosion_act(severity)
-	..()
+/mob/living/silicon/ex_act(severity)
+	if(!blinded)
+		flash_eyes()
+
 	var/brute
 	var/burn
 	switch(severity)
-		if(1)
+		if(1.0)
 			brute = 400
 			burn = 100
-		if(2)
+		if(2.0)
 			brute = 60
 			burn = 60
-		if(3)
+		if(3.0)
 			brute = 30
+
 	apply_damage(brute, BRUTE, damage_flags = DAM_EXPLODE)
 	apply_damage(burn, BURN, damage_flags = DAM_EXPLODE)
 

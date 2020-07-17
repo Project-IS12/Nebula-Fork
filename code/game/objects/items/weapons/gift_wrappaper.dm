@@ -22,10 +22,9 @@
 	else
 		icon_state = "gift[pick(1, 2, 3)]"
 
-/obj/item/a_gift/explosion_act()
-	..()
-	if(!QDELETED(src))
-		qdel(src)
+/obj/item/a_gift/ex_act()
+	qdel(src)
+	return
 
 /obj/effect/spresent/relaymove(mob/user)
 	if (user.stat)
@@ -72,7 +71,7 @@
 		/obj/item/toy/blink,
 		/obj/item/toy/crossbow,
 		/obj/item/gun/projectile/revolver/capgun,
-		/obj/item/sword/katana/toy,
+		/obj/item/toy/katana,
 		/obj/item/toy/prize/deathripley,
 		/obj/item/toy/prize/durand,
 		/obj/item/toy/prize/fireripley,

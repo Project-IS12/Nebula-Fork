@@ -5,7 +5,7 @@
 	name = "pill bottle"
 	desc = "It's an airtight container for storing medication."
 	icon_state = "pill_canister"
-	icon = 'icons/obj/items/storage/pillbottle.dmi'
+	icon = 'icons/obj/chemical.dmi'
 	item_state = "contsolid"
 	w_class = ITEM_SIZE_SMALL
 	max_w_class = ITEM_SIZE_TINY
@@ -18,7 +18,7 @@
 	allow_quick_gather = 1
 	use_to_pickup = 1
 	use_sound = 'sound/effects/storage/pillbottle.ogg'
-	material = /decl/material/solid/plastic
+	material = MAT_PLASTIC
 
 	var/pop_sound = 'sound/effects/peelz.ogg'
 	var/wrapper_color

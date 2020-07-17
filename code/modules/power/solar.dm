@@ -136,27 +136,33 @@ var/list/solars_list = list()
 	. = ..()
 	if(. && new_state)
 		health = 0
-		new /obj/item/shard(src.loc)
-		new /obj/item/shard(src.loc)
+		new /obj/item/material/shard(src.loc)
+		new /obj/item/material/shard(src.loc)
 		var/obj/item/solar_assembly/S = locate() in src
 		S.glass_type = null
 		unset_control()
 
-/obj/machinery/power/solar/explosion_act(severity)
-	. = ..()
-	if(. && !QDELETED(src))
-		if(severity == 1)
+/obj/machinery/power/solar/ex_act(severity)
+	switch(severity)
+		if(1.0)
 			if(prob(15))
-				new /obj/item/shard( src.loc )
-			physically_destroyed(src)
-		else if(severity == 2)
+				new /obj/item/material/shard( src.loc )
+			qdel(src)
+			return
+
+		if(2.0)
 			if (prob(25))
-				new /obj/item/shard( src.loc )
-				physically_destroyed(src)
-			else if (prob(50))
+				new /obj/item/material/shard( src.loc )
+				qdel(src)
+				return
+
+			if (prob(50))
 				set_broken(TRUE)
-		else if(severity == 3 && prob(25))
-			set_broken(TRUE)
+
+		if(3.0)
+			if (prob(25))
+				set_broken(TRUE)
+	return
 
 
 /obj/machinery/power/solar/fake/Initialize(mapload, var/obj/item/solar_assembly/S)
@@ -209,7 +215,7 @@ var/list/solars_list = list()
 	item_state = "electropack"
 	w_class = ITEM_SIZE_HUGE // Pretty big!
 	anchored = 0
-	material = /decl/material/solid/metal/steel
+	material = MAT_STEEL
 	var/tracker = 0
 	var/glass_type = null
 
@@ -243,7 +249,7 @@ var/list/solars_list = list()
 			playsound(src.loc, 'sound/items/Ratchet.ogg', 75, 1)
 			return 1
 
-		if(istype(W, /obj/item/stack/material) && W.get_material_type() == /decl/material/solid/glass)
+		if(istype(W, /obj/item/stack/material) && W.get_material_type() == MAT_GLASS)
 			var/obj/item/stack/material/S = W
 			if(S.use(2))
 				glass_type = W.type
@@ -471,13 +477,18 @@ var/list/solars_list = list()
 		S.update_icon() //update it
 	update_icon()
 
-/obj/machinery/power/solar_control/explosion_act(severity)
-	. = ..()
-	if(.)
-		if(severity == 1)
-			physically_destroyed()
-		else if((severity == 2 && prob(50)) || (severity == 3 && prob(25)))
-			set_broken(TRUE)
+/obj/machinery/power/solar_control/ex_act(severity)
+	switch(severity)
+		if(1.0)
+			//SN src = null
+			qdel(src)
+			return
+		if(2.0)
+			if (prob(50))
+				set_broken(TRUE)
+		if(3.0)
+			if (prob(25))
+				set_broken(TRUE)
 
 // Used for mapping in solar array which automatically starts itself (telecomms, for example)
 /obj/machinery/power/solar_control/autostart

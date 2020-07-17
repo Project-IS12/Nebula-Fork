@@ -194,7 +194,3 @@
 
 /datum/extension/interactive/ntos/proc/emagged()
 	return FALSE
-
-/datum/extension/interactive/ntos/proc/get_processing_power()
-	var/obj/item/stock_parts/computer/processor_unit/CPU = get_component(PART_CPU)
-	return CPU?.processing_power

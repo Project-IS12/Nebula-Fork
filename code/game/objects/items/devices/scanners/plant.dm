@@ -72,12 +72,12 @@
 	dat += "<tr><td><b>Potency</b></td><td>[grown_seed.get_trait(TRAIT_POTENCY)]</td></tr>"
 	dat += "</table>"
 
-	if(LAZYLEN(grown_reagents?.reagent_volumes))
+	if(grown_reagents && grown_reagents.reagent_list && grown_reagents.reagent_list.len)
 		dat += "<h2>Reagent Data</h2>"
+
 		dat += "<br>This sample contains: "
-		for(var/rtype in grown_reagents.reagent_volumes)
-			var/decl/material/R = decls_repository.get_decl(rtype)
-			dat += "<br>- [R.name], [REAGENT_VOLUME(grown_reagents, rtype)] unit(s)"
+		for(var/datum/reagent/R in grown_reagents.reagent_list)
+			dat += "<br>- [R.name], [grown_reagents.get_reagent_amount(R.type)] unit(s)"
 
 	dat += "<h2>Other Data</h2>"
 

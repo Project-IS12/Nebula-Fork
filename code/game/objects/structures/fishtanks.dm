@@ -36,7 +36,7 @@ GLOBAL_LIST_INIT(fishtank_cache, new)
 /obj/structure/glass_tank/aquarium
 	name = "aquarium"
 	desc = "A clear glass box for keeping specimens in. This one is full of water."
-	fill_type = /decl/material/liquid/water
+	fill_type = /datum/reagent/water
 	fill_amt = 300
 
 /obj/structure/glass_tank/Initialize()
@@ -68,12 +68,11 @@ GLOBAL_LIST_INIT(fishtank_cache, new)
 	else
 		. = ..()
 
-/obj/structure/glass_tank/physically_destroyed(var/silent)
-	SHOULD_CALL_PARENT(FALSE)
+/obj/structure/glass_tank/destroyed(var/silent)
 	deleting = 1
 	var/turf/T = get_turf(src)
 	playsound(T, "shatter", 70, 1)
-	new /obj/item/shard(T)
+	new /obj/item/material/shard(T)
 	if(!silent)
 		if(contents.len || reagents.total_volume)
 			visible_message(SPAN_DANGER("\The [src] shatters, spilling its contents everywhere!"))
@@ -82,16 +81,18 @@ GLOBAL_LIST_INIT(fishtank_cache, new)
 	dump_contents()
 	for(var/obj/structure/glass_tank/A in orange(1, src))
 		if(!A.deleting && A.type == type)
-			A.physically_destroyed(TRUE)
+			A.destroyed(TRUE)
 	qdel(src)
 
-/obj/structure/glass_tank/dump_contents()
-	. = ..()
+/obj/structure/glass_tank/proc/dump_contents()
+	for(var/atom/movable/AM in contents)
+		if(AM.simulated)
+			AM.dropInto(get_turf(src))
 	if(reagents && reagents.total_volume)
 		var/turf/T = get_turf(src)
-		var/obj/effect/fluid/F = locate() in T
-		if(!F) F = new(T)
-		reagents.trans_to_holder(F.reagents, reagents.total_volume)
+		if(T)
+			T.add_fluid(reagents.total_volume * TANK_WATER_MULTIPLIER)
+		reagents.clear_reagents()
 
 GLOBAL_LIST_INIT(aquarium_states_and_layers, list(
 	"b" = FLY_LAYER - 0.02,
@@ -135,7 +136,7 @@ GLOBAL_LIST_INIT(aquarium_states_and_layers, list(
 				A.update_icon()
 
 /obj/structure/glass_tank/can_climb(var/mob/living/user, post_climb_check=0)
-	if (!user.can_touch(src) || !(atom_flags & ATOM_FLAG_CLIMBABLE) || (!post_climb_check && (user in climbers)))
+	if (!can_touch(user) || !(atom_flags & ATOM_FLAG_CLIMBABLE) || (!post_climb_check && (user in climbers)))
 		return 0
 
 	if (!Adjacent(user))

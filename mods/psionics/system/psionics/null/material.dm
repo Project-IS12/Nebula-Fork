@@ -1,15 +1,15 @@
-/decl/material
+/material
 	var/is_psionic_nullifier
 
-/decl/material/proc/is_psi_null()
+/material/proc/is_psi_null()
 	return is_psionic_nullifier
 
-/decl/material/nullglass
+/material/nullglass
 	is_psionic_nullifier = TRUE
 
-/decl/material/nullglass
+/material/nullglass
 	
-	color = COLOR_NULLGLASS
+	icon_colour = COLOR_NULLGLASS
 	conductive = 1
 	stack_type = /obj/item/stack/material/nullglass
 	flags = MAT_FLAG_BRITTLE
@@ -18,16 +18,16 @@
 	shard_type = SHARD_SHARD
 	tableslam_noise = 'sound/effects/Glasshit.ogg'
 	hardness = 80
-	weight = MAT_VALUE_HEAVY
+	weight = 25
 	door_icon_base = "stone"
 	destruction_desc = "shatters"
 	hitsound = 'sound/effects/Glasshit.ogg'
 
-/decl/material/nullglass/generate_recipes()
+/material/nullglass/generate_recipes()
 	. = ..()
 	. += new /datum/stack_recipe/tile/nullglass(src)
 
-/obj/item/shard/nullglass
+/obj/item/material/shard/nullglass
 	material = MAT_NULLGLASS
 /datum/stack_recipe/tile/nullglass
 	title = "nullglass floor tile"

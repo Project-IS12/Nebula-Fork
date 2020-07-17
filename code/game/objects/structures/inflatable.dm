@@ -1,7 +1,7 @@
 /obj/item/inflatable
 	name = "inflatable"
 	w_class = ITEM_SIZE_NORMAL
-	icon = 'icons/obj/structures/inflatable.dmi'
+	icon = 'icons/obj/inflatable.dmi'
 	atmos_canpass = CANPASS_DENSITY
 	var/deploy_path = null
 	var/inflatable_health
@@ -43,7 +43,7 @@
 	density = 1
 	anchored = 1
 	opacity = 0
-	icon = 'icons/obj/structures/inflatable.dmi'
+	icon = 'icons/obj/inflatable.dmi'
 	icon_state = "wall"
 	maxhealth = 20
 	hitsound = 'sound/effects/Glasshit.ogg'
@@ -108,16 +108,22 @@
 	if(QDELETED(src))
 		return PROJECTILE_CONTINUE
 
-/obj/structure/inflatable/explosion_act(severity)
-	..()
-	if(!QDELETED(src))
-		if(severity == 1)
-			physically_destroyed()
-		else if(severity == 2 || (severity == 3 && prob(50)))
-			deflate(TRUE)
+/obj/structure/inflatable/ex_act(severity)
+	switch(severity)
+		if(1.0)
+			qdel(src)
+			return
+		if(2.0)
+			deflate(1)
+			return
+		if(3.0)
+			if(prob(50))
+				deflate(1)
+				return
 
 /obj/structure/inflatable/attack_hand(mob/user)
 	add_fingerprint(user)
+	return
 
 /obj/structure/inflatable/can_repair_with(obj/item/tool)
 	. = istype(tool, /obj/item/tape_roll) && (health < maxhealth)
@@ -143,8 +149,7 @@
 
 	return FALSE
 
-/obj/structure/inflatable/physically_destroyed()
-	SHOULD_CALL_PARENT(FALSE)
+/obj/structure/inflatable/destroyed()
 	. = deflate(1)
 
 /obj/structure/inflatable/CtrlClick()
@@ -273,7 +278,7 @@
 /obj/item/inflatable/torn
 	name = "torn inflatable wall"
 	desc = "A folded membrane which rapidly expands into a large cubical shape on activation. It is too torn to be usable."
-	icon = 'icons/obj/structures/inflatable.dmi'
+	icon = 'icons/obj/inflatable.dmi'
 	icon_state = "folded_wall_torn"
 
 	attack_self(mob/user)
@@ -283,7 +288,7 @@
 /obj/item/inflatable/door/torn
 	name = "torn inflatable door"
 	desc = "A folded membrane which rapidly expands into a simple door on activation. It is too torn to be usable."
-	icon = 'icons/obj/structures/inflatable.dmi'
+	icon = 'icons/obj/inflatable.dmi'
 	icon_state = "folded_door_torn"
 
 	attack_self(mob/user)
@@ -293,7 +298,6 @@
 /obj/item/storage/briefcase/inflatable
 	name = "inflatable barrier box"
 	desc = "Contains inflatable walls and doors."
-	icon = 'icons/obj/items/storage/inflatables.dmi'
 	icon_state = "inf_box"
 	item_state = "syringe_kit"
 	w_class = ITEM_SIZE_LARGE

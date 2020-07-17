@@ -187,8 +187,7 @@ obj/structure/disposalpipe/Destroy()
 
 
 // pipe affected by explosion
-/obj/structure/disposalpipe/explosion_act(severity)
-	SHOULD_CALL_PARENT(FALSE)
+/obj/structure/disposalpipe/ex_act(severity)
 	if(severity == 1)
 		broken(0)
 	else
@@ -350,7 +349,7 @@ obj/structure/disposalpipe/Destroy()
 
 /obj/structure/disposalpipe/down/transfer(var/obj/structure/disposalholder/H)
 	var/nextdir = nextdir(H.dir)
-	H.set_dir(nextdir)
+	H.dir = nextdir
 
 	var/turf/T
 	var/obj/structure/disposalpipe/P

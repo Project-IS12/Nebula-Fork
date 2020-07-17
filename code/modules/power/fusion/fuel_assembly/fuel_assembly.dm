@@ -20,13 +20,13 @@
 		desc += " It is warm to the touch."
 		START_PROCESSING(SSobj, src)
 	if(material.luminescence)
-		set_light(material.luminescence, material.luminescence, material.color)
+		set_light(material.luminescence, material.luminescence, material.icon_colour)
 	rod_quantities[material.type] = initial_amount
 	update_icon()
 
 /obj/item/fuel_assembly/on_update_icon()
 	icon_state = "fuel_assembly"
-	color = material.color
+	color = material.icon_colour
 	var/image/I = image(icon, "fuel_assembly_bracket")
 	I.appearance_flags |= RESET_COLOR
 	overlays = list(I)
@@ -43,17 +43,17 @@
 	return ..()
 
 // Mapper shorthand.
-/obj/item/fuel_assembly/deuterium
-	material = /decl/material/gas/hydrogen/deuterium
+/obj/item/fuel_assembly/deuterium/Initialize(mapload)
+	. = ..(mapload,  MAT_DEUTERIUM)
 
-/obj/item/fuel_assembly/tritium
-	material = /decl/material/gas/hydrogen/tritium
+/obj/item/fuel_assembly/tritium/Initialize(mapload)
+	. = ..(mapload,  MAT_TRITIUM)
 
-/obj/item/fuel_assembly/phoron
-	material = /decl/material/solid/phoron
+/obj/item/fuel_assembly/phoron/Initialize(mapload)
+	. = ..(mapload,  MAT_PHORON)
 
-/obj/item/fuel_assembly/supermatter
-	material = /decl/material/solid/supermatter
+/obj/item/fuel_assembly/supermatter/Initialize(mapload)
+	. = ..(mapload,  MAT_SUPERMATTER)
 
-/obj/item/fuel_assembly/hydrogen
-	material = /decl/material/gas/hydrogen
+/obj/item/fuel_assembly/hydrogen/Initialize(mapload)
+	. = ..(mapload,  MAT_HYDROGEN)

@@ -51,14 +51,9 @@
 		)
 	take_damage(W.force)
 
-/obj/structure/deity/dismantle()
-	SHOULD_CALL_PARENT(FALSE)
-	qdel(src)
-	. = TRUE
-
-/obj/structure/deity/physically_destroyed()
+/obj/structure/deity/destroyed()
 	visible_message(SPAN_DANGER("\The [src] crumbles!"))
-	. = ..()
+	qdel(src)
 
 /obj/structure/deity/bullet_act(var/obj/item/projectile/P)
 	take_damage(P.damage)

@@ -62,6 +62,12 @@
 	if(modifiers["ctrl"] && modifiers["alt"])
 		CtrlAltClickOn(A)
 		return 1
+	if(modifiers["alt"] && modifiers["right"])
+		AltRightClickOn(A)
+		return 1
+	if(modifiers["middle"] && modifiers["shift"])
+		ShiftMiddleClickOn(A)
+		return 1
 	if(modifiers["middle"])
 		MiddleClickOn(A)
 		return 1
@@ -74,8 +80,11 @@
 	if(modifiers["ctrl"])
 		CtrlClickOn(A)
 		return 1
+	if(modifiers["right"])
+		RightClickOn(A)
+		return 1
 
-	if(stat || paralysis || stunned || weakened || sleeping)
+	if(stat || paralysis || stunned || sleeping)
 		return
 
 	// Do not allow player facing change in fixed chairs
@@ -163,7 +172,8 @@
 
 // Default behavior: ignore double clicks, the second click that makes the doubleclick call already calls for a normal click
 /mob/proc/DblClickOn(var/atom/A, var/params)
-	. = A.show_atom_list_for_turf(src, get_turf(A))
+	return
+	//. = A.show_atom_list_for_turf(src, get_turf(A))
 
 /*
 	Translates into attack_hand, etc.
@@ -229,6 +239,28 @@
 */
 
 /*
+	Right click.
+	Used for stuff like zooming in, toggling safety, unjamming you gun.
+*/
+/atom/proc/RightClick(var/mob/user)
+	return
+
+/mob/proc/RightClickOn(var/atom/A)
+	A.RightClick(src)
+
+/mob/proc/ShiftRightClickOn(var/atom/A)
+	A.ShiftRightClick(src)
+
+/atom/proc/ShiftRightClick(var/mob/user)
+	return //I dont know where we will use it
+
+/mob/proc/AltRightClickOn(var/atom/A)
+	A.AltRightClick(src)
+
+/atom/proc/AltRightClick(var/mob/user)
+	return
+
+/*
 	Shift click
 	For most mobs, examine.
 	This is overridden in ai.dm
@@ -240,6 +272,13 @@
 	if(user.client && user.client.eye == user)
 		user.examinate(src)
 	return
+
+/mob/proc/ShiftMiddleClickOn(var/atom/A)
+	A.ShiftMiddleClick(src)
+	return
+
+/atom/proc/ShiftMiddleClick(var/mob/user)
+	user.pointed(src)
 
 /*
 	Ctrl click
@@ -348,6 +387,8 @@
 		if(dx > 0)	direction = EAST
 		else		direction = WEST
 	if(direction != dir)
+		if(facing_dir)
+			facing_dir = direction
 		facedir(direction)
 
 GLOBAL_LIST_INIT(click_catchers, create_click_catcher())

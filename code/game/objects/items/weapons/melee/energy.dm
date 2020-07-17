@@ -1,4 +1,4 @@
-/obj/item/energy_blade
+/obj/item/melee/energy
 	var/active = 0
 	var/active_force
 	var/active_throwforce
@@ -11,18 +11,15 @@
 	armor_penetration = 50
 	atom_flags = ATOM_FLAG_NO_TEMP_CHANGE | ATOM_FLAG_NO_BLOOD
 
-/obj/item/energy_blade/get_heat()
-	. = max(..(), 3500)
-
-/obj/item/energy_blade/get_autopsy_descriptors()
+/obj/item/melee/energy/get_autopsy_descriptors()
 	. = ..()
 	if(active)
 		. += "made of pure energy"
 
-/obj/item/energy_blade/can_embed()
+/obj/item/melee/energy/can_embed()
 	return FALSE
 	
-/obj/item/energy_blade/Initialize()
+/obj/item/melee/energy/Initialize()
 	. = ..()
 	if(active)
 		active = FALSE
@@ -31,14 +28,14 @@
 		active = TRUE
 		deactivate()
 		
-/obj/item/energy_blade/on_update_icon()
+/obj/item/melee/energy/on_update_icon()
 	. = ..()
 	if(active)
 		icon_state = active_icon
 	else
 		icon_state = initial(icon_state)
 
-/obj/item/energy_blade/proc/activate(mob/living/user)
+/obj/item/melee/energy/proc/activate(mob/living/user)
 	if(active)
 		return
 	active = TRUE
@@ -54,7 +51,7 @@
 		to_chat(user, "<span class='notice'>\The [src] is now energised.</span>")
 	set_light(0.8, 1, 2, 4, lighting_color)
 	
-/obj/item/energy_blade/proc/deactivate(mob/living/user)
+/obj/item/melee/energy/proc/deactivate(mob/living/user)
 	if(!active)
 		return
 	active = FALSE
@@ -70,7 +67,7 @@
 		to_chat(user, "<span class='notice'>\The [src] deactivates!</span>")
 	set_light(0)
 
-/obj/item/energy_blade/attack_self(mob/living/user)
+/obj/item/melee/energy/attack_self(mob/living/user)
 	if(active)
 		if((MUTATION_CLUMSY in user.mutations) && prob(50))
 			user.visible_message("<span class='danger'>\The [user] accidentally cuts \himself with \the [src].</span>",\
@@ -88,13 +85,13 @@
 	add_fingerprint(user)
 	return
 
-/obj/item/energy_blade/get_storage_cost()
+/obj/item/melee/energy/get_storage_cost()
 	. = active ? ITEM_SIZE_NO_CONTAINER : ..()
 
 /*
  * Energy Axe
  */
-/obj/item/energy_blade/axe
+/obj/item/melee/energy/axe
 	name = "energy axe"
 	desc = "An energised battle axe."
 	icon = 'icons/obj/items/weapon/e_axe.dmi'
@@ -117,14 +114,14 @@
 	edge = 1
 	melee_accuracy_bonus = 15
 
-/obj/item/energy_blade/axe/deactivate(mob/living/user)
+/obj/item/melee/energy/axe/deactivate(mob/living/user)
 	. = ..()
 	to_chat(user, "<span class='notice'>\The [src] is de-energised. It's just a regular axe now.</span>")
 
 /*
  * Energy Sword
  */
-/obj/item/energy_blade/sword
+/obj/item/melee/energy/sword
 	name = "energy sword"
 	desc = "May the force be within you."
 	icon = 'icons/obj/items/weapon/e_sword.dmi'
@@ -145,7 +142,7 @@
 	hitsound = 'sound/weapons/blade1.ogg'
 	var/blade_color
 
-/obj/item/energy_blade/sword/Initialize()
+/obj/item/melee/energy/sword/Initialize()
 	if(!blade_color)
 		blade_color = pick("red","blue","green","purple")
 	
@@ -155,38 +152,34 @@
 	
 	. = ..()
 
-/obj/item/energy_blade/sword/green
+/obj/item/melee/energy/sword/green
 	blade_color = "green"
 
-/obj/item/energy_blade/sword/red
+/obj/item/melee/energy/sword/red
 	blade_color = "red"
 
-/obj/item/energy_blade/sword/red/activated/Initialize()
-	. = ..()
-	activate()
-
-/obj/item/energy_blade/sword/blue
+/obj/item/melee/energy/sword/blue
 	blade_color = "blue"
 
-/obj/item/energy_blade/sword/purple
+/obj/item/melee/energy/sword/purple
 	blade_color = "purple"
 
-/obj/item/energy_blade/sword/dropped(var/mob/user)
+/obj/item/melee/energy/sword/dropped(var/mob/user)
 	..()
 	if(!istype(loc,/mob))
 		deactivate(user)
 
-/obj/item/energy_blade/sword/handle_shield(mob/user, var/damage, atom/damage_source = null, mob/attacker = null, var/def_zone = null, var/attack_text = "the attack")
+/obj/item/melee/energy/sword/handle_shield(mob/user, var/damage, atom/damage_source = null, mob/attacker = null, var/def_zone = null, var/attack_text = "the attack")
 	if(.)
 		var/datum/effect/effect/system/spark_spread/spark_system = new /datum/effect/effect/system/spark_spread()
 		spark_system.set_up(5, 0, user.loc)
 		spark_system.start()
 		playsound(user.loc, 'sound/weapons/blade1.ogg', 50, 1)
 
-/obj/item/energy_blade/sword/get_parry_chance(mob/user)
+/obj/item/melee/energy/sword/get_parry_chance(mob/user)
 	return active ? ..() : 0
 
-/obj/item/energy_blade/sword/pirate
+/obj/item/melee/energy/sword/pirate
 	name = "energy cutlass"
 	desc = "Arrrr matey."
 	icon = 'icons/obj/items/weapon/e_cutlass.dmi'
@@ -194,14 +187,11 @@
 	active_icon = "cutlass1"
 	lighting_color = COLOR_SABER_CUTLASS
 
-/obj/item/energy_blade/sword/pirate/activated/Initialize()
-	. = ..()
-	activate()
 /*
  *Energy Blade
  */
 
-/obj/item/energy_blade/blade
+/obj/item/melee/energy/blade
 	name = "energy blade"
 	desc = "A concentrated beam of energy in the shape of a blade. Very stylish... and lethal."
 	icon = 'icons/obj/items/weapon/energy_blade.dmi'
@@ -224,31 +214,31 @@
 	var/mob/living/creator
 	var/datum/effect/effect/system/spark_spread/spark_system
 
-/obj/item/energy_blade/blade/Initialize()
+/obj/item/melee/energy/blade/Initialize()
 	. = ..()
 	spark_system = new /datum/effect/effect/system/spark_spread()
 	spark_system.set_up(5, 0, src)
 	spark_system.attach(src)
 	START_PROCESSING(SSobj, src)
 
-/obj/item/energy_blade/blade/Destroy()
+/obj/item/melee/energy/blade/Destroy()
 	STOP_PROCESSING(SSobj, src)
 	. = ..()
 
-/obj/item/energy_blade/blade/is_special_cutting_tool(var/high_power)
+/obj/item/melee/energy/blade/is_special_cutting_tool(var/high_power)
 	return TRUE
 
-/obj/item/energy_blade/blade/get_storage_cost()
+/obj/item/melee/energy/blade/get_storage_cost()
 	return ITEM_SIZE_NO_CONTAINER
 
-/obj/item/energy_blade/blade/attack_self(mob/user)
+/obj/item/melee/energy/blade/attack_self(mob/user)
 	user.drop_from_inventory(src)
 
-/obj/item/energy_blade/blade/dropped()
+/obj/item/melee/energy/blade/dropped()
 	..()
 	QDEL_IN(src, 0)
 
-/obj/item/energy_blade/blade/Process()
+/obj/item/melee/energy/blade/Process()
 	if(!creator || loc != creator || (creator.l_hand != src && creator.r_hand != src))
 		// Tidy up a bit.
 		if(istype(loc,/mob/living))
@@ -263,7 +253,7 @@
 			host.drop_from_inventory(src)
 		QDEL_IN(src, 0)
 
-/obj/item/energy_blade/machete
+/obj/item/melee/energy/machete
 	name = "energy machete"
 	desc = "A machete handle that extends out into a long, purple machete blade."
 	icon = 'icons/obj/items/weapon/e_machete.dmi'

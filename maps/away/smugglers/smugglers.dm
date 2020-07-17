@@ -84,7 +84,12 @@
 	icon_state = "horribletie"
 
 /obj/random/ore_smug/spawn_choices()
-	return subtypesof(/obj/item/ore)
+	return list(
+		/obj/item/ore/uranium,
+		/obj/item/ore/gold,
+		/obj/item/ore/silver,
+		/obj/item/ore/slag,
+		/obj/item/ore/phoron)
 
 /obj/random/ammo_magazine_smug
 	name = "Random Ammo Magazine"
@@ -97,7 +102,7 @@
 		/obj/item/ammo_magazine/pistol,
 		/obj/item/ammo_magazine/speedloader,
 		/obj/item/ammo_magazine/rifle,
-		/obj/item/ammo_magazine/rifle)
+		/obj/item/ammo_magazine/mil_rifle)
 
 /obj/structure/closet/crate/plastic_smug_ammo
 	name = "dirty plastic crate"

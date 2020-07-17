@@ -16,7 +16,6 @@
 		/obj/item/storage/evidence,
 		/obj/item/forensics/sample_kit,
 		/obj/item/forensics/sample_kit/powder,
-		/obj/item/gripper/clerical,
 		/obj/item/flash,
 		/obj/item/borg/sight/hud/sec,
 		/obj/item/taperoll/police,
@@ -43,5 +42,5 @@
 	if(luminol.reagents.total_volume < luminol.volume)
 		var/adding = min(luminol.volume-luminol.reagents.total_volume, 2*amount)
 		if(adding > 0)
-			luminol.reagents.add_reagent(/decl/material/liquid/luminol, adding)
+			luminol.reagents.add_reagent(/datum/reagent/luminol, adding)
 	..()

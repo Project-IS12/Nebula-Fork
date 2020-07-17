@@ -7,7 +7,7 @@
 	var/spell/targeted/projectile/carried
 
 	penetrating = 0
-	life_span = 10 //set by the duration of the spell
+	range = 10 //set by the duration of the spell
 
 	var/proj_trail = 0 //if it leaves a trail
 	var/proj_trail_lifespan = 0 //deciseconds
@@ -21,8 +21,7 @@
 	carried = null
 	return ..()
 
-/obj/item/projectile/spell_projectile/explosion_act()
-	SHOULD_CALL_PARENT(FALSE)
+/obj/item/projectile/spell_projectile/ex_act()
 	return
 
 /obj/item/projectile/spell_projectile/before_move()

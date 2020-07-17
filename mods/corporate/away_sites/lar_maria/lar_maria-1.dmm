@@ -226,7 +226,7 @@
 "aA" = (
 /obj/structure/table/glass,
 /obj/item/paper,
-/obj/item/folder/cyan,
+/obj/item/folder/white,
 /turf/simulated/floor/tiled/white,
 /area/lar_maria/vir_main)
 "aB" = (
@@ -243,6 +243,18 @@
 	pixel_x = 0;
 	pixel_y = 24
 	},
+/turf/simulated/floor/tiled/white,
+/area/lar_maria/vir_main)
+"aC" = (
+/turf/simulated/floor/tiled/white,
+/area/lar_maria/vir_main)
+"aD" = (
+/turf/simulated/floor/tiled/white,
+/area/lar_maria/vir_main)
+"aE" = (
+/turf/simulated/floor/tiled/white,
+/area/lar_maria/vir_main)
+"aF" = (
 /turf/simulated/floor/tiled/white,
 /area/lar_maria/vir_main)
 "aG" = (
@@ -317,6 +329,9 @@
 /area/lar_maria/vir_main)
 "aR" = (
 /obj/random/trash,
+/turf/simulated/floor/tiled/white,
+/area/lar_maria/vir_main)
+"aS" = (
 /turf/simulated/floor/tiled/white,
 /area/lar_maria/vir_main)
 "aT" = (
@@ -611,7 +626,7 @@
 /area/lar_maria/vir_main)
 "bK" = (
 /obj/structure/table/glass,
-/obj/item/folder/cyan,
+/obj/item/folder/white,
 /turf/simulated/floor/tiled/white,
 /area/lar_maria/vir_main)
 "bL" = (
@@ -633,6 +648,10 @@
 /area/lar_maria/vir_main)
 "bO" = (
 /obj/structure/table/glass,
+/turf/simulated/floor/tiled/white,
+/area/lar_maria/vir_main)
+"bP" = (
+/obj/structure/closet/crate/freezer,
 /turf/simulated/floor/tiled/white,
 /area/lar_maria/vir_main)
 "bQ" = (
@@ -1802,7 +1821,7 @@
 "eN" = (
 /obj/structure/closet,
 /obj/item/clothing/under/color/red,
-/obj/item/gun/projectile/shotgun/pump,
+/obj/item/gun/projectile/shotgun/pump/combat,
 /turf/simulated/floor/tiled,
 /area/lar_maria/sec_wing)
 "eO" = (
@@ -1899,6 +1918,9 @@
 	},
 /turf/simulated/floor/tiled,
 /area/lar_maria/vir_hallway)
+"eW" = (
+/turf/simulated/floor/tiled/white,
+/area/lar_maria/vir_aux)
 "eX" = (
 /obj/machinery/smartfridge/chemistry,
 /obj/machinery/light,
@@ -1951,9 +1973,9 @@
 /area/lar_maria/sec_wing)
 "fg" = (
 /obj/structure/table/rack,
-/obj/item/baton,
-/obj/item/baton,
-/obj/item/baton,
+/obj/item/melee/baton,
+/obj/item/melee/baton,
+/obj/item/melee/baton,
 /turf/simulated/floor/tiled,
 /area/lar_maria/sec_wing)
 "fh" = (
@@ -2206,6 +2228,12 @@
 	health = 1e+006
 	},
 /obj/machinery/door/window/eastright,
+/turf/simulated/floor/tiled/white,
+/area/lar_maria/vir_aux)
+"fF" = (
+/turf/simulated/floor/tiled/white,
+/area/lar_maria/vir_aux)
+"fG" = (
 /turf/simulated/floor/tiled/white,
 /area/lar_maria/vir_aux)
 "fH" = (
@@ -2589,15 +2617,15 @@
 /area/lar_maria/vir_aux)
 "gf" = (
 /obj/structure/closet/crate,
-/obj/item/folder/cyan,
-/obj/item/knife/folding,
+/obj/item/folder/white,
+/obj/item/material/knife/folding,
 /turf/simulated/floor/plating,
 /area/lar_maria/cells)
 "gg" = (
 /obj/structure/closet,
 /obj/item/clothing/under/color/orange,
 /obj/item/clothing/under/color/orange,
-/obj/item/clothing/shoes/color/orange,
+/obj/item/clothing/shoes/orange,
 /turf/simulated/floor/plating,
 /area/lar_maria/cells)
 "gh" = (
@@ -2636,7 +2664,7 @@
 "gl" = (
 /obj/structure/closet,
 /obj/item/clothing/under/color/orange,
-/obj/item/clothing/shoes/color/orange,
+/obj/item/clothing/shoes/orange,
 /turf/simulated/floor/plating,
 /area/lar_maria/cells)
 "gm" = (
@@ -2900,8 +2928,8 @@
 /obj/structure/closet,
 /obj/item/clothing/under/color/orange,
 /obj/item/clothing/under/color/orange,
-/obj/item/clothing/shoes/color/orange,
-/obj/item/clothing/shoes/color/orange,
+/obj/item/clothing/shoes/orange,
+/obj/item/clothing/shoes/orange,
 /turf/simulated/floor/plating,
 /area/lar_maria/cells)
 "gW" = (
@@ -3090,7 +3118,7 @@
 /area/lar_maria/vir_access)
 "hA" = (
 /obj/structure/closet/crate/trashcart,
-/obj/item/ashtray/plastic,
+/obj/item/material/ashtray/plastic,
 /turf/simulated/floor/plating,
 /area/lar_maria/cells)
 "hB" = (
@@ -3600,7 +3628,7 @@
 /area/lar_maria/cells)
 "iA" = (
 /obj/structure/table/steel_reinforced,
-/obj/item/ashtray/plastic,
+/obj/item/material/ashtray/plastic,
 /turf/simulated/floor/plating,
 /area/lar_maria/cells)
 "iB" = (
@@ -27079,12 +27107,12 @@ aa
 ag
 ag
 aA
-az
+aS
 bp
-az
-az
+aS
+aS
 ck
-az
+aS
 ag
 do
 dJ
@@ -27281,10 +27309,10 @@ aa
 ag
 ag
 aB
-az
+aS
 bq
 bK
-az
+aS
 cl
 cF
 ag
@@ -27482,8 +27510,8 @@ aa
 aa
 ag
 ag
-az
-az
+aC
+aS
 br
 bL
 aR
@@ -27684,11 +27712,11 @@ aa
 aa
 ag
 ag
-az
-az
+aD
+aS
 bq
 bM
-az
+aS
 cn
 cH
 ag
@@ -27886,11 +27914,11 @@ aa
 aa
 ag
 ag
-az
-az
+aE
+aS
 bs
 bN
-az
+aS
 co
 cI
 ag
@@ -27899,7 +27927,7 @@ ds
 dZ
 ds
 eE
-ds
+eW
 dr
 fC
 ds
@@ -28088,11 +28116,11 @@ aa
 aa
 ag
 ag
-az
-az
+aF
+aS
 bq
 bO
-az
+aS
 cp
 cJ
 ag
@@ -28291,10 +28319,10 @@ aa
 ag
 ag
 aG
-az
+aS
 bt
 bL
-az
+aS
 cq
 cK
 ag
@@ -28494,11 +28522,11 @@ ag
 ag
 aH
 aR
-az
-az
-az
-az
-az
+aS
+aS
+aS
+aS
+aS
 ag
 ds
 ds
@@ -28695,12 +28723,12 @@ ab
 ah
 ah
 aI
-az
+aS
 bu
+bP
 bu
-bu
-az
-az
+aS
+aS
 ag
 dv
 dM
@@ -28911,7 +28939,7 @@ dN
 eF
 eY
 fs
-ds
+fF
 ds
 dr
 dr
@@ -29099,11 +29127,11 @@ aa
 ag
 ag
 aK
-az
+aS
 bv
 aJ
 bv
-az
+aS
 cL
 ag
 dw
@@ -29301,7 +29329,7 @@ aa
 ag
 ag
 aL
-az
+aS
 aL
 aJ
 aL
@@ -29315,7 +29343,7 @@ en
 eG
 fb
 ft
-ds
+fG
 ds
 dr
 dr

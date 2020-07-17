@@ -2,6 +2,12 @@
 	var/tmp/atom/movable/openspace/overlay/bound_overlay	// The overlay that is directly mirroring us that we proxy movement to.
 	var/no_z_overlay	// If TRUE, this atom will not be drawn on open turfs.
 
+
+/atom/movable/Initialize(mapload, ...)
+    . = ..()
+    if (!mapload && isturf(loc) && loc:above)
+        update_above()
+
 /atom/movable/forceMove(atom/dest)
 	. = ..(dest)
 	if (. && bound_overlay)
@@ -58,8 +64,7 @@
 	return FALSE
 
 // No blowing up abstract objects.
-/atom/movable/openspace/explosion_act(ex_sev)
-	SHOULD_CALL_PARENT(FALSE)
+/atom/movable/openspace/ex_act(ex_sev)
 	return
 
 /atom/movable/openspace/singularity_act()
@@ -142,8 +147,6 @@
 	var/queued = FALSE
 	var/destruction_timer
 	var/mimiced_type
-	var/original_z
-	var/override_depth
 
 /atom/movable/openspace/overlay/New()
 	atom_flags |= ATOM_FLAG_INITIALIZED
@@ -167,8 +170,10 @@
 /atom/movable/openspace/overlay/attack_hand(mob/user)
 	to_chat(user, SPAN_NOTICE("You cannot reach \the [src] from here."))
 
+/atom/movable/openspace/overlay/attack_generic(mob/user)
+	to_chat(user, SPAN_NOTICE("You cannot reach \the [src] from here."))
+
 /atom/movable/openspace/overlay/examine(...)
-	SHOULD_CALL_PARENT(FALSE)
 	. = associated_atom.examine(arglist(args))	// just pass all the args to the copied atom
 
 /atom/movable/openspace/overlay/forceMove(turf/dest)

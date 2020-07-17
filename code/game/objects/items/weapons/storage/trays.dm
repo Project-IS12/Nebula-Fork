@@ -19,7 +19,7 @@
 
 	var/cooldown = 0	//Cooldown for banging the tray with a rolling pin. based on world.time. very silly
 
-	material = /decl/material/solid/cardboard
+	material = MAT_CARDBOARD
 	applies_material_colour = TRUE
 	applies_material_name = TRUE
 
@@ -29,21 +29,10 @@
 		return
 	. = ..()
 
-/obj/item/storage/tray/gather_all(var/turf/T, var/mob/user)
-	..()
-	update_icon()
-
-/obj/item/storage/tray/afterattack(atom/target, mob/user, proximity_flag, click_parameters)
-	. = ..()
-	if(!proximity_flag)
-		return
-	if(istype(target, /obj/structure/table))
-		dump_contents(user, get_turf(target))
-
-/obj/item/storage/tray/proc/scatter_contents(var/neatly = FALSE, target_loc = get_turf(src))
+/obj/item/storage/tray/proc/scatter_contents(var/neatly = FALSE)
 	set waitfor = 0
 	for(var/obj/item/I in contents)
-		if(remove_from_storage(I, target_loc) && !neatly)
+		if(remove_from_storage(I, get_turf(I)) && !neatly)
 			I.throw_at(get_edge_target_turf(I.loc, pick(GLOB.alldirs)), rand(1,3), round(10/I.w_class))
 	update_icon()
 
@@ -65,7 +54,7 @@
 		scatter_contents()
 
 /obj/item/storage/tray/attackby(obj/item/W, mob/user) // Keeping this from old trays because... i guess?
-	if(istype(W, /obj/item/kitchen/rollingpin))
+	if(istype(W, /obj/item/material/kitchen/rollingpin))
 		if(cooldown < world.time - 25)
 			user.visible_message(SPAN_WARNING("\The [user] bashes \the [src] with \the [W]!"))
 			playsound(user.loc, 'sound/effects/shieldbash.ogg', 50, 1)
@@ -73,17 +62,19 @@
 	else
 		..()
 
-/obj/item/storage/tray/dump_contents(var/mob/user, turf/new_loc = loc)
-	if(!isturf(new_loc)) //to handle hand switching
-		return FALSE
-	if(user)
-		close(user)
-	if(!(locate(/obj/structure/table) in new_loc) && user && contents.len)
+/obj/item/storage/tray/proc/dump_contents(var/mob/user)
+	set waitfor = 0
+	sleep(1)
+
+	if(!isturf(loc)) //to handle hand switching
+		return
+
+	close(user)
+	if(!(locate(/obj/structure/table) in loc) && user && contents.len)
 		visible_message(SPAN_DANGER("Everything falls off the [name]! Good job, [user]."))
-		scatter_contents(FALSE, new_loc)
+		scatter_contents()
 	else
-		scatter_contents(TRUE, new_loc)
-	return TRUE
+		scatter_contents(TRUE)
 
 /obj/item/storage/tray/dropped(mob/user)
 	. = ..()
@@ -93,10 +84,7 @@
 	..()
 	overlays.Cut()
 	for(var/obj/item/I in contents)
-		var/mutable_appearance/MA = new(I)
-		MA.layer = FLOAT_LAYER
-		MA.appearance_flags = RESET_COLOR
-		overlays += MA
+		overlays += image("icon" = I.icon, "icon_state" = I.icon_state, "layer" = 30 + I.layer, "pixel_x" = I.pixel_x, "pixel_y" = I.pixel_y)
 
 /obj/item/storage/tray/examine(mob/user) // So when you look at the tray you can see whats on it.
 	. = ..()
@@ -118,7 +106,7 @@ TRAY TYPES GO HERE
 /obj/item/storage/tray/wood
 	name = "tray" //material names are automatic kay?
 	desc = "A wooden tray to serve food on."
-	material = /decl/material/solid/wood
+	material = MAT_WOOD
 
 /obj/item/storage/tray/metal
 	obj_flags = OBJ_FLAG_CONDUCTIBLE
@@ -130,14 +118,14 @@ TRAY TYPES GO HERE
 /obj/item/storage/tray/metal/aluminium
 	name = "tray"
 	desc = "An aluminium tray to serve food on."
-	material = /decl/material/solid/metal/aluminium
+	material = MAT_ALUMINIUM
 
 /obj/item/storage/tray/metal/silver
 	name = "platter"
 	desc = "You lazy bum."
-	material = /decl/material/solid/metal/silver
+	material = MAT_SILVER
 
 /obj/item/storage/tray/metal/gold
 	name = "platter"
 	desc = "A gold tray to serve food on. But oh sofancy."
-	material = /decl/material/solid/metal/gold
+	material = MAT_GOLD

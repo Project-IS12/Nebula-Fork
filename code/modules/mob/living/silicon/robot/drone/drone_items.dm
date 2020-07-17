@@ -11,7 +11,7 @@
 	//Has a list of items that it can hold.
 	var/list/can_hold = list(
 		/obj/item/cell,
-		/obj/item/stock_parts/circuitboard/airlock_electronics,
+		/obj/item/airlock_electronics,
 		/obj/item/tracker_electronics,
 		/obj/item/stock_parts,
 		/obj/item/frame,
@@ -36,9 +36,9 @@
 	icon_state = "gripper-mining"
 
 	can_hold = list(
-		/obj/item/cell,
-		/obj/item/stock_parts,
-		/obj/item/stock_parts/circuitboard/miningdrill
+	/obj/item/cell,
+	/obj/item/stock_parts,
+	/obj/item/stock_parts/circuitboard/miningdrill
 	)
 
 /obj/item/gripper/clerical
@@ -46,15 +46,13 @@
 	desc = "A simple grasping tool for clerical work."
 
 	can_hold = list(
-		/obj/item/clipboard,
+		/obj/item/material/clipboard,
 		/obj/item/paper,
 		/obj/item/paper_bundle,
-		/obj/item/photo,
 		/obj/item/card/id,
 		/obj/item/book,
 		/obj/item/newspaper,
-		/obj/item/smallDelivery,
-		/obj/item/forensics/sample
+		/obj/item/smallDelivery
 		)
 
 /obj/item/gripper/chemistry
@@ -127,9 +125,9 @@
 	desc = "A simple grasping tool for holding and manipulating organic and mechanical organs, both internal and external."
 
 	can_hold = list(
-		/obj/item/organ,
-		/obj/item/robot_parts,
-		/obj/item/chems/ivbag
+	/obj/item/organ,
+	/obj/item/robot_parts,
+	/obj/item/chems/ivbag
 	)
 
 /obj/item/gripper/no_use //Used when you want to hold and put items in other things, but not able to 'use' the item
@@ -380,10 +378,10 @@
 		else if(istype(W,/obj/item/ammo_casing))
 			if(metal)
 				metal.add_charge(1000)
-		else if(istype(W,/obj/item/shard/shrapnel))
+		else if(istype(W,/obj/item/material/shard/shrapnel))
 			if(metal)
 				metal.add_charge(1000)
-		else if(istype(W,/obj/item/shard))
+		else if(istype(W,/obj/item/material/shard))
 			if(glass)
 				glass.add_charge(1000)
 		else if(istype(W,/obj/item/chems/food/snacks/grown))

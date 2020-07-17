@@ -1,19 +1,21 @@
-SUBSYSTEM_DEF(fluids)
+var/datum/controller/subsystem/fluids/SSfluids
+
+/datum/controller/subsystem/fluids
 	name = "Fluids"
 	wait = 10
 	flags = SS_NO_INIT
 
-	var/next_fluid_act = 0
-	var/fluid_act_delay = 15 // A bit longer than machines.
+	var/next_water_act = 0
+	var/water_act_delay = 15 // A bit longer than machines.
 
 	var/list/active_fluids = list()
 	var/list/water_sources = list()
+	var/list/pushing_atoms = list()
 	var/list/hygiene_props = list()
 
 	var/tmp/list/processing_sources
 	var/tmp/list/processing_fluids
 
-	var/obj/equalizing_reagent_holder
 	var/tmp/active_fluids_copied_yet = FALSE
 	var/af_index = 1
 	var/list/fluid_images = list()
@@ -25,12 +27,8 @@ SUBSYSTEM_DEF(fluids)
 		'sound/effects/gurgle4.ogg'
 		)
 
-/datum/controller/subsystem/fluids/New(start_timeofday)
-	equalizing_reagent_holder = new
-	equalizing_reagent_holder.unacidable = TRUE
-	equalizing_reagent_holder.atom_flags |= (ATOM_FLAG_NO_TEMP_CHANGE|ATOM_FLAG_OPEN_CONTAINER|ATOM_FLAG_NO_REACT)
-	equalizing_reagent_holder.create_reagents(FLUID_MAX_DEPTH * 9 * 3)
-	..()
+/datum/controller/subsystem/fluids/New()
+	NEW_SS_GLOBAL(SSfluids)
 
 /datum/controller/subsystem/fluids/stat_entry()
 	..("A:[active_fluids.len] S:[water_sources.len]")
@@ -65,8 +63,8 @@ SUBSYSTEM_DEF(fluids)
 				var/datum/gas_mixture/GM = T.return_air()
 				if(GM) F.temperature = GM.temperature
 			if(F)
-				if(F.reagents.total_volume < FLUID_MAX_DEPTH)
-					F.reagents.add_reagent(/decl/material/liquid/water, FLUID_MAX_DEPTH - F.reagents.total_volume)
+				if(F.fluid_amount < FLUID_MAX_DEPTH)
+					SET_FLUID_DEPTH(F, FLUID_MAX_DEPTH)
 		if(!flooded_a_neighbor)
 			REMOVE_ACTIVE_FLUID_SOURCE(T)
 		if (MC_TICK_CHECK)
@@ -87,19 +85,19 @@ SUBSYSTEM_DEF(fluids)
 
 		var/turf/T = F.loc
 		checked[T] = TRUE
-		if(!T.CanFluidPass() || F.reagents.total_volume <= FLUID_EVAPORATION_POINT)
+		if(!T.CanFluidPass() || F.fluid_amount <= FLUID_EVAPORATION_POINT)
 			qdel(F)
 			continue
 
-		if(T.density || istype(T, /turf/space) || istype(T, /turf/simulated/floor/exoplanet))
-			F.reagents.remove_any(max(FLUID_EVAPORATION_POINT-1, round(F.reagents.total_volume * 0.5)))
-			if(F.reagents.total_volume <= FLUID_EVAPORATION_POINT)
+		if(istype(T, /turf/space))
+			LOSE_FLUID(F, max(FLUID_EVAPORATION_POINT-1, round(F.fluid_amount * 0.5)))
+			if(F.fluid_amount <= FLUID_EVAPORATION_POINT)
 				qdel(F)
 			continue
 
 		REMOVE_ACTIVE_FLUID(F) // This will be refreshed if our level changes at all in this iteration of the subsystem.
 		UPDATE_FLUID_BLOCKED_DIRS(T)
-		if(!(T.fluid_blocked_dirs & DOWN) && T.is_open() && T.has_gravity())
+		if(!(T.fluid_blocked_dirs & DOWN) && istype(T, /turf/simulated/open) && has_gravity(F))
 			var/turf/below = GetBelow(T)
 			if(below)
 				UPDATE_FLUID_BLOCKED_DIRS(below)
@@ -107,11 +105,13 @@ SUBSYSTEM_DEF(fluids)
 					var/obj/effect/fluid/other = locate() in below
 					if(!other)
 						other = new(below)
-					if(other && other.reagents.total_volume < FLUID_MAX_DEPTH)
-						F.reagents.trans_to_holder(other.reagents, min(Floor(F.reagents.total_volume*0.5), FLUID_MAX_DEPTH - other.reagents.total_volume))
+					if(other && other.fluid_amount < FLUID_MAX_DEPTH)
+						var/transfer = min(Floor(F.fluid_amount*0.5), FLUID_MAX_DEPTH - other.fluid_amount)
+						LOSE_FLUID(F, transfer)
+						SET_FLUID_DEPTH(other, other.fluid_amount + transfer)
 						continue
 		
-		if(F.reagents.total_volume > FLUID_PUDDLE)
+		if(F.fluid_amount > FLUID_EVAPORATION_POINT)
 			for(var/spread_dir in GLOB.cardinal)
 				if(T.fluid_blocked_dirs & spread_dir)
 					continue
@@ -125,12 +125,15 @@ SUBSYSTEM_DEF(fluids)
 				checked[neighbor_turf] = TRUE
 				var/obj/effect/fluid/other = locate() in neighbor_turf.contents
 				if(!other)
-					if(F.reagents.total_volume >= 2)
+					LOSE_FLUID(F, 1)
+					if(F.fluid_amount >= 1)
 						other = new /obj/effect/fluid(neighbor_turf)
-						F.reagents.trans_to_holder(other.reagents, 1)
+						SET_FLUID_DEPTH(other, 1)
 					else
 						qdel(F)
 						break
+		else
+			qdel(F)
 
 		if (MC_TICK_CHECK)
 			return
@@ -144,36 +147,75 @@ SUBSYSTEM_DEF(fluids)
 			continue
 
 		// Equalize across our neighbors. Hardcoded here for performance reasons.
-		if(!length(F.neighbors) || F.reagents.total_volume <= FLUID_PUDDLE)
+		if(!length(F.neighbors) || F.fluid_amount <= FLUID_EVAPORATION_POINT)
 			continue
 
 		var/sufficient_delta = FALSE
 		for(var/thing in F.neighbors)
 			var/obj/effect/fluid/other = thing
-			if(abs(F.reagents.total_volume - other.reagents.total_volume) > FLUID_EVAPORATION_POINT)
+			if(abs(F.fluid_amount - other.fluid_amount) >= FLUID_EVAPORATION_POINT)
 				sufficient_delta = TRUE
 				break
 
 		F.last_flow_strength = 0
 		var/setting_dir = 0
 		if(sufficient_delta)
-			equalizing_reagent_holder.reagents.clear_reagents()
+			var/equalize_avg_depth = F.fluid_amount
+			var/equalize_avg_temp = F.temperature
 			for(var/thing in F.neighbors)
 				var/obj/effect/fluid/other = thing
-				var/flow_amount = F.reagents.total_volume - other.reagents.total_volume
+				equalize_avg_depth += other.fluid_amount
+				equalize_avg_temp += other.temperature
+				var/flow_amount = F.fluid_amount - other.fluid_amount
 				if(F.last_flow_strength < flow_amount && flow_amount >= FLUID_PUSH_THRESHOLD)
 					F.last_flow_strength = flow_amount
 					setting_dir = get_dir(F, other)
-				other.reagents.trans_to_holder(equalizing_reagent_holder.reagents, other.reagents.total_volume)
-			F.reagents.trans_to_holder(equalizing_reagent_holder.reagents, F.reagents.total_volume)
-			
-			var/equalize_amt = round(equalizing_reagent_holder.reagents.total_volume / (length(F.neighbors)+1))
+			equalize_avg_depth = Floor(equalize_avg_depth/(length(F.neighbors)+1))
+			equalize_avg_temp = Floor(equalize_avg_temp/(length(F.neighbors)+1))
+			SET_FLUID_DEPTH(F, equalize_avg_depth)
 			for(var/thing in F.neighbors)
 				var/obj/effect/fluid/other = thing
-				equalizing_reagent_holder.reagents.trans_to_holder(other.reagents, equalize_amt)
-			equalizing_reagent_holder.reagents.trans_to_holder(F.reagents, equalizing_reagent_holder.reagents.total_volume)
-
+				SET_FLUID_DEPTH(other, equalize_avg_depth)
 		F.set_dir(setting_dir)
 
 		if (MC_TICK_CHECK)
-			return 
+			return
+
+	af_index = 1
+	while (af_index <= processing_fluids.len)
+		var/obj/effect/fluid/F = processing_fluids[af_index++]
+		if(QDELETED(F))
+			processing_fluids -= F
+			continue
+
+		if(F.last_flow_strength >= 10)
+			if(prob(1))
+				playsound(F.loc, 'sound/effects/slosh.ogg', 25, 1)
+			for(var/atom/movable/AM in F.loc.contents)
+				if(!pushing_atoms[AM] && AM.is_fluid_pushable(F.last_flow_strength))
+					pushing_atoms[AM] = TRUE
+					step(AM, F.dir)
+
+		if (F.fluid_amount <= FLUID_EVAPORATION_POINT)
+			qdel(F)
+		else
+			F.update_icon()
+
+		if (MC_TICK_CHECK)
+			return
+
+	pushing_atoms.Cut()
+
+	// Sometimes, call water_act().
+	if(world.time >= next_water_act)
+		next_water_act = world.time + water_act_delay
+		af_index = 1
+		while (af_index <= processing_fluids.len)
+			var/obj/effect/fluid/F = processing_fluids[af_index++]
+			var/turf/T = get_turf(F)
+			if(istype(T) && !QDELETED(F))
+				for(var/atom/movable/A in T.contents)
+					if(A.simulated && !A.waterproof)
+						A.water_act(F.fluid_amount)
+			if (MC_TICK_CHECK)
+				return

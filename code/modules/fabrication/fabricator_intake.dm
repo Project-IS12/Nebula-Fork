@@ -6,20 +6,20 @@
 /obj/machinery/fabricator/proc/take_reagents(var/obj/item/thing, var/mob/user, var/destructive = FALSE)
 	if(!thing.reagents || (!destructive && !ATOM_IS_OPEN_CONTAINER(thing)))
 		return SUBSTANCE_TAKEN_NONE
-	for(var/R in thing.reagents.reagent_volumes)
-		if(!base_storage_capacity[R])
+	for(var/datum/reagent/R in thing.reagents.reagent_list)
+		if(!base_storage_capacity[R.type])
 			continue
-		var/taking_reagent = min(REAGENT_VOLUME(thing.reagents, R), storage_capacity[R] - stored_material[R])
+		var/taking_reagent = min(R.volume, storage_capacity[R.type] - stored_material[R.type])
 		if(taking_reagent <= 0)
 			continue
-		thing.reagents.remove_reagent(R, taking_reagent)
-		stored_material[R] += taking_reagent
+		thing.reagents.remove_reagent(R.type, taking_reagent)
+		stored_material[R.type] += taking_reagent
 		// If we're destroying this, take everything.
 		if(destructive)
 			. = SUBSTANCE_TAKEN_ALL
 			continue
 		// Otherwise take the first applicable and useful reagent.
-		if(stored_material[R] == storage_capacity[R])
+		if(stored_material[R.type] == storage_capacity[R.type])
 			return SUBSTANCE_TAKEN_FULL
 		else if(thing.reagents.total_volume > 0)
 			return SUBSTANCE_TAKEN_SOME
@@ -32,14 +32,14 @@
 	var/stacks_used = 1
 	var/mat_colour = thing.color
 	for(var/mat in thing.matter)
-		var/decl/material/material_def = decls_repository.get_decl(mat)
+		var/material/material_def = SSmaterials.get_material_datum(mat)
 		if(!material_def || !base_storage_capacity[material_def.type])
 			continue
 		var/taking_material = min(thing.matter[mat], storage_capacity[material_def.type] - stored_material[material_def.type])
 		if(taking_material <= 0)
 			continue
 		if(!mat_colour)
-			mat_colour = material_def.color
+			mat_colour = material_def.icon_colour
 		stored_material[material_def.type] += taking_material
 		stacks_used = max(stacks_used, ceil(taking_material/SHEET_MATERIAL_AMOUNT))
 		if(storage_capacity[material_def.type] == stored_material[material_def.type])
@@ -81,30 +81,6 @@
 		return ..()
 	if(stat & (NOPOWER | BROKEN))
 		return
-
-	// Gate some simple interactions beind intent so people can still feed lathes disks.
-	if(user.a_intent != I_HURT)
-
-		// Set or update our local network.
-		if(isMultitool(O))
-			var/datum/extension/local_network_member/fabnet = get_extension(src, /datum/extension/local_network_member)
-			fabnet.get_new_tag(user)
-			return
-
-		// Install new designs.
-		if(istype(O, /obj/item/disk/design_disk))
-			var/obj/item/disk/design_disk/disk = O
-			if(!disk.blueprint)
-				to_chat(usr, SPAN_WARNING("\The [O] is blank."))
-				return
-			if(disk.blueprint in installed_designs)
-				to_chat(usr, SPAN_WARNING("\The [src] is already loaded with the blueprint stored on \the [O]."))
-				return
-			installed_designs += disk.blueprint
-			design_cache |= disk.blueprint
-			visible_message(SPAN_NOTICE("\The [user] inserts \the [O] into \the [src], and after a second or so of loud clicking, the fabricator beeps and spits it out again."))
-			return
-
 	// Take reagents, if any are applicable.
 	var/reagents_taken = take_reagents(O, user)
 	if(reagents_taken != SUBSTANCE_TAKEN_NONE && !has_recycler)
@@ -139,3 +115,8 @@
 		return TRUE
 	interact(user)
 	return TRUE
+
+#undef SUBSTANCE_TAKEN_FULL
+#undef SUBSTANCE_TAKEN_NONE
+#undef SUBSTANCE_TAKEN_SOME
+#undef SUBSTANCE_TAKEN_ALL

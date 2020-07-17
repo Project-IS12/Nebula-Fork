@@ -35,7 +35,9 @@
 	max_temp = INFINITY
 
 /datum/artifact_trigger/temperature/heat/on_hit(obj/O, mob/user)
-	. = ..() || O.get_heat() >= T100C || O.isflamesource()
+	. = ..()
+	if(!. && isflamesource(O))
+		return TRUE
 
 /datum/artifact_trigger/temperature/heat/on_explosion(severity)
 	return TRUE

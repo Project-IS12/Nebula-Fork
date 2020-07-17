@@ -1,5 +1,6 @@
 /obj/machinery/mineral/stacking_machine
 	name = "stacking machine"
+	icon_state = "stacker"
 	console = /obj/machinery/computer/mining
 	input_turf =  EAST
 	output_turf = WEST
@@ -23,7 +24,7 @@
 	if(output_turf)
 		for(var/sheet in stacks)
 			if(stacks[sheet] >= stack_amt)
-				var/decl/material/stackmat = decls_repository.get_decl(sheet)
+				var/material/stackmat = SSmaterials.get_material_datum(sheet)
 				stackmat.place_sheet(output_turf, stack_amt)
 				stacks[sheet] -= stack_amt
 
@@ -46,15 +47,9 @@
 		stack_amt = choice
 		. = TRUE
 	else if(href_list["release_stack"] && stacks[href_list["release_stack"]] > 0)
-		var/decl/material/stackmat = decls_repository.get_decl(href_list["release_stack"])
+		var/material/stackmat = SSmaterials.get_material_datum(href_list["release_stack"])
 		stackmat.place_sheet(output_turf, stacks[href_list["release_stack"]])
 		stacks[href_list["release_stack"]] = 0
 		. = TRUE
 	if(. && console)
 		console.updateUsrDialog()
-
-/obj/machinery/mineral/stacking_machine/on_update_icon()
-	if(panel_open)
-		icon_state = "stacker-open"
-	else
-		icon_state = "stacker"

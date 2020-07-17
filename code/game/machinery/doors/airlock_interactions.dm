@@ -38,7 +38,7 @@
 	return
 
 /obj/structure/window/airlock_crush(var/crush_damage)
-	explosion_act(2)//Smashin windows
+	ex_act(2)//Smashin windows
 
 /obj/machinery/portable_atmospherics/canister/airlock_crush(var/crush_damage)
 	. = ..()

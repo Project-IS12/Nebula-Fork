@@ -1,71 +1,101 @@
 //A portable analyzer, for research borgs.  This is better then giving them a gripper which can hold anything and letting them use the normal analyzer.
 /obj/item/portable_destructive_analyzer
-	name = "portable destructive analyzer"
+	name = "Portable Destructive Analyzer"
 	icon = 'icons/obj/items/borg_module/borg_rnd_analyser.dmi'
 	icon_state = "portable_analyzer"
 	desc = "Similar to the stationary version, this rather unwieldy device allows you to break down objects in the name of science."
-	var/obj/item/loaded_item
-	var/list/saved_tech_levels = list()
 
-/obj/item/portable_destructive_analyzer/attack_self(mob/user)
-	if(!loaded_item)
-		to_chat(user, SPAN_WARNING("There is nothing loaded inside \the [src]."))
-		return TRUE
-	var/choice = input("Do you wish to eject or analyze \the [loaded_item]?", "Portable Analyzer") as null|anything in list("Eject", "Analyze")
-	if(!choice || !QDELETED(loaded_item) || user.incapacitated() || loc != user)
-		return TRUE
-	if(choice == "Eject")
-		loaded_item.dropInto(user.loc)
-		loaded_item = null
-		return TRUE
-	var/confirm = alert(user, "This will destroy the item inside forever. Are you sure?","Confirm Analyze","Yes","No")
-	if(confirm == "Yes" && !QDELETED(loaded_item) && !user.incapacitated() && loc == user)
-		to_chat(user, "You activate the analyzer's microlaser, analyzing \the [loaded_item] and breaking it down.")
-		var/list/tech_found = json_decode(loaded_item.origin_tech)
-		for(var/tech in tech_found)
-			if(saved_tech_levels[tech] < tech_found[tech])
-				saved_tech_levels[tech] = tech_found[tech]
-		flick("portable_analyzer_scan", src)
-		QDEL_NULL(loaded_item)
+	var/min_reliability = 90 //Can't upgrade, call it laziness or a drawback
+
+	var/datum/research/techonly/files 	//The device uses the same datum structure as the R&D computer/server.
+										//This analyzer can only store tech levels, however.
+
+	var/obj/item/loaded_item	//What is currently inside the analyzer.
+
+/obj/item/portable_destructive_analyzer/Initialize()
+	. = ..()
+	files = new /datum/research/techonly(src) //Setup the research data holder.
+
+/obj/item/portable_destructive_analyzer/attack_self(user)
+	var/response = alert(user, 	"Analyzing the item inside will *DESTROY* the item for good.\n\
+							Syncing to the research server will send the data that is stored inside to research.\n\
+							Ejecting will place the loaded item onto the floor.",
+							"What would you like to do?", "Analyze", "Sync", "Eject")
+	if(response == "Analyze")
+		if(loaded_item)
+			var/confirm = alert(user, "This will destroy the item inside forever.  Are you sure?","Confirm Analyze","Yes","No")
+			if(confirm == "Yes" && !QDELETED(loaded_item)) //This is pretty copypasta-y
+				to_chat(user, "You activate the analyzer's microlaser, analyzing \the [loaded_item] and breaking it down.")
+				flick("portable_analyzer_scan", src)
+				playsound(src.loc, 'sound/items/Welder2.ogg', 50, 1)
+				var/list/techlvls = loaded_item.origin_tech ? cached_json_decode(loaded_item.origin_tech) : list()
+				for(var/T in techlvls)
+					files.UpdateTech(T, techlvls[T])
+					to_chat(user, "\The [loaded_item] had level [techlvls[T]] in [CallTechName(T)].")
+				loaded_item = null
+				for(var/obj/I in contents)
+					for(var/mob/M in I.contents)
+						M.death()
+					if(istype(I,/obj/item/stack/material))//Only deconstructs one sheet at a time instead of the entire stack
+						var/obj/item/stack/material/S = I
+						if(S.use(1))
+							loaded_item = S
+						else
+							qdel(S)
+							desc = initial(desc)
+							icon_state = initial(icon_state)
+					else
+						qdel(I)
+						desc = initial(desc)
+						icon_state = initial(icon_state)
+			else
+				return
+		else
+			to_chat(user, "The [src] is empty.  Put something inside it first.")
+	if(response == "Sync")
+		var/success = 0
+		for(var/obj/machinery/r_n_d/server/S in SSmachines.machinery)
+			for(var/datum/tech/T in files.known_tech) //Uploading
+				S.files.AddTech2Known(T)
+			for(var/datum/tech/T in S.files.known_tech) //Downloading
+				files.AddTech2Known(T)
+			success = 1
+			files.RefreshResearch()
+		if(success)
+			to_chat(user, "You connect to the research server, push your data upstream to it, then pull the resulting merged data from the master branch.")
+			playsound(src.loc, 'sound/machines/twobeep.ogg', 50, 1)
+		else
+			to_chat(user, "Reserch server ping response timed out.  Unable to connect.  Please contact the system administrator.")
+			playsound(src.loc, 'sound/machines/buzz-two.ogg', 50, 1)
+	if(response == "Eject")
+		if(loaded_item)
+			loaded_item.dropInto(loc)
+			desc = initial(desc)
+			icon_state = initial(icon_state)
+			loaded_item = null
+		else
+			to_chat(user, "The [src] is already empty.")
+
 
 /obj/item/portable_destructive_analyzer/afterattack(var/atom/target, var/mob/living/user, proximity)
-	if(!istype(target,/obj/item) || !proximity || !isturf(target.loc))
+	if(!target)
 		return
-
-	if(istype(target, /obj/machinery/design_database))
-		var/obj/machinery/design_database/db = target
-		var/transferred = FALSE
-		for(var/tech in saved_tech_levels)
-			if(db.tech_levels[tech] < saved_tech_levels[tech])
-				db.tech_levels[tech] = saved_tech_levels[tech]
-				transferred = TRUE
-		if(transferred)
-			to_chat(user, SPAN_NOTICE("You transfer your saved data into the storage volume of \the [src]."))
-		else
-			to_chat(user, SPAN_NOTICE("You have no saved data that \the [src] doesn't already have!"))
-		return TRUE
-
-	if(loaded_item)
-		to_chat(user, SPAN_WARNING("\The [src] already has something inside.  Analyze or eject it first."))
+	if(!proximity)
 		return
-	var/obj/item/I = target
-	if(!I.origin_tech)
-		to_chat(user, SPAN_WARNING("\The [I] has no interesting data to analyze."))
+	if(!isturf(target.loc)) // Don't load up stuff if it's inside a container or mob!
 		return
-	I.forceMove(src)
-	loaded_item = I
-	visible_message(SPAN_NOTICE("\The [user] adds \the [I] to \the [src]."))
-	flick("portable_analyzer_load", src)
-	icon_state = "portable_analyzer_full"
-
-/obj/item/portable_destructive_analyzer/examine(mob/user, distance)
-	. = ..()
-	if(distance <= 1)
+	if(istype(target,/obj/item))
 		if(loaded_item)
-			to_chat(user, "It is holding \the [loaded_item].")
-		to_chat(user, "It has the following data saved:")
-		for(var/tech in saved_tech_levels)
-			to_chat(user, "[tech]: [saved_tech_levels[tech]]")
+			to_chat(user, "Your [src] already has something inside.  Analyze or eject it first.")
+			return
+		var/obj/item/I = target
+		I.forceMove(src)
+		loaded_item = I
+		for(var/mob/M in viewers())
+			M.show_message(text("<span class='notice'>[user] adds the [I] to the [src].</span>"), 1)
+		desc = initial(desc) + "<br>It is holding \the [loaded_item]."
+		flick("portable_analyzer_load", src)
+		icon_state = "portable_analyzer_full"
 
 /obj/item/party_light
 	name = "party light"
@@ -162,9 +192,85 @@
 // Click on table to unload, click on item to load. Otherwise works identically to a tray.
 // Unlike the base item "tray", robotrays ONLY pick up food, drinks and condiments.
 
-/obj/item/storage/tray/robotray
+/obj/item/tray/robotray
 	name = "RoboTray"
 	desc = "An autoloading tray specialized for carrying refreshments."
+
+/obj/item/tray/robotray/afterattack(atom/target, mob/user, proximity)
+	if(!proximity)
+		return
+	if ( !target )
+		return
+	// pick up items, mostly copied from base tray pickup proc
+	// see code/game/objects/items/weapons/kitchen.dm line 241
+	if ( istype(target,/obj/item))
+		if ( !isturf(target.loc) ) // Don't load up stuff if it's inside a container or mob!
+			return
+		var turf/pickup = target.loc
+
+		var addedSomething = 0
+
+		for(var/obj/item/chems/food/I in pickup)
+
+
+			if( I != src && !I.anchored && !istype(I, /obj/item/clothing/under) && !istype(I, /obj/item/clothing/suit) && !istype(I, /obj/item/projectile) )
+				var/add = I.get_storage_cost()
+				if(calc_carry() + add >= max_carry)
+					break
+
+				I.forceMove(src)
+				carrying.Add(I)
+				overlays += image("icon" = I.icon, "icon_state" = I.icon_state, "layer" = 30 + I.layer)
+				addedSomething = 1
+		if ( addedSomething )
+			user.visible_message("<span class='notice'>\The [user] load some items onto their service tray.</span>")
+
+		return
+
+	// Unloads the tray, copied from base item's proc dropped() and altered
+	// see code/game/objects/items/weapons/kitchen.dm line 263
+
+	if ( isturf(target) || istype(target,/obj/structure/table) )
+		var foundtable = istype(target,/obj/structure/table/)
+		if ( !foundtable ) //it must be a turf!
+			for(var/obj/structure/table/T in target)
+				foundtable = 1
+				break
+
+		var turf/dropspot
+		if ( !foundtable ) // don't unload things onto walls or other silly places.
+			dropspot = user.loc
+		else if ( isturf(target) ) // they clicked on a turf with a table in it
+			dropspot = target
+		else					// they clicked on a table
+			dropspot = target.loc
+
+
+		overlays.Cut()
+
+		var droppedSomething = 0
+
+		for(var/obj/item/I in carrying)
+			I.forceMove(dropspot)
+			carrying.Remove(I)
+			droppedSomething = 1
+			if(!foundtable && isturf(dropspot))
+				// if no table, presume that the person just shittily dropped the tray on the ground and made a mess everywhere!
+				spawn()
+					for(var/i = 1, i <= rand(1,2), i++)
+						if(I)
+							step(I, pick(NORTH,SOUTH,EAST,WEST))
+							sleep(rand(2,4))
+		if ( droppedSomething )
+			if ( foundtable )
+				user.visible_message("<span class='notice'>[user] unloads their service tray.</span>")
+			else
+				user.visible_message("<span class='notice'>[user] drops all the items on their tray.</span>")
+
+	return ..()
+
+
+
 
 // A special pen for service droids. Can be toggled to switch between normal writting mode, and paper rename mode
 // Allows service droids to rename paper items.
@@ -266,7 +372,7 @@
 /obj/item/inflatable_dispenser
 	name = "inflatables dispenser"
 	desc = "Hand-held device which allows rapid deployment and removal of inflatables."
-	icon = 'icons/obj/items/inflatable_dispenser.dmi'
+	icon = 'icons/obj/storage.dmi'
 	icon_state = "inf_deployer"
 	w_class = ITEM_SIZE_LARGE
 

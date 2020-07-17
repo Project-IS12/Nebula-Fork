@@ -1,4 +1,5 @@
 /turf/proc/cultify()
+	ChangeTurf(/turf/space)
 	return
 
 /turf/simulated/floor/cultify()

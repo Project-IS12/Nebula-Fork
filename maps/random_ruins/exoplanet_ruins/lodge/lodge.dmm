@@ -12,7 +12,7 @@
 "d" = (
 /obj/structure/closet/cabinet,
 /obj/item/clothing/under/color/black,
-/obj/item/clothing/shoes/jackboots/jungleboots,
+/obj/item/clothing/shoes/jungleboots,
 /obj/item/clothing/mask/breath,
 /turf/simulated/floor/carpet/green,
 /area/template_noop)
@@ -42,15 +42,15 @@
 /obj/structure/table/woodentable,
 /obj/item/clothing/mask/smokable/pipe/cobpipe,
 /obj/item/storage/chewables/rollable/generic,
-/obj/item/ashtray,
+/obj/item/material/ashtray/bronze,
 /turf/simulated/floor/carpet/green,
 /area/template_noop)
 "k" = (
 /obj/structure/table/woodentable,
-/obj/item/kitchen/utensil/fork/plastic,
-/obj/item/kitchen/utensil/fork/plastic,
-/obj/item/kitchen/utensil/fork/plastic,
-/obj/item/knife/table,
+/obj/item/material/kitchen/utensil/fork/plastic,
+/obj/item/material/kitchen/utensil/fork/plastic,
+/obj/item/material/kitchen/utensil/fork/plastic,
+/obj/item/material/knife/table,
 /obj/effect/floor_decal/spline/fancy/wood/corner{
 	dir = 1
 	},
@@ -58,8 +58,8 @@
 /area/template_noop)
 "l" = (
 /obj/structure/table/woodentable,
-/obj/item/knife/table,
-/obj/item/knife/table,
+/obj/item/material/knife/table,
+/obj/item/material/knife/table,
 /obj/effect/floor_decal/spline/fancy/wood{
 	icon_state = "spline_fancy";
 	dir = 1
@@ -97,7 +97,7 @@
 "q" = (
 /obj/structure/table/woodentable,
 /obj/item/book/manual/detective,
-/obj/item/ashtray,
+/obj/item/material/ashtray/bronze,
 /obj/item/deck/cards,
 /turf/simulated/floor/wood,
 /area/template_noop)
@@ -113,7 +113,7 @@
 /obj/effect/decal/cleanable/blood/drip,
 /obj/effect/decal/cleanable/blood/drip,
 /obj/effect/decal/cleanable/blood/drip,
-/obj/item/knife/kitchen/cleaver,
+/obj/item/material/knife/kitchen/cleaver,
 /turf/simulated/floor/tiled/monotile,
 /area/template_noop)
 "t" = (
@@ -122,6 +122,13 @@
 "u" = (
 /obj/effect/floor_decal/spline/fancy/wood{
 	dir = 4
+	},
+/turf/simulated/floor/tiled/monotile,
+/area/template_noop)
+"v" = (
+/obj/machinery/r_n_d/server/robotics{
+	desc = "A jury-rigged server setup.";
+	name = "low-tech server"
 	},
 /turf/simulated/floor/tiled/monotile,
 /area/template_noop)
@@ -193,7 +200,7 @@
 /area/template_noop)
 "I" = (
 /obj/structure/table/rack,
-/obj/item/gun/projectile/zipgun,
+/obj/item/gun/projectile/pirate,
 /obj/item/storage/box/ammo/shotgunshells,
 /turf/simulated/floor/wood,
 /area/template_noop)
@@ -256,7 +263,7 @@ a
 a
 a
 b
-t
+v
 C
 b
 a

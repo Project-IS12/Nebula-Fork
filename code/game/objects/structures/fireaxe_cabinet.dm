@@ -1,7 +1,6 @@
 /obj/structure/fireaxecabinet
 	name = "fire axe cabinet"
 	desc = "There is small label that reads \"For Emergency use only\" along with details for safe use of the axe. As if."
-	icon = 'icons/obj/structures/fireaxe.dmi'
 	icon_state = "fireaxe"
 	anchored = 1
 	density = 0
@@ -10,7 +9,22 @@
 	var/open
 	var/unlocked
 	var/shattered
-	var/obj/item/twohanded/fireaxe/fireaxe
+	var/obj/item/material/twohanded/fireaxe/fireaxe
+
+/obj/structure/fireaxecabinet/attack_generic(var/mob/user, var/damage, var/attack_verb, var/wallbreaker)
+	attack_animation(user)
+	playsound(user, 'sound/effects/Glasshit.ogg', 50, 1)
+	visible_message("<span class='danger'>[user] [attack_verb] \the [src]!</span>")
+	if(damage_threshold > damage)
+		to_chat(user, "<span class='danger'>Your strike is deflected by the reinforced glass!</span>")
+		return
+	if(shattered)
+		return
+	shattered = 1
+	unlocked = 1
+	open = 1
+	playsound(user, 'sound/effects/Glassbr3.ogg', 100, 1)
+	update_icon()
 
 /obj/structure/fireaxecabinet/on_update_icon()
 	overlays.Cut()
@@ -70,7 +84,7 @@
 		toggle_lock(user)
 		return
 
-	if(istype(O, /obj/item/twohanded/fireaxe))
+	if(istype(O, /obj/item/material/twohanded/fireaxe))
 		if(open)
 			if(fireaxe)
 				to_chat(user, "<span class='warning'>There is already \a [fireaxe] inside \the [src].</span>")
@@ -83,19 +97,7 @@
 
 	if(O.force)
 		user.setClickCooldown(10)
-		attack_animation(user)
-		playsound(user, 'sound/effects/Glasshit.ogg', 50, 1)
-		visible_message("<span class='danger'>[user] [pick(O.attack_verb)] \the [src]!</span>")
-		if(damage_threshold > O.force)
-			to_chat(user, "<span class='danger'>Your strike is deflected by the reinforced glass!</span>")
-			return
-		if(shattered)
-			return
-		shattered = 1
-		unlocked = 1
-		open = 1
-		playsound(user, 'sound/effects/Glassbr3.ogg', 100, 1)
-		update_icon()
+		attack_generic(user, O.force, "bashes")
 		return
 
 	return ..()

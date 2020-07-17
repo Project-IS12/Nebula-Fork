@@ -122,7 +122,7 @@
 /turf/simulated/floor/carpet/red,
 /area/unishi/library)
 "av" = (
-/obj/structure/bookcase,
+/obj/structure/bookcase/manuals/research_and_development,
 /turf/simulated/floor/carpet/red,
 /area/unishi/library)
 "aw" = (
@@ -262,6 +262,7 @@
 "aJ" = (
 /obj/structure/table/standard,
 /obj/item/stock_parts/circuitboard/roboprinter,
+/obj/item/stock_parts/circuitboard/rdserver,
 /obj/item/stock_parts/circuitboard/helm,
 /turf/simulated/floor,
 /area/unishi/common)
@@ -1146,7 +1147,7 @@
 	dir = 4
 	},
 /obj/random/clipboard,
-/obj/item/folder/cyan,
+/obj/item/folder/white,
 /obj/item/pen/reagent/sleepy,
 /turf/simulated/floor/tiled,
 /area/unishi/meeting)
@@ -1196,7 +1197,7 @@
 /turf/simulated/floor/tiled/steel_grid,
 /area/unishi/toxins)
 "dd" = (
-/obj/machinery/vending/bombresearch,
+/obj/machinery/vending/phoronresearch,
 /turf/simulated/floor/tiled/steel_grid,
 /area/unishi/toxins)
 "de" = (
@@ -1344,7 +1345,9 @@
 /turf/simulated/floor/tiled,
 /area/unishi/rnd)
 "dA" = (
-/obj/machinery/design_database,
+/obj/machinery/computer/rdconsole/core{
+	req_access = newlist()
+	},
 /turf/simulated/floor/tiled,
 /area/unishi/rnd)
 "dB" = (
@@ -1549,15 +1552,15 @@
 /turf/simulated/floor,
 /area/unishi/hydro)
 "dX" = (
-/obj/machinery/fabricator/imprinter,
+/obj/machinery/r_n_d/circuit_imprinter,
 /turf/simulated/floor/tiled,
 /area/unishi/rnd)
 "dY" = (
-/obj/machinery/destructive_analyzer,
+/obj/machinery/r_n_d/destructive_analyzer,
 /turf/simulated/floor/tiled,
 /area/unishi/rnd)
 "dZ" = (
-/obj/machinery/fabricator/protolathe,
+/obj/machinery/r_n_d/protolathe,
 /turf/simulated/floor/tiled,
 /area/unishi/rnd)
 "ea" = (
@@ -1697,7 +1700,7 @@
 /turf/simulated/floor/reinforced,
 /area/unishi/xenobio)
 "et" = (
-/obj/structure/window/borosilicate_reinforced{
+/obj/structure/window/phoronreinforced{
 	dir = 4
 	},
 /mob/living/carbon/slime,
@@ -1772,7 +1775,7 @@
 /turf/simulated/floor/reinforced,
 /area/unishi/xenobio)
 "eC" = (
-/obj/structure/window/borosilicate_reinforced{
+/obj/structure/window/phoronreinforced{
 	dir = 4
 	},
 /mob/living/carbon/human/monkey,
@@ -1841,10 +1844,10 @@
 /turf/simulated/floor/reinforced,
 /area/unishi/xenobio)
 "eM" = (
-/obj/structure/window/borosilicate_reinforced{
+/obj/structure/window/phoronreinforced{
 	dir = 4
 	},
-/obj/structure/window/borosilicate_reinforced,
+/obj/structure/window/phoronreinforced,
 /turf/simulated/floor/reinforced,
 /area/unishi/xenobio)
 "eN" = (
@@ -2352,14 +2355,14 @@
 /area/unishi/smresearch)
 "fW" = (
 /obj/machinery/atmospherics/unary/tank/phoron,
-/obj/structure/window/borosilicate_reinforced{
+/obj/structure/window/phoronreinforced{
 	dir = 8
 	},
 /turf/simulated/floor,
 /area/unishi/smresearch)
 "fX" = (
 /obj/machinery/atmospherics/portables_connector,
-/obj/structure/window/borosilicate_reinforced{
+/obj/structure/window/phoronreinforced{
 	dir = 4
 	},
 /obj/item/remains,
@@ -2378,7 +2381,7 @@
 /area/unishi/smresearch)
 "fZ" = (
 /obj/machinery/atmospherics/unary/tank/air,
-/obj/structure/window/borosilicate_reinforced{
+/obj/structure/window/phoronreinforced{
 	dir = 8
 	},
 /turf/simulated/floor,
@@ -2427,8 +2430,8 @@
 /area/unishi/smresearch)
 "gh" = (
 /obj/machinery/atmospherics/binary/pump/high_power,
-/obj/structure/window/borosilicate_reinforced,
-/obj/structure/window/borosilicate_reinforced{
+/obj/structure/window/phoronreinforced,
+/obj/structure/window/phoronreinforced{
 	dir = 8
 	},
 /obj/effect/floor_decal/industrial/loading,
@@ -2437,7 +2440,7 @@
 "gi" = (
 /obj/machinery/atmospherics/binary/pump/high_power,
 /obj/machinery/door/window,
-/obj/structure/window/borosilicate_reinforced{
+/obj/structure/window/phoronreinforced{
 	dir = 4
 	},
 /obj/effect/floor_decal/industrial/loading,
@@ -2446,7 +2449,7 @@
 "gj" = (
 /obj/machinery/atmospherics/binary/pump/high_power,
 /obj/machinery/door/window,
-/obj/structure/window/borosilicate_reinforced{
+/obj/structure/window/phoronreinforced{
 	dir = 8
 	},
 /obj/effect/floor_decal/industrial/loading,
@@ -2454,7 +2457,7 @@
 /area/unishi/smresearch)
 "gk" = (
 /obj/machinery/atmospherics/binary/pump/high_power,
-/obj/structure/window/borosilicate_reinforced,
+/obj/structure/window/phoronreinforced,
 /obj/effect/floor_decal/industrial/loading,
 /turf/simulated/floor,
 /area/unishi/smresearch)
@@ -2467,7 +2470,7 @@
 /area/unishi/smresearch)
 "gm" = (
 /obj/machinery/atmospherics/binary/pump/high_power,
-/obj/structure/window/borosilicate_reinforced,
+/obj/structure/window/phoronreinforced,
 /obj/item/remains,
 /obj/item/clothing/suit/storage/toggle/labcoat/science{
 	name = "\improper labcoat"
@@ -2757,14 +2760,14 @@
 /turf/simulated/floor/tiled/techfloor,
 /area/unishi/smresearch)
 "gQ" = (
-/obj/effect/wingrille_spawn/reinforced_borosilicate/full,
+/obj/effect/wingrille_spawn/reinforced_phoron/full,
 /obj/machinery/atmospherics/pipe/simple/visible/yellow{
 	dir = 4
 	},
 /turf/simulated/floor,
 /area/unishi/smresearch)
 "gR" = (
-/obj/effect/wingrille_spawn/reinforced_borosilicate/full,
+/obj/effect/wingrille_spawn/reinforced_phoron/full,
 /obj/machinery/atmospherics/pipe/simple/heat_exchanging/junction,
 /obj/machinery/atmospherics/pipe/simple/visible/yellow{
 	dir = 4
@@ -2772,7 +2775,7 @@
 /turf/simulated/floor,
 /area/unishi/smresearch)
 "gS" = (
-/obj/effect/wingrille_spawn/reinforced_borosilicate/full,
+/obj/effect/wingrille_spawn/reinforced_phoron/full,
 /obj/machinery/atmospherics/pipe/manifold/visible/yellow{
 	icon_state = "map";
 	dir = 4
@@ -2780,7 +2783,7 @@
 /turf/simulated/floor,
 /area/unishi/smresearch)
 "gT" = (
-/obj/effect/wingrille_spawn/reinforced_borosilicate/full,
+/obj/effect/wingrille_spawn/reinforced_phoron/full,
 /turf/simulated/floor,
 /area/unishi/smresearch)
 "gU" = (
@@ -2916,7 +2919,7 @@
 /turf/simulated/floor/tiled/techfloor,
 /area/unishi/smresearch)
 "hm" = (
-/obj/effect/wingrille_spawn/reinforced_borosilicate/full,
+/obj/effect/wingrille_spawn/reinforced_phoron/full,
 /obj/machinery/atmospherics/pipe/simple/visible/red{
 	icon_state = "intact";
 	dir = 4
@@ -3024,7 +3027,7 @@
 /turf/simulated/floor,
 /area/unishi/smresearch)
 "hC" = (
-/obj/structure/window/borosilicate_reinforced{
+/obj/structure/window/phoronreinforced{
 	dir = 4
 	},
 /turf/simulated/floor,

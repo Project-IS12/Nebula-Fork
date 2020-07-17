@@ -45,11 +45,11 @@ var/global/list/datum/supply_drop_loot/supply_drop
 /datum/supply_drop_loot/ballistics/New()
 	..()
 	contents = list(
-		/obj/item/gun/projectile/pistol,
+		/obj/item/gun/projectile/pistol/sec,
 		/obj/item/gun/projectile/shotgun/doublebarrel,
-		/obj/item/gun/projectile/shotgun/pump,
-		/obj/item/gun/projectile/automatic/smg,
-		/obj/item/gun/projectile/automatic/assault_rifle)
+		/obj/item/gun/projectile/shotgun/pump/combat,
+		/obj/item/gun/projectile/automatic/sec_smg,
+		/obj/item/gun/projectile/automatic/bullpup_rifle)
 
 /datum/supply_drop_loot/ballistics
 	name = "Ballistics"
@@ -57,11 +57,11 @@ var/global/list/datum/supply_drop_loot/supply_drop
 /datum/supply_drop_loot/ballistics/New()
 	..()
 	contents = list(
-		/obj/item/gun/projectile/pistol,
+		/obj/item/gun/projectile/pistol/sec,
 		/obj/item/gun/projectile/shotgun/doublebarrel,
-		/obj/item/gun/projectile/shotgun/pump,
-		/obj/item/gun/projectile/automatic/smg,
-		/obj/item/gun/projectile/automatic/assault_rifle)
+		/obj/item/gun/projectile/shotgun/pump/combat,
+		/obj/item/gun/projectile/automatic/sec_smg,
+		/obj/item/gun/projectile/automatic/bullpup_rifle)
 
 /datum/supply_drop_loot/seeds
 	name = "Seeds"
@@ -117,8 +117,8 @@ var/global/list/datum/supply_drop_loot/supply_drop
 		/obj/item/clothing/suit/armor/riot,
 		/obj/item/clothing/suit/armor/vest,
 		/obj/item/clothing/suit/armor/vest,
-		/obj/item/clothing/suit/armor/vest/heavy,
-		/obj/item/clothing/suit/armor/vest/heavy,
+		/obj/item/clothing/suit/storage/vest,
+		/obj/item/clothing/suit/storage/vest,
 		/obj/item/clothing/suit/armor/laserproof,
 		/obj/item/clothing/suit/armor/bulletproof)
 
@@ -151,7 +151,7 @@ var/global/list/datum/supply_drop_loot/supply_drop
 		/obj/item/storage/firstaid/o2,
 		/obj/item/storage/firstaid/adv,
 		/obj/item/chems/glass/bottle/antitoxin,
-		/obj/item/chems/glass/bottle/stabilizer,
+		/obj/item/chems/glass/bottle/adrenaline,
 		/obj/item/chems/glass/bottle/sedatives,
 		/obj/item/storage/box/syringes,
 		/obj/item/storage/box/autoinjectors)

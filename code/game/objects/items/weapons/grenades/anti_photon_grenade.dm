@@ -6,10 +6,10 @@
 	item_state = "emp"
 	det_time = 20
 	origin_tech = "{'bluespace':4,'materials':4}"
-	material = /decl/material/solid/metal/steel
+	material = MAT_STEEL
 	matter = list(
-		/decl/material/solid/glass = MATTER_AMOUNT_REINFORCEMENT,
-		/decl/material/solid/gemstone/diamond = MATTER_AMOUNT_TRACE
+		MAT_GLASS = MATTER_AMOUNT_REINFORCEMENT,
+		MAT_DIAMOND = MATTER_AMOUNT_TRACE
 	)
 
 /obj/item/grenade/anti_photon/detonate()

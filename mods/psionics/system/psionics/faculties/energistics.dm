@@ -85,7 +85,7 @@
 		if(istype(pew))
 			playsound(pew.loc, pew_sound, 25, 1)
 			pew.original = target
-			pew.current = target
+			//pew.current = target
 			pew.starting = get_turf(user)
 			pew.shot_from = user
 			pew.launch(target, user.zone_sel.selecting, (target.x-user.x), (target.y-user.y))

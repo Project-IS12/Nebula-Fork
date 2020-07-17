@@ -23,7 +23,7 @@
 
 	meat_type = /obj/item/chems/food/snacks/meat/corgi
 	meat_amount = 3
-	skin_material = /decl/material/solid/skin/fur/orange
+	skin_material = MAT_SKIN_FUR_ORANGE
 
 	var/obj/item/inventory_head
 	var/obj/item/inventory_back
@@ -199,13 +199,3 @@
 				sleep(1)
 				if(QDELETED(src) || client)
 					return
-
-/mob/living/simple_animal/corgi/harvest_skin()
-	. = ..()
-	. += new/obj/item/corgi_hide(get_turf(src))
-
-/obj/item/corgi_hide
-	name = "corgi hide"
-	desc = "The by-product of corgi farming."
-	icon = 'icons/obj/items/sheet_hide.dmi'
-	icon_state = "sheet-corgi"

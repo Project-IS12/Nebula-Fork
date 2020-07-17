@@ -95,6 +95,7 @@ var/list/admin_verbs_admin = list(
 	/client/proc/list_traders,
 	/client/proc/add_trader,
 	/client/proc/remove_trader,
+	/client/proc/toggle_right_click,
 	/datum/admins/proc/sendFax,
 )
 var/list/admin_verbs_ban = list(
@@ -140,7 +141,7 @@ var/list/admin_verbs_spawn = list(
 	)
 var/list/admin_verbs_server = list(
 	/datum/admins/proc/capture_map_part,
-	/client/proc/set_holiday,
+	/client/proc/Set_Holiday,
 	/datum/admins/proc/startnow,
 	/datum/admins/proc/endnow,
 	/datum/admins/proc/restart,
@@ -205,8 +206,7 @@ var/list/admin_verbs_debug = list(
 	/client/proc/visualpower_remove,
 	/client/proc/ping_webhook,
 	/client/proc/reload_webhooks,
-	/datum/admins/proc/check_unconverted_single_icon_items,
-	/client/proc/spawn_material
+	/datum/admins/proc/check_unconverted_single_icon_items
 	)
 
 var/list/admin_verbs_paranoid_debug = list(
@@ -262,7 +262,7 @@ var/list/admin_verbs_hideable = list(
 	/client/proc/cmd_admin_create_centcom_report,
 	/client/proc/toggle_random_events,
 	/client/proc/cmd_admin_add_random_ai_law,
-	/client/proc/set_holiday,
+	/client/proc/Set_Holiday,
 	/datum/admins/proc/startnow,
 	/datum/admins/proc/endnow,
 	/datum/admins/proc/restart,
@@ -745,26 +745,34 @@ var/list/admin_verbs_mod = list(
 			return
 	var/new_facial = input("Please select facial hair color.", "Character Generation") as color
 	if(new_facial)
-		M.facial_hair_colour = new_facial
+		M.r_facial = hex2num(copytext(new_facial, 2, 4))
+		M.g_facial = hex2num(copytext(new_facial, 4, 6))
+		M.b_facial = hex2num(copytext(new_facial, 6, 8))
 
 	var/new_hair = input("Please select hair color.", "Character Generation") as color
-	if(new_hair)
-		M.hair_colour = new_hair
+	if(new_facial)
+		M.r_hair = hex2num(copytext(new_hair, 2, 4))
+		M.g_hair = hex2num(copytext(new_hair, 4, 6))
+		M.b_hair = hex2num(copytext(new_hair, 6, 8))
 
 	var/new_eyes = input("Please select eye color.", "Character Generation") as color
 	if(new_eyes)
-		M.eye_colour = new_eyes
+		M.r_eyes = hex2num(copytext(new_eyes, 2, 4))
+		M.g_eyes = hex2num(copytext(new_eyes, 4, 6))
+		M.b_eyes = hex2num(copytext(new_eyes, 6, 8))
 		M.update_eyes()
 
 	var/new_skin = input("Please select body color.", "Character Generation") as color
 	if(new_skin)
-		M.skin_colour = new_skin
+		M.r_skin = hex2num(copytext(new_skin, 2, 4))
+		M.g_skin = hex2num(copytext(new_skin, 4, 6))
+		M.b_skin = hex2num(copytext(new_skin, 6, 8))
 
 	var/new_tone = input("Please select skin tone level: 1-220 (1=albino, 35=caucasian, 150=black, 220='very' black)", "Character Generation")  as text
 
 	if (new_tone)
-		M.skin_tone = max(min(round(text2num(new_tone)), 220), 1)
-		M.skin_tone =  -M.skin_tone + 35
+		M.s_tone = max(min(round(text2num(new_tone)), 220), 1)
+		M.s_tone =  -M.s_tone + 35
 
 	// hair
 	var/new_hstyle = input(usr, "Select a hair style", "Grooming")  as null|anything in GLOB.hair_styles_list
@@ -896,3 +904,16 @@ var/list/admin_verbs_mod = list(
 	T.add_spell(new S)
 	SSstatistics.add_field_details("admin_verb","GS") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 	log_and_message_admins("gave [key_name(T)] the spell [S].")
+
+
+//A verb so that admins can toggle right click if they need to use debug stuff. - Matt
+/client/proc/toggle_right_click()
+	set name = "Toggle Right Click"
+	set category = "Admin"
+
+	if(!show_popup_menus)
+		show_popup_menus = TRUE
+		to_chat(src, "<span class='interface'>Right click enabled.</span>")
+	else
+		show_popup_menus = FALSE
+		to_chat(src, "<span class='interface'>Right click disabled.</span>")

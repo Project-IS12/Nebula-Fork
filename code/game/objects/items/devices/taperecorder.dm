@@ -6,8 +6,8 @@
 	item_state = "analyzer"
 	w_class = ITEM_SIZE_SMALL
 
-	material = /decl/material/solid/metal/aluminium
-	matter = list(/decl/material/solid/glass = MATTER_AMOUNT_REINFORCEMENT)
+	material = MAT_ALUMINIUM
+	matter = list(MAT_GLASS = MATTER_AMOUNT_REINFORCEMENT)
 
 	var/emagged = 0.0
 	var/recording = 0.0
@@ -387,10 +387,10 @@
 	icon_state = "tape_white"
 	item_state = "analyzer"
 	w_class = ITEM_SIZE_TINY
-	material = /decl/material/solid/plastic
+	material = MAT_PLASTIC
 	matter = list(
-		/decl/material/solid/metal/steel = MATTER_AMOUNT_REINFORCEMENT,
-		/decl/material/solid/glass = MATTER_AMOUNT_TRACE
+		MAT_STEEL = MATTER_AMOUNT_REINFORCEMENT,
+		MAT_GLASS = MATTER_AMOUNT_TRACE
 	)
 	force = 1
 	throwforce = 0

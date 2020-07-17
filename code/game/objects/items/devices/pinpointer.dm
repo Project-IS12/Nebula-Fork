@@ -1,12 +1,12 @@
 /obj/item/pinpointer
 	name = "pinpointer"
-	icon = 'icons/obj/items/device/pinpointer.dmi'
+	icon = 'icons/obj/pinpointer.dmi'
 	icon_state = "pinoff"
 	obj_flags = OBJ_FLAG_CONDUCTIBLE
 	slot_flags = SLOT_BELT
 	w_class = ITEM_SIZE_SMALL
 	item_state = "electronic"
-	material = /decl/material/solid/metal/steel
+	material = MAT_STEEL
 	var/weakref/target
 	var/active = 0
 	var/beeping = 2
@@ -101,7 +101,7 @@
 		overlays += image(icon,"pin_up")
 		return
 
-	set_dir(get_dir(here, there))
+	dir = get_dir(here,there)
 	var/image/pointer = image(icon,"pin_point")
 	var/distance = get_dist(here,there)
 	if(distance < world.view)
@@ -116,8 +116,8 @@
 /obj/item/pinpointer/radio
 	name = "locator device"
 	desc = "Used to scan and locate signals on a particular frequency."
-	material = /decl/material/solid/metal/aluminium
-	matter = list(/decl/material/solid/glass = MATTER_AMOUNT_REINFORCEMENT)
+	material = MAT_ALUMINIUM
+	matter = list(MAT_GLASS = MATTER_AMOUNT_REINFORCEMENT)
 	var/tracking_freq = PUB_FREQ
 
 /obj/item/pinpointer/radio/acquire_target()

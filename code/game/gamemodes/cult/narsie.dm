@@ -264,8 +264,7 @@ var/global/list/narsie_list = list()
 			var/turf/T2 = A
 			T2.ChangeTurf(get_base_turf_by_area(A))
 
-/obj/singularity/narsie/explosion_act(severity) //No throwing bombs at it either. --NEO
-	SHOULD_CALL_PARENT(FALSE)
+/obj/singularity/narsie/ex_act(severity) //No throwing bombs at it either. --NEO
 	return
 
 /obj/singularity/narsie/proc/pickcultist() //Narsie rewards his cultists with being devoured first, then picks a ghost to follow. --NEO
@@ -347,12 +346,12 @@ var/global/list/narsie_list = list()
 	grav_pull = 0
 
 /obj/singularity/narsie/wizard/eat()
-	for (var/turf/T in RANGE_TURFS(src, consume_range))
+	for (var/turf/T in trange(consume_range, src))
 		consume(T)
 
 /obj/singularity/narsie/proc/narsie_spawn_animation()
 	icon = 'icons/obj/narsie_spawn_anim.dmi'
-	set_dir(SOUTH)
+	dir = SOUTH
 	move_self = 0
 	flick("narsie_spawn_anim",src)
 	sleep(11)

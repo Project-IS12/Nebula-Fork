@@ -10,7 +10,8 @@
 
 	tally += species.handle_movement_delay_special(src)
 
-	if(!has_gravity())
+	var/area/a = get_area(src)
+	if(a && !a.has_gravity())
 		if(skill_check(SKILL_EVA, SKILL_PROF))
 			tally -= 2
 		tally -= 1
@@ -59,6 +60,9 @@
 	if (bodytemperature < species.cold_discomfort_level)
 		tally += (species.cold_discomfort_level - bodytemperature) / 10 * 1.75
 
+	if(zoomed)
+		tally += 3
+
 	tally += max(2 * stance_damage, 0) //damaged/missing feet or legs is slow
 
 	if(mRun in mutations)
@@ -70,38 +74,31 @@
 	. = ..()
 	. += species.strength
 
-/mob/living/carbon/human/Process_Spacemove(var/allow_movement)
-	var/obj/item/tank/jetpack/thrust = get_jetpack()
-
-	if(thrust && thrust.on && (allow_movement || thrust.stabilization_on) && thrust.allow_thrust(0.01, src))
-		return 1
-
+/mob/living/carbon/human/Allow_Spacemove(var/check_drift = 0)
 	. = ..()
+	if(.)
+		return
 
-
-/mob/living/carbon/human/space_do_move(var/allow_move, var/direction)
-	if(allow_move == 1)
-		var/obj/item/tank/jetpack/thrust = get_jetpack()
-		if(thrust && thrust.on && prob(skill_fail_chance(SKILL_EVA, 10, SKILL_ADEPT)))
-			to_chat(src, "<span class='warning'>You fumble with [thrust] controls!</span>")
-			if(prob(50))
-				thrust.toggle()
-			if(prob(50))
-				thrust.stabilization_on = 0
-			SetMoveCooldown(15)	//2 seconds of random rando panic drifting
-			step(src, pick(GLOB.alldirs))
-			return 0
-
-	. = ..()
-
-/mob/living/carbon/human/proc/get_jetpack()
+	//Do we have a working jetpack?
+	var/obj/item/tank/jetpack/thrust
 	if(back)
 		if(istype(back,/obj/item/tank/jetpack))
-			return back
+			thrust = back
 		else if(istype(back,/obj/item/rig))
 			var/obj/item/rig/rig = back
 			for(var/obj/item/rig_module/maneuvering_jets/module in rig.installed_modules)
-				return module.jets
+				thrust = module.jets
+				break
+
+	if(thrust && thrust.on)
+		if(prob(skill_fail_chance(SKILL_EVA, 10, SKILL_ADEPT)))
+			to_chat(src, "<span class='warning'>You fumble with [thrust] controls!</span>")
+			inertia_dir = pick(GLOB.cardinal)
+			return 0
+
+		if(((!check_drift) || (check_drift && thrust.stabilization_on)) && (!lying) && (thrust.allow_thrust(0.01, src)))
+			inertia_dir = 0
+			return 1
 
 /mob/living/carbon/human/slip_chance(var/prob_slip = 5)
 	if(!..())
@@ -127,7 +124,7 @@
 	if(.) //We moved
 		handle_exertion()
 		handle_leg_damage()
-	
+
 		if(client)
 			var/turf/B = GetAbove(src)
 			up_hint.icon_state = "uphint[(B ? B.is_open() : 0)]"
@@ -137,7 +134,7 @@
 		return
 	var/lac_chance =  10 * encumbrance()
 	if(lac_chance && prob(skill_fail_chance(SKILL_HAULING, lac_chance)))
-		make_reagent(1, /decl/material/liquid/lactate)
+		make_reagent(1, /datum/reagent/lactate)
 		adjust_hydration(-DEFAULT_THIRST_FACTOR)
 		switch(rand(1,20))
 			if(1)

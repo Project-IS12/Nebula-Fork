@@ -357,7 +357,7 @@
 		if(Rad.anchored)
 			if(!Rad.P)
 				var/obj/item/tank/phoron/Phoron = new/obj/item/tank/phoron(Rad)
-				Phoron.air_contents.gas[/decl/material/solid/phoron] = 70
+				Phoron.air_contents.gas[MAT_PHORON] = 70
 				Rad.drainratio = 0
 				Rad.P = Phoron
 				Phoron.forceMove(Rad)
@@ -481,14 +481,3 @@
 
 	images -= powernet_markers
 	QDEL_NULL_LIST(powernet_markers)
-
-/client/proc/spawn_material()
-	set category = "Debug"
-	set name = "Spawn Material Stack"
-	if(!check_rights(R_DEBUG)) return
-
-	var/material = input("Select material to spawn") as null|anything in SSmaterials.materials_by_name
-	if(!material)
-		return
-	var/decl/material/M = decls_repository.get_decl(material)
-	new M.stack_type(get_turf(mob), 50, M)

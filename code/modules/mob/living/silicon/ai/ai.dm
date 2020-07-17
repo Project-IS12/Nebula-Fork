@@ -736,18 +736,17 @@ var/list/ai_verbs_default = list(
 	set name = "Change Grid Color"
 	set category = "Silicon Commands"
 
-	var/f_color = input("Choose your color, dark colors are not recommended!") as color|null
-	if(!length(f_color))
+	var/f_color = input("Choose your color, dark colors are not recommended!") as color
+	var/list/black_list = list("#000000","#080808", "#111111", "#1c1c1c", "#292929", "#333333","#4d4d4d")
+	if(f_color in black_list)
+		to_chat(usr, SPAN_WARNING("Color \"[f_color]\" is not allowed!"))
 		return
-
-	var/area/A = get_area(src)
-	if(!A)
+	if(!f_color)
 		return
-
+	var/area/A = get_area(usr)
 	for(var/turf/simulated/floor/bluegrid/F in A)
 		F.color = f_color
-
-	to_chat(usr, SPAN_NOTICE("Proccessing strata color was changed to \"<font color='[f_color]'>[f_color]</font>\""))
+	to_chat(usr, SPAN_NOTICE("Proccessing strata color was change to [f_color]"))
 
 /mob/living/silicon/ai/proc/show_crew_monitor()
 	set category = "Silicon Commands"

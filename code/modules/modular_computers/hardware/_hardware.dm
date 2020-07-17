@@ -1,7 +1,7 @@
 /obj/item/stock_parts/computer/
 	name = "Hardware"
 	desc = "Unknown Hardware."
-	icon = 'icons/obj/items/stock_parts/modular_components.dmi'
+	icon = 'icons/obj/modular_components.dmi'
 	part_flags = PART_FLAG_HAND_REMOVE
 	var/power_usage = 0 			// If the hardware uses extra power, change this.
 	var/enabled = 1					// If the hardware is turned off set this to 0.
@@ -29,9 +29,8 @@
 
 /obj/item/stock_parts/computer/Destroy()
 	if(istype(loc, /obj/item/modular_computer))
-		var/datum/extension/assembly/modular_computer/assembly = get_extension(loc, /datum/extension/assembly)
-		if(assembly)
-			assembly.uninstall_component(null, src)
+		var/obj/item/modular_computer/C = loc
+		C.uninstall_component(null, src)
 	return ..()
 
 // Handles damage checks

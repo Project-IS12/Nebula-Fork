@@ -16,6 +16,8 @@
 		body = new /obj/item/mech_component/chassis/powerloader(src)
 		body.color = "#ffdc37"
 
+	body.armour = new /obj/item/robot_parts/robot_component/armour/exosuit(src)
+
 	. = ..()
 
 /mob/living/exosuit/premade/powerloader/spawn_mech_equipment()
@@ -38,7 +40,7 @@
 	move_delay = 4
 	turn_delay = 4
 	power_use = 10
-	material = /decl/material/solid/metal/steel
+	material = MAT_STEEL
 
 /obj/item/mech_component/sensors/powerloader
 	name = "exosuit sensors"
@@ -65,7 +67,7 @@
 
 /obj/item/mech_component/chassis/powerloader/prebuild()
 	. = ..()
-	m_armour = new /obj/item/robot_parts/robot_component/armour/exosuit(src)
+	armour = new /obj/item/robot_parts/robot_component/armour/exosuit(src)
 
 /obj/item/mech_component/chassis/powerloader/Initialize()
 	pilot_positions = list(
@@ -114,7 +116,7 @@
 		body = new /obj/item/mech_component/chassis/heavy(src)
 		body.color = "#385b3c"
 
-	material = decls_repository.get_decl(/decl/material/solid/metal/plasteel/ocp)
+	material = SSmaterials.get_material_datum(MAT_OSMIUM_CARBIDE_PLASTEEL)
 
 /mob/living/exosuit/premade/firefighter/spawn_mech_equipment()
 	..()

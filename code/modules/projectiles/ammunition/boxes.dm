@@ -1,46 +1,43 @@
 /obj/item/ammo_magazine/speedloader
-	icon_state = ICON_STATE_WORLD
+	name = "speed loader"
+	desc = "A speed loader for revolvers."
+	icon_state = "spdloader"
+	caliber = CALIBER_PISTOL
+	ammo_type = /obj/item/ammo_casing/pistol
+	matter = list(MAT_STEEL = 1260)
+	max_ammo = 6
+	multiple_sprites = 1
+
+/obj/item/ammo_magazine/speedloader/rubber
+	labels = list("rubber")
+	ammo_type = /obj/item/ammo_casing/pistol/rubber
+
+/obj/item/ammo_magazine/speedloader/magnum
+	icon_state = "spdloader_magnum"
 	caliber = CALIBER_PISTOL_MAGNUM
 	ammo_type = /obj/item/ammo_casing/pistol/magnum
-	material = /decl/material/solid/metal/steel
+	material = MAT_STEEL
 	max_ammo = 6
-	on_mob_icon = 'icons/obj/ammo/speedloader.dmi'
-	var/list/global/bullet_offsets = list(
-		list("x" = 0, "y" = 0),
-		list("x" = -2, "y" = -3),
-		list("x" = -2, "y" = -7),
-		list("x" = 0, "y" = -10),
-		list("x" = 2, "y" = -7),
-		list("x" = 2, "y" = -3)
-	)
+	multiple_sprites = 1
 
-/obj/item/ammo_magazine/speedloader/on_update_icon()
-	cut_overlays()
-	if(!length(stored_ammo))
-		return
-	switch(icon_state)
-		if("world")
-			var/ammo_state = "world-some"
-			if(length(stored_ammo) == 1)
-				ammo_state = "world-one"
-			else if(length(stored_ammo) == max_ammo)
-				ammo_state = "world-full"
-			var/obj/item/ammo_casing/A = stored_ammo[1]
-			add_overlay(overlay_image(icon, ammo_state, A.color, RESET_COLOR))
-			add_overlay(overlay_image(icon, "[ammo_state]-bullets", A.bullet_color, flags = RESET_COLOR))
-			if(A.marking_color)
-				add_overlay(overlay_image(icon, "[ammo_state]-markings", A.marking_color, RESET_COLOR))
-		if("inventory")
-			for(var/i = 1 to length(stored_ammo))
-				var/obj/item/ammo_casing/A = stored_ammo[i]
-				var/image/I = overlay_image(icon, "casing", A.color, RESET_COLOR)
-				if(A.marking_color)
-					I.overlays += overlay_image(icon, "marking", A.marking_color, RESET_COLOR)
-				if(A.BB)
-					I.overlays += overlay_image(icon, "bullet", A.bullet_color, RESET_COLOR)
-				I.pixel_x = bullet_offsets[i]["x"]
-				I.pixel_y = bullet_offsets[i]["y"]
-				add_overlay(I)
+/obj/item/ammo_magazine/speedloader/small
+	name = "speed loader"
+	icon_state = "spdloader_small"
+	caliber = CALIBER_PISTOL_SMALL
+	ammo_type = /obj/item/ammo_casing/pistol/small
+	matter = list(MAT_STEEL = 1060)
+	max_ammo = 6
+	multiple_sprites = 1
+
+/obj/item/ammo_magazine/speedloader/clip
+	name = "stripper clip"
+	desc = "A stripper clip for bolt action rifles."
+	icon_state = "clip"
+	caliber = CALIBER_RIFLE
+	ammo_type = /obj/item/ammo_casing/rifle
+	matter = list(MAT_STEEL = 1800)
+	max_ammo = 5
+	multiple_sprites = 1
 
 /obj/item/ammo_magazine/shotholder
 	name = "shotgun slug holder"
@@ -48,7 +45,7 @@
 	icon_state = "shotholder"
 	caliber = CALIBER_SHOTGUN
 	ammo_type = /obj/item/ammo_casing/shotgun
-	material = /decl/material/solid/metal/steel
+	material = MAT_STEEL
 	max_ammo = 4
 	multiple_sprites = 1
 	var/marking_color
@@ -79,48 +76,75 @@
 /obj/item/ammo_magazine/shotholder/beanbag
 	name = "beanbag shell holder"
 	ammo_type = /obj/item/ammo_casing/shotgun/beanbag
-	material = /decl/material/solid/metal/steel
+	material = MAT_STEEL
 	marking_color = COLOR_PAKISTAN_GREEN
 
 /obj/item/ammo_magazine/shotholder/flash
 	name = "illumination shell holder"
 	ammo_type = /obj/item/ammo_casing/shotgun/flash
-	material = /decl/material/solid/metal/steel
-	matter = list(/decl/material/solid/glass = MATTER_AMOUNT_REINFORCEMENT)
+	material = MAT_STEEL
+	matter = list(MAT_GLASS = MATTER_AMOUNT_REINFORCEMENT)
 	marking_color = COLOR_PALE_YELLOW
 
 /obj/item/ammo_magazine/shotholder/stun
 	name = "stun shell holder"
 	ammo_type = /obj/item/ammo_casing/shotgun/stunshell
-	material = /decl/material/solid/metal/steel
-	matter = list(/decl/material/solid/glass = MATTER_AMOUNT_REINFORCEMENT)
+	material = MAT_STEEL
+	matter = list(MAT_GLASS = MATTER_AMOUNT_REINFORCEMENT)
 	marking_color = COLOR_MUZZLE_FLASH
 
 /obj/item/ammo_magazine/shotholder/empty
 	name = "shotgun ammunition holder"
-	material = /decl/material/solid/metal/steel
+	material = MAT_STEEL
 	initial_ammo = 0
 
-/obj/item/ammo_magazine/smg
+/obj/item/ammo_magazine/machine_pistol
+	name = "stick magazine"
+	icon_state = "machine_pistol"
+	mag_type = MAGAZINE
+	ammo_type = /obj/item/ammo_casing/pistol
+	matter = list(MAT_STEEL = 1200)
+	caliber = CALIBER_PISTOL
+	max_ammo = 16
+	multiple_sprites = 1
+
+/obj/item/ammo_magazine/machine_pistol/empty
+	initial_ammo = 0
+
+/obj/item/ammo_magazine/smg_top
 	name = "top mounted magazine"
 	icon_state = "smg_top"
 	mag_type = MAGAZINE
 	ammo_type = /obj/item/ammo_casing/pistol/small
-	material = /decl/material/solid/metal/steel
+	material = MAT_STEEL
 	caliber = CALIBER_PISTOL_SMALL
+	max_ammo = 20
+	multiple_sprites = 1
+
+/obj/item/ammo_magazine/smg_top/empty
+	initial_ammo = 0
+
+/obj/item/ammo_magazine/smg_top/rubber
+	labels = list("rubber")
+	ammo_type = /obj/item/ammo_casing/pistol/small/rubber
+
+/obj/item/ammo_magazine/smg_top/practice
+	labels = list("practice")
+	ammo_type = /obj/item/ammo_casing/pistol/small/practice
+
+/obj/item/ammo_magazine/smg
+	name = "box magazine"
+	icon_state = "smg"
+	origin_tech = "{'combat':2}"
+	mag_type = MAGAZINE
+	caliber = CALIBER_PISTOL
+	matter = list(MAT_STEEL = 1500)
+	ammo_type = /obj/item/ammo_casing/pistol
 	max_ammo = 20
 	multiple_sprites = 1
 
 /obj/item/ammo_magazine/smg/empty
 	initial_ammo = 0
-
-/obj/item/ammo_magazine/smg/rubber
-	labels = list("rubber")
-	ammo_type = /obj/item/ammo_casing/pistol/small/rubber
-
-/obj/item/ammo_magazine/smg/practice
-	labels = list("practice")
-	ammo_type = /obj/item/ammo_casing/pistol/small/practice
 
 /obj/item/ammo_magazine/pistol
 	name = "pistol magazine"
@@ -128,7 +152,7 @@
 	origin_tech = "{'combat':2}"
 	mag_type = MAGAZINE
 	caliber = CALIBER_PISTOL
-	material = /decl/material/solid/metal/steel
+	material = MAT_STEEL
 	ammo_type = /obj/item/ammo_casing/pistol
 	max_ammo = 10
 	multiple_sprites = 1
@@ -140,9 +164,23 @@
 	labels = list("rubber")
 	ammo_type = /obj/item/ammo_casing/pistol/rubber
 
+/obj/item/ammo_magazine/pistol/double
+	name = "doublestack pistol magazine"
+	icon_state = "pistol"
+	matter = list(MAT_STEEL = 1050)
+	max_ammo = 15
+
+/obj/item/ammo_magazine/pistol/double/rubber
+	labels = list("rubber")
+	ammo_type = /obj/item/ammo_casing/pistol/rubber
+
+/obj/item/ammo_magazine/pistol/double/practice
+	labels = list("practice")
+	ammo_type = /obj/item/ammo_casing/pistol/practice
+
 /obj/item/ammo_magazine/pistol/small
 	icon_state = "holdout"
-	material = /decl/material/solid/metal/steel
+	material = MAT_STEEL
 	caliber = CALIBER_PISTOL_SMALL
 	ammo_type = /obj/item/ammo_casing/pistol/small
 	max_ammo = 8
@@ -150,11 +188,24 @@
 /obj/item/ammo_magazine/pistol/small/empty
 	initial_ammo = 0
 
+/obj/item/ammo_magazine/magnum
+	name = "magazine"
+	icon_state = "magnum"
+	mag_type = MAGAZINE
+	caliber = CALIBER_PISTOL_MAGNUM
+	matter = list(MAT_STEEL = 1680)
+	ammo_type = /obj/item/ammo_casing/pistol/magnum
+	max_ammo = 7
+	multiple_sprites = 1
+
+/obj/item/ammo_magazine/magnum/empty
+	initial_ammo = 0
+
 /obj/item/ammo_magazine/box/smallpistol
 	name = "ammunition box"
 	icon_state = "smallpistol"
 	origin_tech = "{'combat':2}"
-	material = /decl/material/solid/metal/steel
+	material = MAT_STEEL
 	caliber = CALIBER_PISTOL_SMALL
 	ammo_type = /obj/item/ammo_casing/pistol/small
 	max_ammo = 30
@@ -164,12 +215,17 @@
 	icon_state = "smallpistol"
 	origin_tech = "{'combat':2}"
 	caliber = CALIBER_PISTOL
-	material = /decl/material/solid/metal/steel
+	material = MAT_STEEL
 	ammo_type = /obj/item/ammo_casing/pistol
 	max_ammo = 30
 
 /obj/item/ammo_magazine/box/pistol/empty
 	initial_ammo = 0
+
+/obj/item/ammo_magazine/pistol/throwback
+	name = "pistol magazine"
+	caliber = CALIBER_PISTOL_ANTIQUE
+	ammo_type = /obj/item/ammo_casing/pistol/throwback
 
 /obj/item/ammo_magazine/box/emp/pistol
 	name = "ammunition box"
@@ -187,23 +243,68 @@
 	caliber = CALIBER_PISTOL_SMALL
 	max_ammo = 8
 
+/obj/item/ammo_magazine/proto_smg
+	name = "submachine gun magazine"
+	icon_state = CALIBER_PISTOL_FLECHETTE
+	mag_type = MAGAZINE
+	caliber = CALIBER_PISTOL_FLECHETTE
+	matter = list(MAT_STEEL = 2000)
+	ammo_type = /obj/item/ammo_casing/flechette
+	max_ammo = 40
+	multiple_sprites = 1
+
+/obj/item/ammo_magazine/gyrojet
+	name = "microrocket magazine"
+	icon_state = "gyrojet"
+	mag_type = MAGAZINE
+	caliber = CALIBER_GYROJET
+	ammo_type = /obj/item/ammo_casing/gyrojet
+	multiple_sprites = 1
+	max_ammo = 4
+
+/obj/item/ammo_magazine/gyrojet/empty
+	initial_ammo = 0
+
+/obj/item/ammo_magazine/box/machinegun
+	name = "magazine box"
+	icon_state = "machinegun"
+	mag_type = MAGAZINE
+	caliber = CALIBER_RIFLE
+	matter = list(MAT_STEEL = 4500)
+	ammo_type = /obj/item/ammo_casing/rifle
+	max_ammo = 50
+	multiple_sprites = 1
+
+/obj/item/ammo_magazine/box/machinegun/empty
+	initial_ammo = 0
+
 /obj/item/ammo_magazine/rifle
 	name = "assault rifle magazine"
-	icon_state = "bullup"
+	icon_state = "assault_rifle"
 	origin_tech = "{'combat':2}"
 	mag_type = MAGAZINE
 	caliber = CALIBER_RIFLE
-	material = /decl/material/solid/metal/steel
+	material = MAT_STEEL
 	ammo_type = /obj/item/ammo_casing/rifle
-	max_ammo = 15 //if we lived in a world where normal mags had 30 rounds, this would be a 20 round mag
+	max_ammo = 20
 	multiple_sprites = 1
 
-/obj/item/ammo_magazine/rifle/empty
+/obj/item/ammo_magazine/mil_rifle
+	name = "assault rifle magazine"
+	icon_state = "bullup"
+	mag_type = MAGAZINE
+	caliber = CALIBER_RIFLE_MILITARY
+	matter = list(MAT_STEEL = 1800)
+	ammo_type = /obj/item/ammo_casing/rifle/military
+	max_ammo = 20 //if we lived in a world where normal mags had 30 rounds, this would be a 20 round mag
+	multiple_sprites = 1
+
+/obj/item/ammo_magazine/mil_rifle/empty
 	initial_ammo = 0
 
-/obj/item/ammo_magazine/rifle/practice
+/obj/item/ammo_magazine/mil_rifle/practice
 	labels = list("practice")
-	ammo_type = /obj/item/ammo_casing/rifle/practice
+	ammo_type = /obj/item/ammo_casing/rifle/military/practice
 
 /obj/item/ammo_magazine/caps
 	name = "speed loader"
@@ -211,10 +312,6 @@
 	icon_state = "T38"
 	caliber = CALIBER_CAPS
 	ammo_type = /obj/item/ammo_casing/cap
-	material = /decl/material/solid/metal/steel
+	material = MAT_STEEL
 	max_ammo = 7
 	multiple_sprites = 1
-
-/obj/item/ammo_magazine/speedloader/laser_revolver
-	caliber = CALIBER_PISTOL_LASBULB
-	ammo_type = /obj/item/ammo_casing/lasbulb

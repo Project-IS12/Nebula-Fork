@@ -1,3 +1,5 @@
+#ifdef UNIT_TEST
+
 /datum/unit_test/virtual
 	name = "VIRTUAL - Template"
 	template = /datum/unit_test/virtual
@@ -106,3 +108,5 @@
 /obj/effect/landmark/virtual_spawn/one
 /obj/effect/landmark/virtual_spawn/two
 /obj/effect/landmark/virtual_spawn/three
+
+#endif

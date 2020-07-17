@@ -33,7 +33,6 @@
 		update_icon()
 
 /turf/simulated/ocean/on_update_icon(update_neighbors)
-	. = ..(update_neighbors)
-	cut_overlays()
+	..(update_neighbors)
 	if(detail_decal)
-		add_overlay(image(icon = 'icons/turf/mining_decals.dmi', icon_state = detail_decal))
+		overlays += image(icon = 'icons/turf/mining_decals.dmi', icon_state = detail_decal)

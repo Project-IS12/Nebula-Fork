@@ -171,12 +171,11 @@
 //**********************
 /obj/item/storage/backpack/chameleon
 	name = "backpack"
+	icon_state = "backpack"
+	item_state = "backpack"
 	desc = "A backpack outfitted with cloaking tech. It seems to have a small dial inside, kept away from the storage."
 	origin_tech = "{'esoteric':3}"
 	item_flags = ITEM_FLAG_INVALID_FOR_CHAMELEON
-	icon = 'icons/obj/items/storage/backpack/backpack.dmi'
-	on_mob_icon = 'icons/obj/items/storage/backpack/backpack.dmi'
-
 	var/global/list/clothing_choices
 
 /obj/item/storage/backpack/chameleon/Initialize()
@@ -206,10 +205,8 @@
 
 /obj/item/clothing/gloves/chameleon
 	name = "black gloves"
-	icon_state = ICON_STATE_WORLD
-	color = COLOR_GRAY40
-	icon = 'icons/clothing/hands/gloves_generic.dmi'
-	on_mob_icon = 'icons/clothing/hands/gloves_generic.dmi'
+	icon_state = "black"
+	item_state = "bgloves"
 	desc = "It looks like a pair of gloves, but it seems to have a small dial inside."
 	origin_tech = "{'esoteric':3}"
 	item_flags = ITEM_FLAG_INVALID_FOR_CHAMELEON
@@ -404,7 +401,7 @@
 		P.icon_state = initial(copy_projectile.icon_state)
 		P.pass_flags = initial(copy_projectile.pass_flags)
 		P.hitscan = initial(copy_projectile.hitscan)
-		P.step_delay = initial(copy_projectile.step_delay)
+		P.speed = initial(copy_projectile.speed)
 		P.muzzle_type = initial(copy_projectile.muzzle_type)
 		P.tracer_type = initial(copy_projectile.tracer_type)
 		P.impact_type = initial(copy_projectile.impact_type)

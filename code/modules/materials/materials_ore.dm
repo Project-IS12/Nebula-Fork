@@ -12,7 +12,7 @@
 		matter[material.type] = SHEET_MATERIAL_AMOUNT
 		name =       material.ore_name
 		desc =       material.ore_desc ? material.ore_desc : "A lump of ore."
-		color =      material.color
+		color =      material.icon_colour
 		icon_state = material.ore_icon_overlay
 		if(material.ore_desc)
 			desc = material.ore_desc
@@ -30,35 +30,30 @@
 			H.eye_blurry += 10
 			QDEL_IN(src, 1)
 
-/obj/item/ore/explosion_act(var/severity)
-	SHOULD_CALL_PARENT(FALSE)
-	if(severity == 1 && prob(25))
-		qdel(src)
-
 // Map definitions.
 /obj/item/ore/uranium
-	material = /decl/material/solid/mineral/pitchblende
+	material = MAT_PITCHBLENDE
 /obj/item/ore/iron
-	material = /decl/material/solid/mineral/hematite
+	material = MAT_HEMATITE
 /obj/item/ore/coal
-	material = /decl/material/solid/mineral/graphite
+	material = MAT_GRAPHITE
 /obj/item/ore/glass
-	material = /decl/material/solid/mineral/sand
+	material = MAT_SAND
 /obj/item/ore/silver
-	material = /decl/material/solid/metal/silver
+	material = MAT_SILVER
 /obj/item/ore/gold
-	material = /decl/material/solid/metal/gold
+	material = MAT_GOLD
 /obj/item/ore/diamond
-	material = /decl/material/solid/gemstone/diamond
+	material = MAT_DIAMOND
 /obj/item/ore/osmium
-	material = /decl/material/solid/metal/platinum
+	material = MAT_PLATINUM
 /obj/item/ore/hydrogen
-	material = /decl/material/solid/metallic_hydrogen
+	material = MAT_METALLIC_HYDROGEN
 /obj/item/ore/slag
-	material = /decl/material/solid/slag
-/obj/item/ore/phosphorite
-	material = /decl/material/solid/mineral/phosphorite
+	material = MAT_WASTE
+/obj/item/ore/phoron
+	material = MAT_PHORON
 /obj/item/ore/aluminium
-	material = /decl/material/solid/mineral/bauxite
+	material = MAT_BAUXITE
 /obj/item/ore/rutile
-	material = /decl/material/solid/mineral/rutile
+	material = MAT_RUTILE

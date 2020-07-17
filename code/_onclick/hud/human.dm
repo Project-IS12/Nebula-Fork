@@ -71,7 +71,7 @@
 		using.SetName("movement method")
 		using.icon = ui_style
 		using.icon_state = mymob.move_intent.hud_icon_state
-		using.screen_loc = ui_movi
+		using.screen_loc = ui_pull_resist//ui_movi
 		using.color = ui_color
 		using.alpha = ui_alpha
 		src.adding += using
@@ -179,7 +179,7 @@
 		mymob.healths.SetName("health")
 		mymob.healths.screen_loc = ui_health
 		hud_elements |= mymob.healths
-		
+
 		mymob.oxygen = new /obj/screen/oxygen()
 		mymob.oxygen.icon = 'icons/mob/status_indicators.dmi'
 		mymob.oxygen.icon_state = "oxy0"
@@ -249,6 +249,14 @@
 		mymob.up_hint.screen_loc = ui_up_hint
 		hud_elements |= mymob.up_hint
 
+	if(hud_data.has_fixeye)
+		mymob.fixeye = new /obj/screen()
+		mymob.fixeye.SetName("fixeye")
+		mymob.fixeye.icon = ui_style
+		mymob.fixeye.icon_state = "fixeye"
+		mymob.fixeye.screen_loc = ui_fixeye
+		hud_elements |= mymob.fixeye
+
 	mymob.pain = new /obj/screen/fullscreen/pain( null )
 	hud_elements |= mymob.pain
 
@@ -260,13 +268,24 @@
 	mymob.zone_sel.overlays += image('icons/mob/zone_sel.dmi', "[mymob.zone_sel.selecting]")
 	hud_elements |= mymob.zone_sel
 
+	mymob.pain = new /obj/screen( null )
+	mymob.pain.icon = ui_style
+	mymob.pain.icon_state = "blank"
+	mymob.pain.name = "pain"
+	mymob.pain.screen_loc = "WEST,SOUTH to EAST,NORTH"
+	mymob.pain.plane = HUD_PLANE
+	mymob.pain.layer = UNDER_HUD_LAYER
+	mymob.pain.mouse_opacity = 0
+	hud_elements |= mymob.pain
+
+	/*
 	//Handle the gun settings buttons
 	mymob.gun_setting_icon = new /obj/screen/gun/mode(null)
 	mymob.gun_setting_icon.icon = ui_style
 	mymob.gun_setting_icon.color = ui_color
 	mymob.gun_setting_icon.alpha = ui_alpha
 	hud_elements |= mymob.gun_setting_icon
-
+	*/
 	mymob.item_use_icon = new /obj/screen/gun/item(null)
 	mymob.item_use_icon.icon = ui_style
 	mymob.item_use_icon.color = ui_color
@@ -300,7 +319,7 @@
 		client.screen -= hud_used.hotkeybuttons
 		hud_used.hotkey_ui_hidden = 1
 
-// Yes, these use icon state. Yes, these are terrible. The alternative is duplicating 
+// Yes, these use icon state. Yes, these are terrible. The alternative is duplicating
 // a bunch of fairly blobby logic for every click override on these objects.
 
 /obj/screen/food/Click(var/location, var/control, var/params)

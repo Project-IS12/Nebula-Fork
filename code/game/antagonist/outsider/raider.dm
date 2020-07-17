@@ -34,8 +34,8 @@ GLOBAL_DATUM_INIT(raiders, /datum/antagonist/raider, new)
 	var/list/raider_shoes = list(
 		/obj/item/clothing/shoes/jackboots,
 		/obj/item/clothing/shoes/workboots,
-		/obj/item/clothing/shoes/color/brown,
-		/obj/item/clothing/shoes/dress
+		/obj/item/clothing/shoes/brown,
+		/obj/item/clothing/shoes/laceup
 		)
 
 	var/list/raider_glasses = list(
@@ -66,23 +66,33 @@ GLOBAL_DATUM_INIT(raiders, /datum/antagonist/raider, new)
 
 	var/list/raider_guns = list(
 		/obj/item/gun/energy/laser,
-		/obj/item/gun/projectile/revolver/lasvolver,
+		/obj/item/gun/energy/retro,
 		/obj/item/gun/energy/xray,
+		/obj/item/gun/energy/xray/pistol,
+		/obj/item/gun/energy/mindflayer,
 		/obj/item/gun/energy/toxgun,
+		/obj/item/gun/energy/stunrevolver,
 		/obj/item/gun/energy/ionrifle,
 		/obj/item/gun/energy/taser,
 		/obj/item/gun/energy/crossbow/largecrossbow,
 		/obj/item/gun/launcher/crossbow,
 		/obj/item/gun/launcher/grenade/loaded,
 		/obj/item/gun/launcher/pneumatic,
-		/obj/item/gun/projectile/automatic/smg,
+		/obj/item/gun/projectile/automatic/machine_pistol,
+		/obj/item/gun/projectile/automatic/merc_smg,
+		/obj/item/gun/projectile/automatic/sec_smg,
 		/obj/item/gun/projectile/automatic/assault_rifle,
 		/obj/item/gun/projectile/shotgun/pump,
+		/obj/item/gun/projectile/shotgun/pump/combat,
 		/obj/item/gun/projectile/shotgun/doublebarrel,
+		/obj/item/gun/projectile/shotgun/doublebarrel/pellet,
 		/obj/item/gun/projectile/shotgun/doublebarrel/sawn,
+		/obj/item/gun/projectile/pistol/sec,
 		/obj/item/gun/projectile/pistol/holdout,
 		/obj/item/gun/projectile/revolver,
-		/obj/item/gun/projectile/zipgun
+		/obj/item/gun/projectile/pirate,
+		/obj/item/gun/projectile/revolver/medium,
+		/obj/item/gun/projectile/pistol/throwback
 		)
 
 	var/list/raider_holster = list(
@@ -182,7 +192,7 @@ GLOBAL_DATUM_INIT(raiders, /datum/antagonist/raider, new)
 
 	//Give some of the raiders a pirate gun as a secondary
 	if(prob(60))
-		var/obj/item/secondary = new /obj/item/gun/projectile/zipgun(T)
+		var/obj/item/secondary = new /obj/item/gun/projectile/pirate(T)
 		if(!(primary.slot_flags & SLOT_HOLSTER))
 			holster = new new_holster(T)
 			var/datum/extension/holster/H = get_extension(holster, /datum/extension/holster)

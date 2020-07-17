@@ -100,9 +100,10 @@
 		return
 
 	if(istype(O,/obj/item/stack/material))
-		var/decl/material/material = O.get_material()
-		if(!material)
-			to_chat(user, SPAN_NOTICE("\The [material.solid_name] cannot be ground down to any usable reagents."))
+		var/obj/item/stack/material/stack = O
+		var/material/material = stack.get_material()
+		if(!LAZYLEN(material.chem_products))
+			to_chat(user, SPAN_NOTICE("\The [material.display_name] is unable to produce any usable reagents."))
 			return TRUE
 
 	else if(!O.reagents?.total_volume)
@@ -133,9 +134,8 @@
 
 	data["beakercontents"] = list()
 	if(beaker?.reagents)
-		for(var/rtype in beaker.reagents.reagent_volumes)
-			var/decl/material/R = decls_repository.get_decl(rtype)
-			data["beakercontents"] += "<b>[capitalize(R.name)]</b> ([REAGENT_VOLUME(beaker.reagents, rtype)]u)"
+		for(var/datum/reagent/R in beaker.reagents.reagent_list)
+			data["beakercontents"] += "<b>[capitalize(R.name)]</b> ([R.volume]u)"
 
 	ui = SSnano.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if(!ui)
@@ -204,22 +204,31 @@
 
 		var/obj/item/stack/material/stack = O
 		if(istype(stack))
-			var/decl/material/material = stack.get_material()
-			if(!material)
+			var/material/material = stack.get_material()
+			if(!LAZYLEN(material.chem_products))
 				break
 
-			var/amount_to_take = max(0,min(stack.amount, Floor(remaining_volume / REAGENT_UNITS_PER_MATERIAL_SHEET)))
+			var/list/chem_products = material.chem_products
+			var/sheet_volume = 0
+			for(var/chem in chem_products)
+				sheet_volume += chem_products[chem]
+
+			var/amount_to_take = max(0,min(stack.amount,round(remaining_volume/sheet_volume)))
 			if(amount_to_take)
 				stack.use(amount_to_take)
 				if(QDELETED(stack))
 					holdingitems -= stack
-				beaker.reagents.add_reagent(material.type, (amount_to_take * REAGENT_UNITS_PER_MATERIAL_SHEET * skill_factor))
+				for(var/chem in chem_products)
+					beaker.reagents.add_reagent(chem, (amount_to_take*chem_products[chem]*skill_factor))
 				continue
 
-		else if(O.reagents)
+		if(O.reagents)
 			O.reagents.trans_to(beaker, O.reagents.total_volume, skill_factor)
-			holdingitems -= O
-			qdel(O)
+			if(O.reagents.total_volume == 0)
+				holdingitems -= O
+				qdel(O)
+			if (beaker.reagents.total_volume >= beaker.reagents.maximum_volume)
+				break
 
 /obj/machinery/reagentgrinder/proc/end_grind(mob/user)
 	inuse = FALSE
@@ -238,7 +247,7 @@
 	user.visible_message(SPAN_DANGER("\The [user]'s hand gets caught in \the [src]!"), SPAN_DANGER("Your hand gets caught in \the [src]!"))
 	user.apply_damage(dam, BRUTE, hand, damage_flags = DAM_SHARP, used_weapon = "grinder")
 	if(BP_IS_PROSTHETIC(hand_organ))
-		beaker.reagents.add_reagent(/decl/material/solid/metal/iron, dam)
+		beaker.reagents.add_reagent(/datum/reagent/iron, dam)
 	else
 		user.take_blood(beaker, dam)
 	user.Stun(2)

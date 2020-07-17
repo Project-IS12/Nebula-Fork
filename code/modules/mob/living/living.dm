@@ -132,6 +132,7 @@ default behaviour is:
 					for(var/obj/structure/window/win in get_step(AM,t))
 						now_pushing = 0
 						return
+				AM.glide_size = glide_size
 				step(AM, t)
 				if (istype(AM, /mob/living))
 					var/mob/living/tmob = AM
@@ -177,9 +178,11 @@ default behaviour is:
 	return can_move_mob(tmob, 1, 0)
 
 /mob/living/verb/succumb()
-	set hidden = 1
-	if ((src.health < src.maxHealth/2)) // Health below half of maxhealth.
-		src.adjustBrainLoss(src.health + src.maxHealth * 2) // Deal 2x health in BrainLoss damage, as before but variable.
+	set name = "Succumb"
+	set category = "IC"
+	set desc = "Succumbs to your injuries if they are too great."
+	if ((health < maxHealth/2) || is_asystole()) // Health below half of maxhealth or you're in crit.
+		adjustBrainLoss(health +maxHealth * 2) // Deal 2x health in BrainLoss damage, as before but variable.
 		updatehealth()
 		to_chat(src, "<span class='notice'>You have given up life and succumbed to death.</span>")
 
@@ -425,7 +428,7 @@ default behaviour is:
 	ear_deaf = 0
 	ear_damage = 0
 	drowsyness = 0
-	drugged = 0
+	druggy = 0
 	jitteriness = 0
 	confused = 0
 
@@ -640,10 +643,13 @@ default behaviour is:
 		return
 	return 1
 
-/mob/living/carbon/get_contained_external_atoms()
-	. = contents.Copy()
-	. -= internal_organs
-	. -= organs
+//Organs should not be removed via inventory procs.
+/mob/living/carbon/drop_from_inventory(var/obj/item/W, var/atom/Target = null)
+	if(W in internal_organs)
+		return
+	if(W in organs)
+		return
+	. = ..()
 
 //damage/heal the mob ears and adjust the deaf amount
 /mob/living/adjustEarDamage(var/damage, var/deaf)
@@ -759,21 +765,19 @@ default behaviour is:
 	if(!can_drown() || !loc.is_flooded(lying))
 		return FALSE
 	if(prob(5))
-		var/obj/effect/fluid/F = locate() in loc
-		to_chat(src, SPAN_DANGER("You choke and splutter as you inhale [(F?.reagents && F.reagents.get_primary_reagent_name()) || "liquid"]!"))
-		F?.reagents?.trans_to_holder(get_ingested_reagents(), min(F.reagents.total_volume, rand(2,5)))
-
+		to_chat(src, SPAN_DANGER("You choke and splutter as you inhale water!"))
 	var/turf/T = get_turf(src)
 	T.show_bubbles()
 	return TRUE // Presumably chemical smoke can't be breathed while you're underwater.
 
-/mob/living/fluid_act(var/datum/reagents/fluids)
+/mob/living/water_act(var/depth)
 	..()
+	wash_mob(src)
 	for(var/thing in get_equipped_items(TRUE))
 		if(isnull(thing)) continue
 		var/atom/movable/A = thing
-		if(A.simulated)
-			A.fluid_act(fluids)
+		if(A.simulated && !A.waterproof)
+			A.water_act(depth)
 
 /mob/living/proc/nervous_system_failure()
 	return FALSE
@@ -844,7 +848,8 @@ default behaviour is:
 
 /mob/living/handle_grab_damage()
 	..()
-	if(!has_gravity())
+	var/area/A = get_area(src)
+	if(!A.has_gravity)
 		return
 	if(isturf(loc) && pull_damage() && prob(getBruteLoss() / 6))
 		blood_splatter(loc, src, large = TRUE)
@@ -860,6 +865,3 @@ default behaviour is:
 
 /mob/living/proc/can_do_special_ranged_attack(var/check_flag = TRUE)
 	return TRUE
-
-/mob/living/proc/get_ingested_reagents()
-	return reagents

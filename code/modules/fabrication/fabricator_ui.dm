@@ -3,8 +3,6 @@
 /obj/machinery/fabricator/ui_interact(mob/user, ui_key = "rcon", datum/nanoui/ui=null, force_open=1)
 	var/list/data = list()
 
-	var/datum/extension/network_device/D = get_extension(src, /datum/extension/network_device)
-	data["network"] = D.network_tag
 	data["category"] =   show_category
 	data["functional"] = is_functioning()
 
@@ -21,7 +19,7 @@
 			material_data["stored"] =      "[stored_material[material]][SHEET_UNIT]"
 			material_data["max"] =         storage_capacity[material]
 			material_data["eject_key"] =   stored_substances_to_names[material]
-			material_data["eject_label"] = ispath(material, /decl/material) ? "Eject" : "Flush"
+			material_data["eject_label"] = ispath(material, /material) ? "Eject" : "Flush"
 			data["material_storage"] +=    list(material_data)
 
 		var/list/current_build = list()
@@ -50,10 +48,8 @@
 			data["build_queue"] += list(order_data)
 
 		data["build_options"] = list()
-		for(var/datum/fabricator_recipe/R in design_cache)
-			if(R.hidden && !(fab_status_flags & FAB_HACKED))
-				continue
-			if(show_category != "All" && show_category != R.category)
+		for(var/datum/fabricator_recipe/R in SSfabrication.get_recipes(fabricator_class))
+			if(R.hidden && !(fab_status_flags & FAB_HACKED) || (show_category != "All" && show_category != R.category))
 				continue
 			var/list/build_option = list()
 			var/max_sheets = 0

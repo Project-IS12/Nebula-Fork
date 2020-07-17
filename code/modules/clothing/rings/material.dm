@@ -7,9 +7,9 @@
 /obj/item/clothing/ring/material/set_material(var/new_material)
 	. = ..()
 	if(istype(material))
-		name = "[material.solid_name] ring"
-		desc = "A ring made from [material.solid_name]."
-		color = material.color
+		name = "[material.display_name] ring"
+		desc = "A ring made from [material.display_name]."
+		color = material.icon_colour
 
 /obj/item/clothing/ring/material/attackby(var/obj/item/S, var/mob/user)
 	if(S.sharp)
@@ -17,7 +17,7 @@
 		if(!user.stat && !user.incapacitated() && user.Adjacent(src) && S.loc == user)
 			if(!inscription)
 				return
-			desc = "A ring made from [material.solid_name]."
+			desc = "A ring made from [material.display_name]."
 			to_chat(user, "<span class='warning'>You carve \"[inscription]\" into \the [src].</span>")
 			desc += "<br>Written on \the [src] is the inscription \"[inscription]\""
 
@@ -34,18 +34,18 @@
 	. += " <a href='?src=\ref[src];examine=1'>\[View\]</a>"
 
 /obj/item/clothing/ring/material/wood
-	material = /decl/material/solid/wood/walnut
+	material = MAT_WALNUT
 /obj/item/clothing/ring/material/plastic
-	material = /decl/material/solid/plastic
+	material = MAT_PLASTIC
 /obj/item/clothing/ring/material/steel
-	material = /decl/material/solid/metal/steel
+	material = MAT_STEEL
 /obj/item/clothing/ring/material/silver
-	material = /decl/material/solid/metal/silver
+	material = MAT_SILVER
 /obj/item/clothing/ring/material/gold
-	material = /decl/material/solid/metal/gold
+	material = MAT_GOLD
 /obj/item/clothing/ring/material/platinum
-	material = /decl/material/solid/metal/platinum
+	material = MAT_PLATINUM
 /obj/item/clothing/ring/material/bronze
-	material = /decl/material/solid/metal/bronze
+	material = MAT_BRONZE
 /obj/item/clothing/ring/material/glass
-	material = /decl/material/solid/glass
+	material = MAT_GLASS

@@ -10,11 +10,7 @@
 		/datum/exoplanet_theme = 100,
 		/datum/exoplanet_theme/robotic_guardians = 10
 	)
-	map_generators = list(
-		/datum/random_map/automata/cave_system/mountains/volcanic, 
-		/datum/random_map/noise/exoplanet/volcanic, 
-		/datum/random_map/noise/ore/filthy_rich
-	)
+	map_generators = list(/datum/random_map/automata/cave_system/mountains/volcanic, /datum/random_map/noise/exoplanet/volcanic, /datum/random_map/noise/ore/filthy_rich)
 	ruin_tags_blacklist = RUIN_HABITAT|RUIN_WATER
 	surface_color = "#261e19"
 	water_color = "#c74d00"
@@ -86,14 +82,14 @@
 /datum/random_map/automata/cave_system/mountains/volcanic
 	iterations = 2
 	descriptor = "space volcanic mountains"
-	wall_type =  /turf/simulated/wall/natural/volcanic
-	mineral_turf =  /turf/simulated/wall/natural/random/volcanic
+	wall_type =  /turf/simulated/mineral/volcanic
+	mineral_turf =  /turf/simulated/mineral/random/volcanic
 	rock_color = COLOR_DARK_GRAY
 
-/datum/random_map/automata/cave_system/mountains/volcanic/get_additional_spawns(value, var/turf/simulated/wall/natural/T)
+/datum/random_map/automata/cave_system/mountains/volcanic/get_additional_spawns(value, var/turf/simulated/mineral/T)
 	..()
 	if(use_area && istype(T))
-		T.floor_type = prob(90) ? use_area.base_turf : /turf/simulated/floor/exoplanet/lava
+		T.mined_turf = prob(90) ? use_area.base_turf : /turf/simulated/floor/exoplanet/lava
 
 /turf/simulated/floor/exoplanet/lava
 	name = "lava"
@@ -148,3 +144,15 @@
 
 /turf/simulated/floor/exoplanet/lava/get_footstep_sound(var/mob/caller)
 	return get_footstep(/decl/footsteps/lava, caller)
+
+/turf/simulated/mineral/volcanic
+	name = "volcanic rock"
+	color = COLOR_DARK_GRAY
+
+/turf/simulated/mineral/random/volcanic
+	name = "volcanic rock"
+	color = COLOR_DARK_GRAY
+
+/turf/simulated/mineral/random/high_chance/volcanic
+	name = "volcanic rock"
+	color = COLOR_DARK_GRAY

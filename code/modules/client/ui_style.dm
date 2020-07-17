@@ -33,6 +33,9 @@ var/all_tooltip_styles = list(
 		to_chat(usr, "<span class='warning'>You must be human to use this verb.</span>")
 		return
 
+	if(usr.using_alt_hud)
+		return
+
 	var/UI_style_new = input(usr, "Select a style. White is recommended for customization") as null|anything in all_ui_styles
 	if(!UI_style_new) return
 

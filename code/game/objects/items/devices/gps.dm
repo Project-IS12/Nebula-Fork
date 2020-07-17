@@ -5,16 +5,16 @@
 	icon_state = "locator"
 	item_state = "locator"
 	origin_tech = "{'materials':2,'programming':2,'bluespace':2}"
-	material = /decl/material/solid/metal/aluminium
+	material = MAT_ALUMINIUM
 	matter = list(
-		/decl/material/solid/metal/steel = MATTER_AMOUNT_REINFORCEMENT,
-		/decl/material/solid/glass = MATTER_AMOUNT_TRACE
+		MAT_STEEL = MATTER_AMOUNT_REINFORCEMENT,
+		MAT_GLASS = MATTER_AMOUNT_TRACE
 	)
 	w_class = ITEM_SIZE_SMALL
-	material = /decl/material/solid/metal/aluminium
+	material = MAT_ALUMINIUM
 	matter = list(
-		/decl/material/solid/metal/steel = MATTER_AMOUNT_REINFORCEMENT,
-		/decl/material/solid/glass = MATTER_AMOUNT_TRACE
+		MAT_STEEL = MATTER_AMOUNT_REINFORCEMENT,
+		MAT_GLASS = MATTER_AMOUNT_TRACE
 	)
 
 /obj/item/gps/attack_self(var/mob/user)

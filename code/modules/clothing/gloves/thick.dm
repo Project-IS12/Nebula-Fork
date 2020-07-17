@@ -11,21 +11,21 @@
 	color = COLOR_GRAY20
 	icon = 'icons/clothing/hands/gloves_thick.dmi'
 	on_mob_icon = 'icons/clothing/hands/gloves_thick.dmi'
-	icon_state = ICON_STATE_WORLD
+	icon_state = "world"
 	force = 5
 	sprite_sheets = null
 	armor = list(
-		melee = ARMOR_MELEE_RESISTANT, 
-		bullet = ARMOR_BALLISTIC_PISTOL, 
+		melee = ARMOR_MELEE_RESISTANT,
+		bullet = ARMOR_BALLISTIC_PISTOL,
 		laser = ARMOR_LASER_HANDGUNS,
-		energy = ARMOR_ENERGY_SMALL, 
-		bomb = ARMOR_BOMB_RESISTANT, 
+		energy = ARMOR_ENERGY_SMALL,
+		bomb = ARMOR_BOMB_RESISTANT,
 		bio = ARMOR_BIO_MINOR)
 
 /obj/item/clothing/gloves/thick/swat
 	desc = "These tactical gloves are somewhat fire and impact-resistant."
 	name = "\improper SWAT Gloves"
-		
+
 /obj/item/clothing/gloves/thick/combat //Combined effect of SWAT gloves and insulated gloves
 	desc = "These tactical gloves are somewhat fire and impact resistant."
 	name = "combat gloves"
@@ -36,7 +36,7 @@
 	desc = "These work gloves protect against thorns, barbs, prickles, spikes and other harmful objects of floral origin."
 	applies_material_colour = TRUE
 	applies_material_name = TRUE
-	material = /decl/material/solid/leather
+	material = MAT_LEATHER_GENERIC
 
 /obj/item/clothing/gloves/thick/botany/on_update_icon()
 	. = ..()
@@ -55,19 +55,14 @@
 	desc = "These brown duty gloves are made from a durable synthetic."
 	color = COLOR_BEASTY_BROWN
 
-/obj/item/clothing/gloves/thick/craftable
-	name = "gauntlets"
-	desc = "Made to be thrown at scoundrels. Pretty heavy."
-	icon = 'icons/clothing/hands/gauntlets.dmi'
-	on_mob_icon = 'icons/clothing/hands/gauntlets.dmi'
-	material = /decl/material/solid/metal/steel
-	material_armor_multiplier = 1
-	applies_material_colour = TRUE
-	applies_material_name = TRUE
 
-/obj/item/clothing/gloves/thick/craftable/set_material(var/new_material)
-	..()
-	if(material.conductive)
-		siemens_coefficient = 1
-	if(material.is_brittle())
-		item_flags &= ~ITEM_FLAG_THICKMATERIAL
+/obj/item/clothing/gloves/thick/sbgloves
+	name = "Red Baron gloves"
+	desc = "Protects your hands."
+	icon_state = "sbgloves"
+	icon = 'icons/obj/clothing/obj_hands.dmi'
+	on_mob_icon = 'icons/mob/onmob/onmob_hands.dmi'
+
+/obj/item/clothing/gloves/thick/sbgloves/blue
+	name = "Blue Eagle gloves"
+	icon_state = "blueteam"

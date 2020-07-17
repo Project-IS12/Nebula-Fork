@@ -168,6 +168,20 @@
 	if(get_status() != LIGHT_OK)
 		set_light(0)
 
+/obj/machinery/light/attack_generic(var/mob/user, var/damage)
+	if(!damage)
+		return
+	var/status = get_status()
+	if(status == LIGHT_EMPTY || status == LIGHT_BROKEN)
+		to_chat(user, "That object is useless to you.")
+		return
+	if(!(status == LIGHT_OK||status == LIGHT_BURNED))
+		return
+	visible_message("<span class='danger'>[user] smashes the light!</span>")
+	attack_animation(user)
+	broken()
+	return 1
+
 /obj/machinery/light/proc/set_mode(var/new_mode)
 	if(current_mode != new_mode)
 		current_mode = new_mode
@@ -379,13 +393,17 @@
 // explosion effect
 // destroy the whole light fixture or just shatter it
 
-/obj/machinery/light/explosion_act(severity)
-	. = ..()
-	if(. && !QDELETED(src))
-		if(severity == 1)
-			physically_destroyed()
-		else if((severity == 2 && prob(75)) || (severity == 3 && prob(50)))
-			broken()
+/obj/machinery/light/ex_act(severity)
+	switch(severity)
+		if(1)
+			qdel(src)
+			return
+		if(2)
+			if (prob(75))
+				broken()
+		if(3)
+			if (prob(50))
+				broken()
 
 // timed process
 // use power
@@ -467,7 +485,7 @@
 	var/status = 0		// LIGHT_OK, LIGHT_BURNED or LIGHT_BROKEN
 	var/base_state
 	var/switchcount = 0	// number of times switched
-	material = /decl/material/solid/metal/steel
+	material = MAT_STEEL
 	var/rigged = 0		// true if rigged to explode
 	var/broken_chance = 2
 
@@ -485,8 +503,8 @@
 	icon_state = "ltube"
 	base_state = "ltube"
 	item_state = "c_tube"
-	material = /decl/material/solid/glass
-	matter = list(/decl/material/solid/metal/aluminium = MATTER_AMOUNT_REINFORCEMENT)
+	material = MAT_GLASS
+	matter = list(MAT_ALUMINIUM = MATTER_AMOUNT_REINFORCEMENT)
 
 	b_outer_range = 5
 	b_colour = "#fffee0"
@@ -518,7 +536,7 @@
 	base_state = "lbulb"
 	item_state = "contvapour"
 	broken_chance = 3
-	material = /decl/material/solid/glass
+	material = MAT_GLASS
 
 	b_max_bright = 0.6
 	b_inner_range = 0.1
@@ -548,7 +566,7 @@
 	icon_state = "fbulb"
 	base_state = "fbulb"
 	item_state = "egg4"
-	material = /decl/material/solid/glass
+	material = MAT_GLASS
 
 // update the icon state and description of the light
 /obj/item/light/on_update_icon()
@@ -577,18 +595,21 @@
 // if a syringe, can inject phoron to make it explode
 /obj/item/light/attackby(var/obj/item/I, var/mob/user)
 	..()
-	if(istype(I, /obj/item/chems/syringe) && I.reagents?.total_volume)
+	if(istype(I, /obj/item/chems/syringe))
 		var/obj/item/chems/syringe/S = I
+
 		to_chat(user, "You inject the solution into the [src].")
-		for(var/rtype in S.reagents)
-			var/decl/material/R = decls_repository.get_decl(rtype)
-			if(R.fuel_value)
-				rigged = TRUE
-				log_and_message_admins("injected a light with flammable reagents, rigging it to explode.", user)
-				break
+
+		if(S.reagents.has_reagent(/datum/reagent/toxin/phoron, 5))
+
+			log_and_message_admins("injected a light with phoron, rigging it to explode.", user)
+
+			rigged = 1
+
 		S.reagents.clear_reagents()
-		return TRUE
-	. = ..()
+	else
+		..()
+	return
 
 // called after an attack with a light item
 // shatter light, unless it was an attempt to put it in a light socket

@@ -71,6 +71,12 @@
 	tracer_type = /obj/effect/projectile/laser/pulse/tracer
 	impact_type = /obj/effect/projectile/laser/pulse/impact
 
+/obj/item/projectile/beam/pulse/mid
+	damage = 20
+
+/obj/item/projectile/beam/pulse/heavy
+	damage = 25
+
 /obj/item/projectile/beam/pulse/destroy
 	name = "destroyer pulse"
 	damage = 100 //badmins be badmins I don't give a fuck
@@ -78,7 +84,7 @@
 
 /obj/item/projectile/beam/pulse/destroy/on_hit(var/atom/target, var/blocked = 0)
 	if(isturf(target))
-		target.explosion_act(2)
+		target.ex_act(2)
 	..()
 
 /obj/item/projectile/beam/emitter
@@ -196,7 +202,7 @@
 	sharp = 1
 	edge = 1
 	damage_type = BURN
-	life_span = 5
+	range = 5
 	pass_flags = PASS_FLAG_TABLE
 	distance_falloff = 4
 
@@ -205,9 +211,9 @@
 	impact_type = /obj/effect/projectile/trilaser/impact
 
 /obj/item/projectile/beam/plasmacutter/on_impact(var/atom/A)
-	if(istype(A, /turf/simulated/wall/natural))
-		var/turf/simulated/wall/natural/M = A
-		M.dismantle_wall()
+	if(istype(A, /turf/simulated/mineral))
+		var/turf/simulated/mineral/M = A
+		M.GetDrilled(1)
 	. = ..()
 
 /obj/item/projectile/beam/confuseray
@@ -220,7 +226,7 @@
 	distance_falloff = 5
 	damage_flags = 0
 	damage_type = STUN
-	life_span = 3
+	range = 3
 	penetration_modifier = 0
 	var/potency_min = 4
 	var/potency_max = 6
@@ -298,7 +304,7 @@
 	eyeblur = 8
 	sharp = FALSE
 	damage_flags = 0
-	life_span = 8
+	range = 8
 	penetration_modifier = 0.1
 
 	muzzle_type = /obj/effect/projectile/incen/muzzle
@@ -312,12 +318,3 @@
 		L.adjust_fire_stacks(rand(2,4))
 		if(L.fire_stacks >= 3)
 			L.IgniteMob()
-
-/obj/item/projectile/beam/pop
-	icon_state = "bluelaser"
-	fire_sound = 'sound/weapons/gunshot/laserbulb.ogg'
-	fire_sound_vol = 100
-
-	muzzle_type = /obj/effect/projectile/laser/blue/muzzle
-	tracer_type = /obj/effect/projectile/laser/blue/tracer
-	impact_type = /obj/effect/projectile/laser/blue/impact

@@ -16,6 +16,9 @@
 /obj/effect/vine/attack_hand(var/mob/user)
 	manual_unbuckle(user)
 
+/obj/effect/vine/attack_generic(var/mob/user)
+	manual_unbuckle(user)
+
 /obj/effect/vine/Crossed(atom/movable/O)
 	if(isliving(O))
 		trodden_on(O)

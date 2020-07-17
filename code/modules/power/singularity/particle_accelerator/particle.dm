@@ -56,8 +56,7 @@
 	if(ismob(A))
 		Bump(A)
 
-/obj/effect/accelerated_particle/explosion_act(severity)
-	SHOULD_CALL_PARENT(FALSE)
+/obj/effect/accelerated_particle/ex_act(severity)
 	qdel(src)
 
 /obj/effect/accelerated_particle/proc/toxmob(var/mob/living/M)

@@ -14,8 +14,11 @@
 	stop_automated_movement_when_pulled = 0
 	maxHealth = 100
 	health = 100
-	natural_weapon = /obj/item/natural_weapon/punch
+	harm_intent_damage = 5
+	melee_damage_lower = 10
+	melee_damage_upper = 10
 	can_escape = TRUE
+	attacktext = "punched"
 	a_intent = I_HURT
 	var/corpse = /obj/effect/landmark/corpse/syndicate
 	var/weapon1
@@ -39,10 +42,13 @@
 ///////////////Sword and shield////////////
 
 /mob/living/simple_animal/hostile/syndicate/melee
+	melee_damage_lower = 20
+	melee_damage_upper = 25
 	icon_state = "syndicatemelee"
 	icon_living = "syndicatemelee"
-	natural_weapon = /obj/item/energy_blade/sword/red/activated
+	weapon1 = /obj/item/melee/energy/sword/red
 	weapon2 = /obj/item/shield/energy
+	attacktext = "slashed"
 	status_flags = 0
 
 /mob/living/simple_animal/hostile/syndicate/melee/attackby(var/obj/item/O, var/mob/user)
@@ -89,7 +95,7 @@
 	projectilesound = 'sound/weapons/gunshot/gunshot_smg.ogg'
 	projectiletype = /obj/item/projectile/bullet/pistol
 
-	weapon1 = /obj/item/gun/projectile/automatic/smg
+	weapon1 = /obj/item/gun/projectile/automatic/merc_smg
 
 /mob/living/simple_animal/hostile/syndicate/ranged/space
 	icon_state = "syndicaterangedpsace"
@@ -110,7 +116,10 @@
 	pass_flags = PASS_FLAG_TABLE
 	health = 15
 	maxHealth = 15
-	natural_weapon = /obj/item/natural_weapon/rotating_blade
+	melee_damage_lower = 15
+	melee_damage_upper = 15
+	attacktext = "cut"
+	attack_sound = 'sound/weapons/bladeslice.ogg'
 	faction = "syndicate"
 	min_gas = null
 	max_gas = null
@@ -122,14 +131,6 @@
 	bone_amount =   0
 	skin_material = null
 	skin_amount =   0
-
-/obj/item/natural_weapon/rotating_blade
-	name = "rotating blades"
-	attack_verb = list("sliced", "cut")
-	hitsound = 'sound/weapons/bladeslice.ogg'
-	force = 15
-	edge = 1
-	sharp = 1
 
 /mob/living/simple_animal/hostile/viscerator/death(gibbed, deathmessage, show_dead_message)
 	..(null,"is smashed into pieces!", show_dead_message)

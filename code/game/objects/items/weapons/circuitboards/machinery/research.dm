@@ -1,6 +1,18 @@
+/obj/item/stock_parts/circuitboard/rdserver
+	name = T_BOARD("R&D server")
+	build_path = /obj/machinery/r_n_d/server
+	board_type = "machine"
+	origin_tech = "{'programming':3}"
+	req_components = list(
+							/obj/item/stack/cable_coil = 2,
+							/obj/item/stock_parts/scanning_module = 1)
+	additional_spawn_components = list(
+		/obj/item/stock_parts/power/apc/buildable = 1
+	)
+
 /obj/item/stock_parts/circuitboard/destructive_analyzer
 	name = T_BOARD("destructive analyzer")
-	build_path = /obj/machinery/destructive_analyzer
+	build_path = /obj/machinery/r_n_d/destructive_analyzer
 	board_type = "machine"
 	origin_tech = "{'magnets':2,'engineering':2,'programming':2}"
 	req_components = list(
@@ -57,7 +69,7 @@
 
 /obj/item/stock_parts/circuitboard/protolathe
 	name = T_BOARD("protolathe")
-	build_path = /obj/machinery/fabricator/protolathe
+	build_path = /obj/machinery/r_n_d/protolathe
 	board_type = "machine"
 	origin_tech = "{'engineering':2,'programming':2}"
 	req_components = list(
@@ -65,14 +77,12 @@
 							/obj/item/stock_parts/manipulator = 2,
 							/obj/item/chems/glass/beaker = 2)
 	additional_spawn_components = list(
-		/obj/item/stock_parts/console_screen = 1,
-		/obj/item/stock_parts/keyboard = 1,
 		/obj/item/stock_parts/power/apc/buildable = 1
 	)
 
 /obj/item/stock_parts/circuitboard/circuit_imprinter
 	name = T_BOARD("circuit imprinter")
-	build_path = /obj/machinery/fabricator/imprinter
+	build_path = /obj/machinery/r_n_d/circuit_imprinter
 	board_type = "machine"
 	origin_tech = "{'engineering':2,'programming':2}"
 	req_components = list(
@@ -80,44 +90,12 @@
 							/obj/item/stock_parts/manipulator = 1,
 							/obj/item/chems/glass/beaker = 2)
 	additional_spawn_components = list(
-		/obj/item/stock_parts/console_screen = 1,
-		/obj/item/stock_parts/keyboard = 1,
 		/obj/item/stock_parts/power/apc/buildable = 1
 	)
 
 /obj/item/stock_parts/circuitboard/mechfab
-	name = T_BOARD("industrial fabricator")
-	build_path = /obj/machinery/fabricator/industrial
-	board_type = "machine"
-	origin_tech = "{'programming':3,'engineering':3}"
-	req_components = list(
-		/obj/item/stock_parts/matter_bin = 2,
-		/obj/item/stock_parts/manipulator = 1,
-		/obj/item/stock_parts/micro_laser = 1)
-	additional_spawn_components = list(
-		/obj/item/stock_parts/console_screen = 1,
-		/obj/item/stock_parts/keyboard = 1,
-		/obj/item/stock_parts/power/apc/buildable = 1
-	)
-
-/obj/item/stock_parts/circuitboard/roboticsfab
-	name = T_BOARD("robotics fabricator")
-	build_path = /obj/machinery/fabricator/robotics
-	board_type = "machine"
-	origin_tech = "{'programming':3,'engineering':3}"
-	req_components = list(
-		/obj/item/stock_parts/matter_bin = 2,
-		/obj/item/stock_parts/manipulator = 1,
-		/obj/item/stock_parts/micro_laser = 1)
-	additional_spawn_components = list(
-		/obj/item/stock_parts/console_screen = 1,
-		/obj/item/stock_parts/keyboard = 1,
-		/obj/item/stock_parts/power/apc/buildable = 1
-	)
-
-/obj/item/stock_parts/circuitboard/textilesfab
-	name = T_BOARD("textiles fabricator")
-	build_path = /obj/machinery/fabricator/textile
+	name = "Circuit board (Exosuit Fabricator)"
+	build_path = /obj/machinery/robotics_fabricator
 	board_type = "machine"
 	origin_tech = "{'programming':3,'engineering':3}"
 	req_components = list(

@@ -27,16 +27,7 @@
 
 /obj/item/chems/glass/replenishing/Initialize()
 	. = ..()
-	spawning_id = pick(
-		/decl/material/liquid/blood,     \
-		/decl/material/liquid/lube,      \
-		/decl/material/liquid/sedatives, \
-		/decl/material/liquid/ethanol,   \
-		/decl/material/liquid/water,   \
-		/decl/material/solid/ice,  \
-		/decl/material/liquid/fuel,      \
-		/decl/material/liquid/cleaner    \
-	)
+	spawning_id = pick(/datum/reagent/blood,/datum/reagent/water/holywater,/datum/reagent/lube,/datum/reagent/sedatives,/datum/reagent/ethanol,/datum/reagent/drink/ice,/datum/reagent/fuel,/datum/reagent/cleaner)
 	START_PROCESSING(SSobj, src)
 
 /obj/item/chems/glass/replenishing/Process()

@@ -33,14 +33,24 @@
 	if(prob(20/severity)) set_broken(TRUE)
 	..()
 
-/obj/machinery/computer/explosion_act(severity)
-	..()
-	if(!QDELETED(src))
-		if(severity == 1 || (severity == 2 && prob(25)))
+/obj/machinery/computer/ex_act(severity)
+	switch(severity)
+		if(1.0)
 			qdel(src)
-		else if(prob(100 - (severity * 25)))
-			verbs.Cut()
-			set_broken(TRUE)
+			return
+		if(2.0)
+			if (prob(25))
+				qdel(src)
+				return
+			if (prob(50))
+				for(var/x in verbs)
+					verbs -= x
+				set_broken(TRUE)
+		if(3.0)
+			if (prob(25))
+				for(var/x in verbs)
+					verbs -= x
+				set_broken(TRUE)
 
 /obj/machinery/computer/on_update_icon()
 	overlays.Cut()
@@ -91,7 +101,7 @@
 		to_chat(user, "<span class='notice'>The broken glass falls out.</span>")
 		for(var/obj/item/stock_parts/console_screen/screen in component_parts)
 			qdel(screen)
-			new /obj/item/shard(loc)
+			new /obj/item/material/shard(loc)
 	else
 		to_chat(user, "<span class='notice'>You disconnect the monitor.</span>")
 	return ..()

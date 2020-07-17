@@ -73,4 +73,4 @@
 	if(.)
 		var/turf/T = loc
 		if(istype(T))
-			T.RecalculateOpacity()
+			T.handle_opacity_change(src)

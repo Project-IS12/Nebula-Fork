@@ -44,7 +44,7 @@
 		var/image/I = image(icon, "[icon_state]_padding")
 		if(material_alteration & MAT_FLAG_ALTERATION_COLOR)
 			I.appearance_flags |= RESET_COLOR
-			I.color = reinf_material.color
+			I.color = reinf_material.icon_colour
 		LAZYADD(new_overlays, I)
 	overlays = new_overlays
 
@@ -54,10 +54,19 @@
 	else
 		return ..()
 
-/obj/structure/bed/explosion_act(severity)
-	. = ..()
-	if(. && !QDELETED(src) && (severity == 1 || (severity == 2 && prob(50)) || (severity == 3 && prob(5))))
-		physically_destroyed(src)
+/obj/structure/bed/ex_act(severity)
+	switch(severity)
+		if(1.0)
+			qdel(src)
+			return
+		if(2.0)
+			if (prob(50))
+				qdel(src)
+				return
+		if(3.0)
+			if (prob(5))
+				qdel(src)
+				return
 
 /obj/structure/bed/attackby(obj/item/W, mob/user)
 	. = ..()
@@ -72,7 +81,7 @@
 				return
 			var/padding_type //This is awful but it needs to be like this until tiles are given a material var.
 			if(istype(W,/obj/item/stack/tile/carpet))
-				padding_type = /decl/material/solid/carpet
+				padding_type = MAT_CARPET
 			else if(istype(W,/obj/item/stack/material))
 				var/obj/item/stack/material/M = W
 				if(M.material && (M.material.flags & MAT_FLAG_PADDING))
@@ -129,7 +138,7 @@
 	update_icon()
 
 /obj/structure/bed/proc/add_padding(var/padding_type)
-	reinf_material = decls_repository.get_decl(padding_type)
+	reinf_material = SSmaterials.get_material_datum(padding_type)
 	update_icon()
 
 /obj/structure/bed/psych
@@ -138,19 +147,19 @@
 	icon_state = "psychbed"
 
 /obj/structure/bed/psych
-	material = /decl/material/solid/wood/walnut
-	reinf_material = /decl/material/solid/leather
+	material = MAT_WALNUT
+	reinf_material = MAT_LEATHER_GENERIC
 
 /obj/structure/bed/padded
-	material = /decl/material/solid/metal/aluminium
-	reinf_material = /decl/material/solid/cloth
+	material = MAT_ALUMINIUM
+	reinf_material = MAT_CLOTH
 
 /*
  * Roller beds
  */
 /obj/structure/bed/roller
 	name = "roller bed"
-	icon = 'icons/obj/structures/rollerbed.dmi'
+	icon = 'icons/obj/rollerbed.dmi'
 	icon_state = "down"
 	anchored = 0
 	buckle_pixel_shift = @"{'x':0,'y':0,'z':6}"
@@ -267,7 +276,7 @@
 /obj/item/roller
 	name = "roller bed"
 	desc = "A collapsed roller bed that can be carried around."
-	icon = 'icons/obj/structures/rollerbed.dmi'
+	icon = 'icons/obj/rollerbed.dmi'
 	icon_state = "folded"
 	item_state = "rbed"
 	slot_flags = SLOT_BACK
@@ -282,7 +291,7 @@
 /obj/item/robot_rack/roller
 	name = "roller bed rack"
 	desc = "A rack for carrying collapsed roller beds. Can also be used for carrying ironing boards."
-	icon = 'icons/obj/structures/rollerbed.dmi'
+	icon = 'icons/obj/rollerbed.dmi'
 	icon_state = "folded"
 	object_type = /obj/item/roller
 	interact_type = /obj/structure/bed/roller

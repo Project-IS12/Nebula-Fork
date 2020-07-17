@@ -30,3 +30,6 @@
 		handle_immunity()
 
 		. = 1
+
+		if(!client && !mind && species)
+			species.handle_npc(src)

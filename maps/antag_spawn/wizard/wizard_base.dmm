@@ -270,6 +270,7 @@
 /area/map_template/wizard_station)
 "aL" = (
 /obj/structure/closet,
+/obj/item/chems/food/drinks/bottle/bottleofnothing,
 /obj/item/chems/food/drinks/bottle/pwine,
 /obj/item/chems/food/drinks/bottle/agedwhiskey,
 /obj/item/chems/food/drinks/bottle/cognac,
@@ -578,7 +579,7 @@
 /area/map_template/wizard_station)
 "bx" = (
 /obj/structure/cult/talisman,
-/obj/item/knife/ritual,
+/obj/item/material/knife/ritual,
 /turf/unsimulated/floor{
 	name = "plating";
 	icon_state = "cult"
@@ -624,7 +625,7 @@
 /area/map_template/wizard_station)
 "bD" = (
 /obj/structure/table/woodentable,
-/obj/item/cat_hide,
+/obj/item/xenos_claw,
 /turf/unsimulated/floor{
 	name = "plating";
 	icon_state = "cult"

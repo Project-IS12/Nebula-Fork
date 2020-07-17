@@ -1,13 +1,13 @@
 /obj/item/paicard
 	name = "personal AI device"
-	icon = 'icons/obj/items/device/pai.dmi'
+	icon = 'icons/obj/pda.dmi'
 	icon_state = "pai"
 	item_state = "electronic"
 	w_class = ITEM_SIZE_SMALL
 	slot_flags = SLOT_BELT
 	origin_tech = "{'programming':2}"
-	material = /decl/material/solid/glass
-	matter = list(/decl/material/solid/metal/steel = MATTER_AMOUNT_REINFORCEMENT)
+	material = MAT_GLASS
+	matter = list(MAT_STEEL = MATTER_AMOUNT_REINFORCEMENT)
 
 	var/current_emotion = 1
 	var/obj/item/radio/radio
@@ -321,13 +321,11 @@
 	for(var/mob/M in src)
 		M.emp_act(severity)
 
-/obj/item/paicard/explosion_act(severity)
-	..()
-	if(!QDELETED(src))
-		if(pai)
-			pai.explosion_act(severity)
-		else
-			qdel(src)
+/obj/item/paicard/ex_act(severity)
+	if(pai)
+		pai.ex_act(severity)
+	else
+		qdel(src)
 
 /obj/item/paicard/see_emote(mob/living/M, text)
 	if(pai && pai.client && pai.stat == CONSCIOUS)

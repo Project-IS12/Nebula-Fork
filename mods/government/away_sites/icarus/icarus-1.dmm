@@ -9,10 +9,10 @@
 /turf/simulated/floor/exoplanet/grass,
 /area/icarus/open)
 "ae" = (
-/turf/simulated/wall/natural,
+/turf/simulated/mineral,
 /area/icarus/open)
 "af" = (
-/turf/simulated/wall/natural,
+/turf/simulated/mineral,
 /area/icarus/vessel)
 "ag" = (
 /obj/structure/grille,
@@ -363,7 +363,7 @@
 	dir = 1
 	},
 /obj/structure/table/steel,
-/obj/item/folder/cyan,
+/obj/item/folder/white,
 /turf/simulated/floor/tiled,
 /area/icarus/vessel)
 "bz" = (
@@ -471,7 +471,7 @@
 /area/icarus/vessel)
 "bO" = (
 /obj/structure/table/steel,
-/obj/item/folder/cyan,
+/obj/item/folder/white,
 /turf/simulated/floor/tiled,
 /area/icarus/vessel)
 "bP" = (
@@ -672,7 +672,7 @@
 /obj/effect/floor_decal/corner/grey/diagonal{
 	dir = 4
 	},
-/obj/item/kitchen/rollingpin,
+/obj/item/material/kitchen/rollingpin,
 /turf/simulated/floor/tiled,
 /area/icarus/vessel)
 "cu" = (
@@ -787,7 +787,7 @@
 	dir = 4
 	},
 /obj/item/trash/plate,
-/obj/item/kitchen/utensil/fork,
+/obj/item/material/kitchen/utensil/fork,
 /turf/simulated/floor/tiled,
 /area/icarus/vessel)
 "cM" = (
@@ -984,7 +984,7 @@
 /area/icarus/vessel)
 "dq" = (
 /obj/structure/table/standard,
-/obj/item/knife/table,
+/obj/item/material/knife/table,
 /turf/simulated/floor/tiled,
 /area/icarus/vessel)
 "dr" = (
@@ -1408,7 +1408,7 @@
 /obj/effect/decal/cleanable/dirt,
 /obj/effect/decal/cleanable/dirt,
 /obj/effect/decal/cleanable/dirt,
-/obj/item/knife/table,
+/obj/item/material/knife/table,
 /turf/unsimulated/beach/sand,
 /area/icarus/open)
 "eK" = (
@@ -2249,17 +2249,19 @@
 /turf/simulated/floor/plating,
 /area/icarus/vessel)
 "ho" = (
-/obj/structure/window/borosilicate_reinforced{
+/obj/structure/window/phoronreinforced{
 	dir = 4
 	},
 /obj/machinery/door/blast/regular{
 	dir = 4;
 	id_tag = "d1starboardnacelle"
 	},
-/obj/structure/window/borosilicate_reinforced{
+/obj/structure/window/phoronreinforced{
+	icon_state = "phoronrwindow";
 	dir = 8
 	},
-/obj/structure/window/borosilicate_reinforced{
+/obj/structure/window/phoronreinforced{
+	icon_state = "phoronrwindow";
 	dir = 1
 	},
 /obj/structure/grille,
@@ -2354,10 +2356,11 @@
 /turf/simulated/floor/plating,
 /area/icarus/vessel)
 "hB" = (
-/obj/structure/window/borosilicate_reinforced{
+/obj/structure/window/phoronreinforced{
 	dir = 4
 	},
-/obj/structure/window/borosilicate_reinforced{
+/obj/structure/window/phoronreinforced{
+	icon_state = "phoronrwindow";
 	dir = 8
 	},
 /obj/structure/grille,
@@ -2399,11 +2402,12 @@
 /turf/simulated/floor/plating,
 /area/icarus/vessel)
 "hG" = (
-/obj/structure/window/borosilicate_reinforced{
+/obj/structure/window/phoronreinforced{
 	dir = 4
 	},
-/obj/structure/window/borosilicate_reinforced,
-/obj/structure/window/borosilicate_reinforced{
+/obj/structure/window/phoronreinforced,
+/obj/structure/window/phoronreinforced{
+	icon_state = "phoronrwindow";
 	dir = 8
 	},
 /obj/structure/grille,

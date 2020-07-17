@@ -103,11 +103,6 @@
 	if(air_temporary)
 		loc.assume_air(air_temporary)
 
-	if(in_stasis)
-		var/obj/machinery/clamp/C = locate() in get_turf(src)
-		if(C.target == src)
-			C.open()
-			C.removal()
 	. = ..()
 
 /obj/machinery/atmospherics/pipe/deconstruction_pressure_check()
@@ -188,9 +183,6 @@
 /obj/machinery/atmospherics/pipe/simple/Process()
 	if(!parent) //This should cut back on the overhead calling build_network thousands of times per cycle
 		..()
-	else if(parent.air.compare(loc.return_air()) || in_stasis)
-		update_sound(0)
-		. = PROCESS_KILL
 	else if(leaking)
 		parent.mingle_with_turf(loc, volume)
 		var/air = parent.air && parent.air.return_pressure()
@@ -250,9 +242,6 @@
 	if(node2)
 		node2.update_underlays()
 
-/obj/machinery/atmospherics/pipe/proc/try_leak()
-	set_leaking(!in_stasis && !(node1 && node2))
-
 /obj/machinery/atmospherics/pipe/simple/on_update_icon(var/safety = 0)
 	if(!atmos_initalized)
 		return
@@ -272,9 +261,10 @@
 		qdel(src)
 	else if(node1 && node2)
 		overlays += icon_manager.get_atmos_icon("pipe", , pipe_color, "[pipe_icon]intact[icon_connect_type]")
+		set_leaking(FALSE)
 	else
 		overlays += icon_manager.get_atmos_icon("pipe", , pipe_color, "[pipe_icon]exposed[node1?1:0][node2?1:0][icon_connect_type]")
-	try_leak()
+		set_leaking(TRUE)
 
 /obj/machinery/atmospherics/pipe/simple/update_underlays()
 	return
@@ -464,6 +454,7 @@
 	if(node3)
 		node3.disconnect(src)
 		node3 = null
+
 	. = ..()
 
 /obj/machinery/atmospherics/pipe/manifold/disconnect(obj/machinery/atmospherics/reference)
@@ -496,16 +487,13 @@
 	if(node3)
 		node3.update_underlays()
 
-/obj/machinery/atmospherics/pipe/manifold/try_leak()
-	set_leaking(!in_stasis && !(node1 && node2 && node3))
-
 /obj/machinery/atmospherics/pipe/manifold/on_update_icon(var/safety = 0)
 	if(!atmos_initalized)
 		return
 	if(!check_icon_cache())
 		return
 
-	try_leak()
+	set_leaking(!(node1 && node2 && node3))
 	alpha = 255
 
 	if(!node1 && !node2 && !node3)
@@ -761,16 +749,13 @@
 	if(node4)
 		node4.update_underlays()
 
-/obj/machinery/atmospherics/pipe/manifold4w/try_leak()
-	set_leaking(!in_stasis && !(node1 && node2 && node3 && node4))
-
 /obj/machinery/atmospherics/pipe/manifold4w/on_update_icon(var/safety = 0)
 	if(!atmos_initalized)
 		return
 	if(!check_icon_cache())
 		return
 
-	try_leak()
+	set_leaking(!(node1 && node2 && node3 && node4))
 	alpha = 255
 
 	if(!node1 && !node2 && !node3 && !node4)

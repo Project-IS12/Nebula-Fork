@@ -20,8 +20,10 @@
 	var/image/ret = ..()
 	if(item_state_slots && item_state_slots[slot])
 		ret.icon_state = item_state_slots[slot]
-	else if(item_state)
+	else
 		ret.icon_state = item_state
+	if(!ret.icon_state)
+		ret.icon_state = icon_state
 	return ret
 
 /obj/item/clothing/suit/handle_shield()

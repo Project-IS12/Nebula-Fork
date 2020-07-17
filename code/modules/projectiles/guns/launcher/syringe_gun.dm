@@ -4,8 +4,8 @@
 	icon = 'icons/obj/ammo.dmi'
 	icon_state = "syringe-cartridge"
 	var/icon_flight = "syringe-cartridge-flight" //so it doesn't look so weird when shot
-	material = /decl/material/solid/metal/steel
-	matter = list(/decl/material/solid/glass = MATTER_AMOUNT_REINFORCEMENT)
+	material = MAT_STEEL
+	matter = list(MAT_GLASS = MATTER_AMOUNT_REINFORCEMENT)
 	obj_flags = OBJ_FLAG_CONDUCTIBLE
 	slot_flags = SLOT_BELT | SLOT_EARS
 	throwforce = 3
@@ -63,12 +63,12 @@
 /obj/item/gun/launcher/syringe
 	name = "syringe gun"
 	desc = "A spring loaded rifle designed to fit syringes, designed to incapacitate unruly patients from a distance."
-	on_mob_icon = 'icons/obj/guns/launcher/syringe.dmi'
-	icon = 'icons/obj/guns/launcher/syringe.dmi'
-	icon_state = ICON_STATE_WORLD
+	icon = 'icons/obj/guns/syringegun.dmi'
+	icon_state = "syringegun"
+	item_state = "syringegun"
 	w_class = ITEM_SIZE_LARGE
 	force = 7
-	material = /decl/material/solid/metal/steel
+	material = MAT_STEEL
 	slot_flags = SLOT_BELT
 
 	fire_sound = 'sound/weapons/empty.ogg'
@@ -133,15 +133,16 @@
 /obj/item/gun/launcher/syringe/rapid
 	name = "syringe gun revolver"
 	desc = "A modification of the syringe gun design, using a rotating cylinder to store up to five syringes. The spring still needs to be drawn between shots."
-	on_mob_icon = 'icons/obj/guns/launcher/syringe_rapid.dmi'
+	icon_state = "rapidsyringegun"
+	item_state = "rapidsyringegun"
 	max_darts = 5
-	material = /decl/material/solid/metal/steel
-	matter = list(/decl/material/solid/glass = MATTER_AMOUNT_REINFORCEMENT)
+	material = MAT_STEEL
+	matter = list(MAT_GLASS = MATTER_AMOUNT_REINFORCEMENT)
 
 /obj/item/gun/launcher/syringe/disguised
 	name = "deluxe electronic cigarette"
 	desc = "A premium model eGavana MK3 electronic cigarette, shaped like a cigar."
-	icon = 'icons/obj/items/ecig.dmi'
+	icon = 'icons/obj/ecig.dmi'
 	icon_state = "pcigoff1"
 	item_state = "pcigoff1"
 	w_class = ITEM_SIZE_SMALL

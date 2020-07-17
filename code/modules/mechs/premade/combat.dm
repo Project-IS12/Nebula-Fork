@@ -47,12 +47,12 @@
 	vision_flags = SEE_MOBS
 	see_invisible = SEE_INVISIBLE_NOLIGHTING
 	power_use = 200
-	material = /decl/material/solid/metal/steel
+	material = MAT_STEEL
 
 /obj/item/mech_component/sensors/combat/prebuild()
 	..()
 	software = new(src)
-	software.installed_software = list(MECH_SOFTWARE_WEAPONS)
+	software.installed_software = list(MECH_SOFTWARE_WEAPONS, MECH_SOFTWARE_ADVWEAPONS)
 
 /obj/item/mech_component/chassis/combat
 	name = "sealed exosuit chassis"
@@ -62,11 +62,11 @@
 	exosuit_desc_string = "an armoured chassis"
 	icon_state = "combat_body"
 	power_use = 40
-	material = /decl/material/solid/metal/steel
+	material = MAT_STEEL
 
 /obj/item/mech_component/chassis/combat/prebuild()
 	. = ..()
-	m_armour = new /obj/item/robot_parts/robot_component/armour/exosuit/combat(src)
+	armor = new /obj/item/robot_parts/robot_component/armour/exosuit/combat(src)
 
 /obj/item/mech_component/chassis/combat/Initialize()
 	pilot_positions = list(

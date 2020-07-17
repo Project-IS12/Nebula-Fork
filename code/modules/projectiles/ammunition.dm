@@ -8,14 +8,13 @@
 	slot_flags = SLOT_BELT | SLOT_EARS
 	throwforce = 1
 	w_class = ITEM_SIZE_TINY
+	drop_sound = 'sound/items/handle/casing_drop.ogg'
 
 	var/leaves_residue = 1
 	var/caliber = ""					//Which kind of guns it can be loaded into
 	var/projectile_type					//The bullet type to create when New() is called
 	var/obj/item/projectile/BB = null	//The loaded bullet - make it so that the projectiles are created only when needed?
 	var/spent_icon = "pistolcasing-spent"
-	var/bullet_color = COLOR_COPPER
-	var/marking_color
 	var/fall_sounds = list('sound/weapons/guns/casingfall1.ogg','sound/weapons/guns/casingfall2.ogg','sound/weapons/guns/casingfall3.ogg')
 
 /obj/item/ammo_casing/Initialize()
@@ -33,7 +32,10 @@
 /obj/item/ammo_casing/proc/expend()
 	. = BB
 	BB = null
-	set_dir(pick(GLOB.alldirs)) //spin spent casings
+	var/matrix/M = matrix()
+	M.Turn(rand(180))
+	src.transform = M //spin spent casings
+	//set_dir(pick(GLOB.alldirs)) //spin spent casings
 
 	// Aurora forensics port, gunpowder residue.
 	if(leaves_residue)
@@ -80,20 +82,23 @@
 		else
 			to_chat(user, "<span class='notice'>You inscribe \"[label_text]\" into \the [initial(BB.name)].</span>")
 			BB.SetName("[initial(BB.name)] (\"[label_text]\")")
+
+	if(istype(W, /obj/item/ammo_magazine))//Using your mag to pick up ammo. Gets rid of the tedious
+		var/obj/item/ammo_magazine/A = W
+		if(caliber == A.caliber && src.BB)
+			if(A.stored_ammo.len >= A.max_ammo)
+				to_chat(user, "<span class='warning'>[A] is full!</span>")
+				return
+			else
+				if(src.loc == user)
+					user.remove_from_mob(src)
+				forceMove(A)
+				A.stored_ammo.Add(src)
+				A.update_icon()
 	else ..()
 
 /obj/item/ammo_casing/on_update_icon()
-	if(on_mob_icon)
-		cut_overlays()
-		if(BB)
-			var/image/I = overlay_image(icon, "[icon_state]-bullet", bullet_color, flags=RESET_COLOR)
-			I.dir = dir
-			add_overlay(I)
-		if(marking_color)
-			var/image/I = overlay_image(icon, "[icon_state]-marking", marking_color, flags=RESET_COLOR)
-			I.dir = dir
-			add_overlay(I)
-	else if(spent_icon && !BB)
+	if(spent_icon && !BB)
 		icon_state = spent_icon
 
 /obj/item/ammo_casing/examine(mob/user)
@@ -112,7 +117,7 @@
 	obj_flags = OBJ_FLAG_CONDUCTIBLE
 	slot_flags = SLOT_BELT
 	item_state = "syringe_kit"
-	material = /decl/material/solid/metal/steel
+	material = MAT_STEEL
 	throwforce = 5
 	w_class = ITEM_SIZE_SMALL
 	throw_speed = 4

@@ -9,10 +9,10 @@
 /turf/simulated/open,
 /area/icarus/open)
 "ad" = (
-/turf/simulated/wall/natural,
+/turf/simulated/mineral,
 /area/icarus/open)
 "ae" = (
-/turf/simulated/wall/natural,
+/turf/simulated/mineral,
 /area/icarus/vessel)
 "af" = (
 /obj/structure/grille,
@@ -380,8 +380,8 @@
 /area/icarus/vessel)
 "bq" = (
 /obj/structure/table/rack,
-/obj/item/baton,
-/obj/item/baton,
+/obj/item/melee/baton,
+/obj/item/melee/baton,
 /turf/simulated/floor/plating,
 /area/icarus/vessel)
 "br" = (
@@ -518,7 +518,7 @@
 /area/icarus/vessel)
 "bO" = (
 /obj/structure/table/steel_reinforced,
-/obj/item/harpoon,
+/obj/item/material/harpoon,
 /turf/simulated/floor/plating,
 /area/icarus/vessel)
 "bP" = (
@@ -1227,7 +1227,7 @@
 /turf/simulated/floor/tiled,
 /area/icarus/open)
 "dO" = (
-/obj/machinery/destructive_analyzer,
+/obj/machinery/r_n_d/destructive_analyzer,
 /turf/simulated/floor/tiled,
 /area/icarus/open)
 "dP" = (

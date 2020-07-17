@@ -6,7 +6,10 @@
 	blend_mode = BLEND_SUBTRACT
 	health = 100
 	maxHealth = 100
-	natural_weapon = /obj/item/natural_weapon/bite/strong
+	melee_damage_lower = 15
+	melee_damage_upper = 30
+	attacktext = "bitten"
+	attack_sound = 'sound/weapons/bite.ogg'
 	faction = MOB_FACTION_NEUTRAL
 	density = 0
 	stop_automated_movement = 1
@@ -27,9 +30,9 @@
 	allowed_mobs.Cut()
 	return ..()
 
-/mob/living/simple_animal/faithful_hound/do_delayed_life_action()
-	..()
-	if(!stat && !client && world.time > last_check)
+/mob/living/simple_animal/faithful_hound/Life()
+	. = ..()
+	if(. && !client && world.time > last_check)
 		last_check = world.time + 5 SECONDS
 		var/aggressiveness = 0 //The closer somebody is to us, the more aggressive we are
 		var/list/mobs = list()
@@ -42,7 +45,7 @@
 			var/mob/living/M = m
 			var/dist = get_dist(M, src)
 			if(dist < 2) //Attack! Attack!
-				M.attackby(get_natural_weapon(), src)
+				M.attack_generic(src,10,"bitten")
 				return .
 			else if(dist == 2)
 				new_aggress = 3

@@ -13,7 +13,7 @@
 		if(!H.reagents || H.reagents.has_reagent(R))
 			return FALSE
 	for(var/R in triggers)
-		if(REAGENT_VOLUME(H.reagents, R) >= triggers[R])
+		if(H.reagents.get_reagent_amount(R) >= triggers[R])
 			return TRUE
 	return FALSE
 
@@ -81,8 +81,8 @@
 // ========
 /datum/medical_effect/headache
 	name = "Headache"
-	triggers = list(/decl/material/liquid/brute_meds = 15, /decl/material/liquid/regenerator = 15)
-	cures = list(/decl/material/liquid/neuroannealer, /decl/material/liquid/painkillers)
+	triggers = list(/datum/reagent/brute_meds = 15, /datum/reagent/regenerator = 15)
+	cures = list(/datum/reagent/neuroannealer, /datum/reagent/painkillers)
 	cure_message = "Your head stops throbbing..."
 
 /datum/medical_effect/headache/on_life(mob/living/carbon/human/H, strength)
@@ -106,8 +106,8 @@
 // ===========
 /datum/medical_effect/bad_stomach
 	name = "Bad Stomach"
-	triggers = list(/decl/material/liquid/burn_meds = 30)
-	cures = list(/decl/material/liquid/antitoxins)
+	triggers = list(/datum/reagent/burn_meds = 30)
+	cures = list(/datum/reagent/antitoxins)
 	cure_message = "Your stomach feels a little better now..."
 
 /datum/medical_effect/bad_stomach/on_life(mob/living/carbon/human/H, strength)
@@ -125,8 +125,8 @@
 // ======
 /datum/medical_effect/cramps
 	name = "Cramps"
-	triggers = list(/decl/material/liquid/antitoxins = 30, /decl/material/liquid/painkillers = 15)
-	cures = list(/decl/material/liquid/adrenaline)
+	triggers = list(/datum/reagent/antitoxins = 30, /datum/reagent/painkillers = 15)
+	cures = list(/datum/reagent/adrenaline)
 	cure_message = "The cramps let up..."
 
 /datum/medical_effect/cramps/on_life(mob/living/carbon/human/H, strength)
@@ -144,8 +144,8 @@
 // ====
 /datum/medical_effect/itch
 	name = "Itch"
-	triggers = list(/decl/material/liquid/psychoactives = 10)
-	cures = list(/decl/material/liquid/adrenaline)
+	triggers = list(/datum/reagent/psychoactives = 10)
+	cures = list(/datum/reagent/adrenaline)
 	cure_message = "The itching stops..."
 
 /datum/medical_effect/itch/on_life(mob/living/carbon/human/H, strength)

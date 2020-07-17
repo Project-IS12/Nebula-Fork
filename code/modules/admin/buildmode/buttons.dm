@@ -23,7 +23,7 @@
 
 /obj/effect/bmode/dir/Initialize()
 	. = ..()
-	set_dir(host.direction)
+	set_dir(host.dir)
 
 /obj/effect/bmode/dir/OnClick(var/list/parameters)
 	switch(dir)
@@ -37,7 +37,7 @@
 			set_dir(NORTHWEST)
 		else
 			set_dir(SOUTH)
-	host.direction = dir
+	host.dir = dir
 
 /obj/effect/bmode/help
 	icon_state = "buildhelp"

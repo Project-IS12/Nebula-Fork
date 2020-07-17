@@ -4,9 +4,8 @@
 	icon_state = "mech_clamp"
 	restricted_hardpoints = list(HARDPOINT_LEFT_HAND, HARDPOINT_RIGHT_HAND)
 	restricted_software = list(MECH_SOFTWARE_UTILITY)
+	var/obj/carrying
 	origin_tech = "{'materials':2,'engineering':2}"
-	var/carrying_capacity = 5
-	var/list/obj/carrying = list()
 
 /obj/item/mech_equipment/clamp/resolve_attackby(atom/A, mob/user, click_params)
 	if(istype(A, /obj/structure/closet) && owner)
@@ -15,46 +14,37 @@
 
 /obj/item/mech_equipment/clamp/attack_hand(mob/user)
 	if(owner && LAZYISIN(owner.pilots, user))
-		if(!owner.hatch_closed && length(carrying))
-			var/obj/chosen_obj = input(user, "Choose an object to grab.", "Clamp Claw") as null|anything in carrying
-			if(!chosen_obj)
-				return
+		if(!owner.hatch_closed && carrying)
 			if(!do_after(user, 20, owner)) return
-			if(owner.hatch_closed || !chosen_obj) return
-			if(user.put_in_active_hand(chosen_obj))
-				owner.visible_message(SPAN_NOTICE("\The [user] carefully grabs \the [chosen_obj] from \the [src]."))
+			if(user.put_in_active_hand(carrying))
+				owner.visible_message(SPAN_NOTICE("\The [user] carefully grabs \the [carrying] from \the [src]."))
 				playsound(src, 'sound/mecha/hydraulic.ogg', 50, 1)
-				carrying -= chosen_obj
+				carrying = null
 	. = ..()
 
 /obj/item/mech_equipment/clamp/afterattack(var/atom/target, var/mob/living/user, var/inrange, var/params)
 	. = ..()
 
-	if(.)
-		if(length(carrying) >= carrying_capacity)
-			to_chat(user, SPAN_WARNING("\The [src] is fully loaded!"))
-			return
+	if(. && !carrying)
 		if(istype(target, /obj))
+
+
 			var/obj/O = target
 			if(O.buckled_mob)
 				return
 			if(locate(/mob/living) in O)
-				to_chat(user, SPAN_WARNING("You can't load living things into the cargo compartment."))
+				to_chat(user,"<span class='warning'>You can't load living things into the cargo compartment.</span>")
 				return
 
 			if(O.anchored)
-				to_chat(user, SPAN_WARNING("\The [target] is firmly secured."))
+				to_chat(user, "<span class='warning'>[target] is firmly secured.</span>")
 				return
+
 
 			owner.visible_message(SPAN_NOTICE("\The [owner] begins loading \the [O]."))
 			if(do_after(owner, 20, O, 0, 1))
-				if(O in carrying || O.buckled_mob || O.anchored || (locate(/mob/living) in O)) //Repeat checks
-					return
-				if(length(carrying) >= carrying_capacity)
-					to_chat(user, SPAN_WARNING("\The [src] is fully loaded!"))
-					return
 				O.forceMove(src)
-				carrying += O
+				carrying = O
 				owner.visible_message(SPAN_NOTICE("\The [owner] loads \the [O] into its cargo compartment."))
 				playsound(src, 'sound/mecha/hydraulic.ogg', 50, 1)
 
@@ -79,62 +69,23 @@
 /obj/item/mech_equipment/clamp/attack_self(var/mob/user)
 	. = ..()
 	if(.)
-		drop_carrying(user, TRUE)
-
-/obj/item/mech_equipment/clamp/CtrlClick(mob/user)
-	if(owner)
-		drop_carrying(user, FALSE)
-	else
-		..()
-
-/obj/item/mech_equipment/clamp/proc/drop_carrying(var/mob/user, var/choose_object)
-	if(!length(carrying))
-		to_chat(user, SPAN_WARNING("You are not carrying anything in \the [src]."))
-		return
-	var/obj/chosen_obj = carrying[1]
-	if(choose_object)
-		chosen_obj = input(user, "Choose an object to set down.", "Clamp Claw") as null|anything in carrying
-	if(!chosen_obj)
-		return
-	if(chosen_obj.density)
-		for(var/atom/A in get_turf(src))
-			if(A != owner && A.density && !(A.atom_flags & ATOM_FLAG_CHECKS_BORDER))
-				to_chat(user, SPAN_WARNING("\The [A] blocks you from putting down \the [chosen_obj]."))
-				return
-
-	owner.visible_message(SPAN_NOTICE("\The [owner] unloads \the [chosen_obj]."))
-	playsound(src, 'sound/mecha/hydraulic.ogg', 50, 1)
-	chosen_obj.forceMove(get_turf(src))
-	carrying -= chosen_obj
-
-/obj/item/mech_equipment/clamp/get_hardpoint_status_value()
-	if(length(carrying) > 1)
-		return length(carrying)/carrying_capacity
-	return null
+		if(!carrying)
+			to_chat(user, SPAN_WARNING("You are not carrying anything in \the [src]."))
+		else
+			owner.visible_message(SPAN_NOTICE("\The [owner] unloads \the [carrying]."))
+			playsound(src, 'sound/mecha/hydraulic.ogg', 50, 1)
+			carrying.forceMove(get_turf(src))
+			carrying = null
 
 /obj/item/mech_equipment/clamp/get_hardpoint_maptext()
-	if(length(carrying) == 1)
-		return carrying[1].name
-	else if(length(carrying) > 1)
-		return "Multiple"
+	if(carrying)
+		return carrying.name
 	. = ..()
 
 /obj/item/mech_equipment/clamp/uninstalled()
-	if(length(carrying))
-		for(var/obj/load in carrying)
-			var/turf/location = get_turf(src)
-			var/list/turfs = location.AdjacentTurfsSpace()
-			if(load.density)
-				if(turfs.len > 0)
-					location = pick(turfs)
-					turfs -= location
-				else
-					load.dropInto(location)
-					load.throw_at_random(FALSE, rand(2,4), 4)
-					location = null
-			if(location)
-				load.dropInto(location)
-			carrying -= load
+	if(carrying)
+		carrying.dropInto(loc)
+		carrying = null
 	. = ..()
 
 // A lot of this is copied from floodlights.
@@ -257,17 +208,17 @@
 #undef CATAPULT_AREA
 
 
-/obj/item/drill_head
+/obj/item/material/drill_head
 	name = "drill head"
 	desc = "A replaceable drill head usually used in exosuit drills."
 	icon = 'icons/obj/items/tool/drill_head.dmi'
 	icon_state = "drill_head"
 	var/durability = 0
 
-/obj/item/drill_head/proc/get_durability_percentage()
+/obj/item/material/drill_head/proc/get_durability_percentage()
 	return (durability * 100) / (2 * material.integrity)
 
-/obj/item/drill_head/examine(mob/user, distance)
+/obj/item/material/drill_head/examine(mob/user, distance)
 	. = ..()
 	var/percentage = get_durability_percentage()
 	var/descriptor = "looks close to breaking"
@@ -282,7 +233,7 @@
 
 	to_chat(user, "It [descriptor].")
 
-/obj/item/drill_head/Initialize()
+/obj/item/material/drill_head/Initialize()
 	. = ..()
 	durability = 2 * material.integrity
 
@@ -295,12 +246,12 @@
 	equipment_delay = 10
 
 	//Drill can have a head
-	var/obj/item/drill_head/drill_head
+	var/obj/item/material/drill_head/drill_head
 	origin_tech = "{'materials':2,'engineering':2}"
 
 /obj/item/mech_equipment/drill/Initialize()
 	. = ..()
-	drill_head = new /obj/item/drill_head(src, /decl/material/solid/metal/steel) //You start with a basic steel head
+	drill_head = new /obj/item/material/drill_head(src, MAT_STEEL) //You start with a basic steel head
 
 /obj/item/mech_equipment/drill/attack_self(var/mob/user)
 	. = ..()
@@ -315,8 +266,8 @@
 	return
 
 /obj/item/mech_equipment/drill/attackby(obj/item/W, mob/user)
-	if(istype(W,/obj/item/drill_head))
-		var/obj/item/drill_head/DH = W
+	if(istype(W,/obj/item/material/drill_head))
+		var/obj/item/material/drill_head/DH = W
 		if(!user.unEquip(DH))
 			return
 		if(drill_head)
@@ -336,8 +287,8 @@
 			var/obj/target_obj = target
 			if(target_obj.unacidable)
 				return
-		if(istype(target,/obj/item/drill_head))
-			var/obj/item/drill_head/DH = target
+		if(istype(target,/obj/item/material/drill_head))
+			var/obj/item/material/drill_head/DH = target
 			if(drill_head)
 				owner.visible_message(SPAN_NOTICE("\The [owner] detaches the [drill_head] mounted on the [src]."))
 				drill_head.forceMove(owner.loc)
@@ -368,26 +319,25 @@
 					drill_head.shatter()
 					drill_head = null
 					return
-
-				if(istype(target, /turf/simulated/wall/natural))
-					for(var/turf/simulated/wall/natural/M in range(target,1))
-						if(get_dir(owner,M)&owner.dir)
-							M.dismantle_wall()
-							drill_head.durability -= 1
-				else if(istype(target, /turf/simulated/wall))
+				if(istype(target, /turf/simulated/wall))
 					var/turf/simulated/wall/W = target
 					if(max(W.material.hardness, W.reinf_material ? W.reinf_material.hardness : 0) > drill_head.material.hardness)
 						to_chat(user, "<span class='warning'>\The [target] is too hard to drill through with this drill head.</span>")
-					target.explosion_act(2)
+					target.ex_act(2)
 					drill_head.durability -= 1
 					log_and_message_admins("used [src] on the wall [W].", user, owner.loc)
+				else if(istype(target, /turf/simulated/mineral))
+					for(var/turf/simulated/mineral/M in range(target,1))
+						if(get_dir(owner,M)&owner.dir)
+							M.GetDrilled()
+							drill_head.durability -= 1
 				else if(istype(target, /turf/simulated/floor/asteroid))
 					for(var/turf/simulated/floor/asteroid/M in range(target,1))
 						if(get_dir(owner,M)&owner.dir)
 							M.gets_dug()
 							drill_head.durability -= 1
 				else if(target.loc == T)
-					target.explosion_act(2)
+					target.ex_act(2)
 					drill_head.durability -= 1
 					log_and_message_admins("[src] used to drill [target].", user, owner.loc)
 
@@ -421,8 +371,8 @@
 	holding_type = /obj/item/gun/energy/plasmacutter/mounted/mech
 	restricted_hardpoints = list(HARDPOINT_LEFT_HAND, HARDPOINT_RIGHT_HAND, HARDPOINT_LEFT_SHOULDER, HARDPOINT_RIGHT_SHOULDER)
 	restricted_software = list(MECH_SOFTWARE_UTILITY)
-	origin_tech = "{'materials':4,'exoticmatter':4,'engineering':6,'combat':3}"
-	material = /decl/material/solid/metal/steel
+	origin_tech = "{'materials':4,'phorontech':4,'engineering':6,'combat':3}"
+	material = MAT_STEEL
 
 /obj/item/gun/energy/plasmacutter/mounted/mech
 	use_external_power = TRUE

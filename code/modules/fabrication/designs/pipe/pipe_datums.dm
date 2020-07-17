@@ -18,7 +18,6 @@
 	build_icon_state = "manifold"
 	constructed_path = /obj/machinery/atmospherics/pipe/manifold/hidden
 	pipe_class = PIPE_CLASS_TRINARY
-	rotate_class = PIPE_ROTATE_STANDARD
 
 /datum/fabricator_recipe/pipe/manifold4w
 	name = "four-way pipe manifold fitting"
@@ -38,12 +37,14 @@
 /datum/fabricator_recipe/pipe/up
 	name = "upward pipe fitting"
 	desc = "an upward pipe."
+	build_icon = 'icons/obj/structures.dmi'
 	build_icon_state = "up"
 	constructed_path = /obj/machinery/atmospherics/pipe/zpipe/up
 
 /datum/fabricator_recipe/pipe/down
 	name = "downward pipe fitting"
 	desc = "a downward pipe."
+	build_icon = 'icons/obj/structures.dmi'
 	build_icon_state = "down"
 	constructed_path = /obj/machinery/atmospherics/pipe/zpipe/down
 
@@ -71,7 +72,6 @@
 	build_icon_state = "manifold"
 	constructed_path = /obj/machinery/atmospherics/pipe/manifold/hidden/supply
 	pipe_class = PIPE_CLASS_TRINARY
-	rotate_class = PIPE_ROTATE_STANDARD
 
 /datum/fabricator_recipe/pipe/supply/manifold4w
 	name = "four-way supply pipe manifold fitting"
@@ -91,12 +91,14 @@
 /datum/fabricator_recipe/pipe/supply/up
 	name = "upward supply pipe fitting"
 	desc = "an upward supply pipe segment."
+	build_icon = 'icons/obj/structures.dmi'
 	build_icon_state = "up"
 	constructed_path = /obj/machinery/atmospherics/pipe/zpipe/up/supply
 
 /datum/fabricator_recipe/pipe/supply/down
 	name = "downward supply pipe fitting"
 	desc = "a downward supply pipe segment."
+	build_icon = 'icons/obj/structures.dmi'
 	build_icon_state = "down"
 	constructed_path = /obj/machinery/atmospherics/pipe/zpipe/down/supply
 
@@ -124,7 +126,6 @@
 	build_icon_state = "manifold"
 	constructed_path = /obj/machinery/atmospherics/pipe/manifold/hidden/scrubbers
 	pipe_class = PIPE_CLASS_TRINARY
-	rotate_class = PIPE_ROTATE_STANDARD
 
 /datum/fabricator_recipe/pipe/scrubber/manifold4w
 	name = "four-way scrubber pipe manifold fitting"
@@ -143,12 +144,14 @@
 /datum/fabricator_recipe/pipe/scrubber/up
 	name = "upward scrubber pipe fitting"
 	desc = "an upward scrubber pipe segment."
+	build_icon = 'icons/obj/structures.dmi'
 	build_icon_state = "up"
 	constructed_path = /obj/machinery/atmospherics/pipe/zpipe/up/scrubbers
 
 /datum/fabricator_recipe/pipe/scrubber/down
 	name = "downward scrubber pipe fitting"
 	desc = "a downward scrubber pipe segment."
+	build_icon = 'icons/obj/structures.dmi'
 	build_icon_state = "down"
 	constructed_path = /obj/machinery/atmospherics/pipe/zpipe/down/scrubbers
 
@@ -176,7 +179,6 @@
 	build_icon_state = "manifold"
 	constructed_path = /obj/machinery/atmospherics/pipe/manifold/hidden/fuel
 	pipe_class = PIPE_CLASS_TRINARY
-	rotate_class = PIPE_ROTATE_STANDARD
 
 /datum/fabricator_recipe/pipe/fuel/manifold4w
 	name = "four-way supply pipe manifold fitting"
@@ -196,19 +198,20 @@
 /datum/fabricator_recipe/pipe/fuel/up
 	name = "upward fuel pipe fitting"
 	desc = "an upward fuel pipe segment."
+	build_icon = 'icons/obj/structures.dmi'
 	build_icon_state = "up"
 	constructed_path = /obj/machinery/atmospherics/pipe/zpipe/up/fuel
 
 /datum/fabricator_recipe/pipe/fuel/down
 	name = "downward fuel pipe fitting"
 	desc = "a downward fuel pipe segment."
+	build_icon = 'icons/obj/structures.dmi'
 	build_icon_state = "down"
 	constructed_path = /obj/machinery/atmospherics/pipe/zpipe/down/fuel
 
 /datum/fabricator_recipe/pipe/he
 	category = "Heat Exchange Pipes"
 	colorable = FALSE
-	pipe_color = null
 	connect_types = CONNECT_TYPE_HE
 	constructed_path = /obj/machinery/atmospherics/pipe/simple/heat_exchanging
 	pipe_class = PIPE_CLASS_BINARY
@@ -232,7 +235,6 @@
 	connect_types = CONNECT_TYPE_REGULAR|CONNECT_TYPE_HE
 	build_icon_state = "junction"
 	constructed_path = /obj/machinery/atmospherics/pipe/simple/heat_exchanging/junction
-	rotate_class = PIPE_ROTATE_STANDARD
 
 /datum/fabricator_recipe/pipe/he/exchanger
 	name = "heat exchanger"
@@ -241,7 +243,6 @@
 	build_icon_state = "heunary"
 	constructed_path = /obj/machinery/atmospherics/unary/heat_exchanger
 	pipe_class = PIPE_CLASS_UNARY
-	rotate_class = PIPE_ROTATE_STANDARD
 
 //Cleanup
 #undef PIPE_STRAIGHT

@@ -13,7 +13,4 @@
 /obj/item/caution/cone
 	desc = "This cone is trying to warn you of something!"
 	name = "warning cone"
-	icon = 'icons/obj/items/warning_cone.dmi'
-	on_mob_icon = 'icons/obj/items/warning_cone.dmi'
-	icon_state = ICON_STATE_WORLD
-	slot_flags = SLOT_HEAD
+	icon_state = "cone"

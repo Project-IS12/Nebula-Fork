@@ -41,8 +41,11 @@
 	onclose(user, "copier")
 	return
 
-/obj/machinery/photocopier/OnTopic(user, href_list, state)
+/obj/machinery/photocopier/Topic(href, href_list)
 	if(href_list["copy"])
+		if(stat & (BROKEN|NOPOWER))
+			return
+
 		for(var/i = 0, i < copies, i++)
 			if(toner <= 0)
 				break
@@ -56,31 +59,31 @@
 				var/obj/item/paper_bundle/B = bundlecopy(copyitem)
 				sleep(15*B.pages.len)
 			else
-				to_chat(user, "<span class='warning'>\The [copyitem] can't be copied by \the [src].</span>")
+				to_chat(usr, "<span class='warning'>\The [copyitem] can't be copied by \the [src].</span>")
 				break
 
 			use_power_oneoff(active_power_usage)
-		return TOPIC_REFRESH
-
-	if(href_list["remove"])
-		OnRemove(user)
-		return TOPIC_REFRESH
-
-	if(href_list["min"])
+		updateUsrDialog()
+	else if(href_list["remove"])
+		if(copyitem)
+			usr.put_in_hands(copyitem)
+			to_chat(usr, "<span class='notice'>You take \the [copyitem] out of \the [src].</span>")
+			copyitem = null
+			updateUsrDialog()
+	else if(href_list["min"])
 		if(copies > 1)
 			copies--
-		return TOPIC_REFRESH
-
+			updateUsrDialog()
 	else if(href_list["add"])
 		if(copies < maxcopies)
 			copies++
-		return TOPIC_REFRESH
-
-	if(href_list["aipic"])
-		if(!istype(user,/mob/living/silicon)) return
+			updateUsrDialog()
+	else if(href_list["aipic"])
+		if(!istype(usr,/mob/living/silicon)) return
+		if(stat & (BROKEN|NOPOWER)) return
 
 		if(toner >= 5)
-			var/mob/living/silicon/tempAI = user
+			var/mob/living/silicon/tempAI = usr
 			var/obj/item/camera/siliconcam/camera = tempAI.silicon_camera
 
 			if(!camera)
@@ -96,13 +99,7 @@
 				p.desc += " - Copied by [tempAI.name]"
 			toner -= 5
 			sleep(15)
-		return TOPIC_REFRESH
-
-/obj/machinery/photocopier/proc/OnRemove(mob/user)
-	if(copyitem)
-		user.put_in_hands(copyitem)
-		to_chat(user, "<span class='notice'>You take \the [copyitem] out of \the [src].</span>")
-		copyitem = null
+		updateUsrDialog()
 
 /obj/machinery/photocopier/attackby(obj/item/O, mob/user)
 	if(istype(O, /obj/item/paper) || istype(O, /obj/item/photo) || istype(O, /obj/item/paper_bundle))
@@ -128,14 +125,23 @@
 			to_chat(user, "<span class='notice'>This cartridge is not yet ready for replacement! Use up the rest of the toner.</span>")
 	else ..()
 
-/obj/machinery/photocopier/explosion_act(severity)
-	. = ..()
-	if(.)
-		if(severity == 1 || (severity == 2 && prob(50)))
-			physically_destroyed()
-		else if((severity == 2 || prob(50)) && toner)
-			new /obj/effect/decal/cleanable/blood/oil(get_turf(src))
-			toner = 0
+/obj/machinery/photocopier/ex_act(severity)
+	switch(severity)
+		if(1.0)
+			qdel(src)
+		if(2.0)
+			if(prob(50))
+				qdel(src)
+			else
+				if(toner > 0)
+					new /obj/effect/decal/cleanable/blood/oil(get_turf(src))
+					toner = 0
+		else
+			if(prob(50))
+				if(toner > 0)
+					new /obj/effect/decal/cleanable/blood/oil(get_turf(src))
+					toner = 0
+	return
 
 /obj/machinery/photocopier/proc/copy(var/obj/item/paper/copy, var/need_toner=1)
 	var/obj/item/paper/c = new copy.type(loc, copy.text, copy.name, copy.metadata )

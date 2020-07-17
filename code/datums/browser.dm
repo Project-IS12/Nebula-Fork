@@ -129,16 +129,16 @@
 // This will allow you to show an icon in the browse window
 // This is added to mob so that it can be used without a reference to the browser object
 // There is probably a better place for this...
-/mob/proc/browse_rsc_icon(icon, icon_state, direction = -1)
+/mob/proc/browse_rsc_icon(icon, icon_state, dir = -1)
 	/*
 	var/icon/I
-	if (direction >= 0)
-		I = new /icon(icon, icon_state, direction)
+	if (dir >= 0)
+		I = new /icon(icon, icon_state, dir)
 	else
 		I = new /icon(icon, icon_state)
-		direction = "default"
+		dir = "default"
 
-	var/filename = "[ckey("[icon]_[icon_state]_[direction]")].png"
+	var/filename = "[ckey("[icon]_[icon_state]_[dir]")].png"
 	send_rsc(src, I, filename)
 	return filename
 	*/

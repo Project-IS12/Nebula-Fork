@@ -35,12 +35,10 @@
 	ui_header = null
 	if(current_transfer)
 		qdel(current_transfer)
-	return ..()
 
 /datum/computer_file/program/filemanager/Topic(href, href_list, state)
-	. = ..()
-	if(.)
-		return
+	if(..())
+		return TOPIC_HANDLED
 
 	var/mob/user = usr
 
@@ -55,16 +53,6 @@
 		var/file_source = input(usr, "Choose a storage medium to use:", "Select Storage Medium") as null|anything in choices
 		if(file_source)
 			current_filesource = choices[file_source]
-			if(istype(current_filesource, /datum/file_storage/network))
-				var/datum/computer_network/network = computer.get_network()
-				if(!network)
-					return TOPIC_REFRESH
-				// Helper for some user-friendliness. Try to select the first available mainframe.
-				var/list/file_servers = network.get_file_server_tags()
-				if(!file_servers.len)
-					return TOPIC_REFRESH
-				var/datum/file_storage/network/N = current_filesource
-				N.server = file_servers[1]
 			return TOPIC_REFRESH
 
 	if(href_list["PRG_changefileserver"])
@@ -72,7 +60,7 @@
 		var/datum/computer_network/network = computer.get_network()
 		if(!network)
 			return
-		var/list/file_servers = network.get_file_server_tags(MF_ROLE_FILESERVER, user)
+		var/list/file_servers = network.get_file_server_tags()
 		var/file_server = input(usr, "Choose a fileserver to view files on:", "Select File Server") as null|anything in file_servers
 		if(file_server)
 			var/datum/file_storage/network/N = file_sources[/datum/file_storage/network]
@@ -186,16 +174,14 @@
 			ui_header = "downloader_running.gif"
 
 /datum/computer_file/program/filemanager/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = 1, var/datum/topic_state/state = GLOB.default_state)
-	. = ..()
-	if(!.)
-		return
 	var/list/data = computer.initial_data()
 
 	if(error)
 		data["error"] = error
-	else if(current_filesource)
-		data["error"] = current_filesource.check_errors()
-
+	else
+		var/errors = current_filesource.check_errors()
+		if(errors)
+			data["error"] = errors
 	data["current_source"] = current_filesource.name
 	if(istype(current_filesource, /datum/file_storage/network))
 		var/datum/file_storage/network/N = current_filesource

@@ -14,5 +14,5 @@
 	name = "merchant shuttle control console"
 	icon_keyboard = "power_key"
 	icon_screen = "shuttle"
-	initial_access = list(access_merchant)
+	req_access = list(access_merchant)
 	shuttle_tag = "Merchant"

@@ -1,6 +1,6 @@
 /obj/item/gun/projectile/revolver/foundation
 	name = "\improper Foundation revolver"
-	icon = 'mods/psionics/icons/foundation.dmi'
+	icon = 'icons/obj/guns/foundation.dmi'
 	icon_state = "foundation"
 	desc = "The CF 'Troubleshooter', a compact plastic-composite weapon designed for concealed carry by Cuchulain Foundation field agents. Smells faintly of copper."
 	ammo_type = /obj/item/ammo_casing/pistol/magnum/nullglass
@@ -19,6 +19,6 @@
 
 /obj/item/storage/briefcase/foundation/Initialize()
 	. = ..()
-	new /obj/item/ammo_magazine/speedloader/nullglass(src)
+	new /obj/item/ammo_magazine/speedloader/magnum/nullglass(src)
 	new /obj/item/gun/projectile/revolver/foundation(src)
 	make_exact_fit()

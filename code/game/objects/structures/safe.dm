@@ -8,7 +8,7 @@ FLOOR SAFES
 /obj/structure/safe
 	name = "safe"
 	desc = "A huge chunk of metal with a dial embedded in it. Fine print on the dial reads \"Scarborough Arms - 2 tumbler safe, guaranteed thermite resistant, explosion resistant, and assistant resistant.\"."
-	icon = 'icons/obj/structures/safe.dmi'
+	icon = 'icons/obj/structures.dmi'
 	icon_state = "safe"
 	anchored = 1
 	density = 1
@@ -156,8 +156,7 @@ FLOOR SAFES
 			return
 
 
-obj/structure/safe/explosion_act(severity)
-	SHOULD_CALL_PARENT(FALSE)
+obj/structure/safe/ex_act(severity)
 	return
 
 //FLOOR SAFES

@@ -14,8 +14,6 @@
 		energy = ARMOR_ENERGY_RESISTANT,
 		bomb = ARMOR_BIO_MINOR
 		)
-	item_icons = list(slot_head_str = 'mods/corporate/icons/mob/onmob_head.dmi')
-	icon = 'mods/corporate/icons/obj/clothing/obj_head.dmi'
 
 //Security
 /obj/item/clothing/head/helmet/ert/security

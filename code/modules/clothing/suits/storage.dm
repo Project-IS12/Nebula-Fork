@@ -57,3 +57,10 @@
 		icon_open = citem.additional_data["icon_open"]
 	if(citem.additional_data["icon_closed"])
 		icon_closed = citem.additional_data["icon_closed"]
+
+/obj/item/clothing/suit/storage/vest/merc
+	slots = 4
+
+/obj/item/clothing/suit/storage/vest/tactical
+	slots = 4
+

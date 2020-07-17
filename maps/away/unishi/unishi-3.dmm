@@ -245,6 +245,8 @@
 /obj/structure/table/rack,
 /obj/item/gun/energy/laser,
 /obj/item/gun/energy/laser,
+/obj/item/gun/energy/stunrevolver,
+/obj/item/gun/energy/stunrevolver,
 /obj/item/clothing/suit/armor/pcarrier/blue,
 /obj/item/clothing/suit/armor/pcarrier/tan,
 /obj/item/clothing/suit/armor/pcarrier/tan,
@@ -456,9 +458,9 @@
 /area/unishi/living)
 "bC" = (
 /obj/structure/closet,
-/obj/item/ammo_magazine/speedloader,
-/obj/item/ammo_magazine/speedloader,
-/obj/item/ammo_magazine/speedloader,
+/obj/item/ammo_magazine/speedloader/magnum,
+/obj/item/ammo_magazine/speedloader/magnum,
+/obj/item/ammo_magazine/speedloader/magnum,
 /obj/item/gun/projectile/revolver,
 /obj/item/handcuffs,
 /obj/machinery/light/small{

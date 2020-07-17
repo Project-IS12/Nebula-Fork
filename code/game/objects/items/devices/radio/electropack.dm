@@ -1,7 +1,6 @@
 /obj/item/radio/electropack
 	name = "electropack"
 	desc = "Dance, my monkeys! DANCE!"
-	icon = 'icons/obj/items/device/radio/electropack.dmi'
 	icon_state = "electropack0"
 	item_state = "electropack"
 	frequency = 1449
@@ -9,8 +8,8 @@
 	slot_flags = SLOT_BACK
 	w_class = ITEM_SIZE_HUGE
 
-	material = /decl/material/solid/metal/steel
-	matter = list(/decl/material/solid/glass = MATTER_AMOUNT_REINFORCEMENT)
+	material = MAT_STEEL
+	matter = list(MAT_GLASS = MATTER_AMOUNT_REINFORCEMENT)
 
 	var/code = 2
 

@@ -1,7 +1,7 @@
 /obj/structure/rubble
 	name = "pile of rubble"
 	desc = "One man's garbage is another man's treasure."
-	icon = 'icons/obj/structures/rubble.dmi'
+	icon = 'icons/obj/rubble.dmi'
 	icon_state = "base"
 	appearance_flags = PIXEL_SCALE
 	opacity = 1
@@ -74,16 +74,9 @@
 		return TRUE
 	. = ..()
 
-/obj/structure/rubble/dismantle()
-	SHOULD_CALL_PARENT(FALSE)
-	qdel(src)
-	. = TRUE
-	
-/obj/structure/rubble/physically_destroyed()
-	SHOULD_CALL_PARENT(FALSE)
+/obj/structure/rubble/destroyed()
 	visible_message(SPAN_NOTICE("\The [src] is cleared away."))
 	qdel(src)
-	. = TRUE
 
 /obj/structure/rubble/house
 	loot = list(

@@ -1,7 +1,7 @@
 /obj/item/chems
 	name = "Container"
 	desc = "..."
-	icon = 'icons/obj/items/chem/container.dmi'
+	icon = 'icons/obj/chemical.dmi'
 	icon_state = null
 	w_class = ITEM_SIZE_SMALL
 
@@ -18,19 +18,6 @@
 		to_chat(usr, SPAN_WARNING("You can't set transfer amounts while \the [src] is being held by someone else."))
 		return TRUE
 	return FALSE
-
-/obj/item/chems/proc/get_base_name()
-	. = initial(name)
-
-/obj/item/chems/on_reagent_change()
-	if(atom_flags & ATOM_FLAG_SHOW_REAGENT_NAME)
-		var/decl/material/R = reagents?.get_primary_reagent_decl()
-		var/newname = get_base_name()
-		if(R)
-			newname = "[newname] of [R.get_presentation_name(src)]"
-		if(newname != name)
-			SetName(newname)
-	update_icon()
 
 /obj/item/chems/verb/set_amount_per_transfer_from_this()
 	set name = "Set Transfer Amount"
@@ -80,7 +67,7 @@
 		to_chat(user, "<span class='notice'>[target] is empty.</span>")
 		return 1
 
-	if(reagents && !REAGENTS_FREE_SPACE(reagents))
+	if(reagents && !reagents.get_free_space())
 		to_chat(user, "<span class='notice'>[src] is full.</span>")
 		return 1
 
@@ -100,7 +87,7 @@
 		to_chat(user, "<span class='notice'>[src] is empty.</span>")
 		return 1
 
-	if(target.reagents && !REAGENTS_FREE_SPACE(target.reagents))
+	if(target.reagents && !target.reagents.get_free_space())
 		to_chat(user, "<span class='notice'>[target] is full.</span>")
 		return 1
 
@@ -196,7 +183,7 @@
 		to_chat(user, "<span class='notice'>[src] is empty.</span>")
 		return 1
 
-	if(!REAGENTS_FREE_SPACE(target.reagents))
+	if(!target.reagents.get_free_space())
 		to_chat(user, "<span class='notice'>[target] is full.</span>")
 		return 1
 
@@ -224,3 +211,9 @@
 		to_chat(user, "<span class='notice'>The [src] contains: [reagents.get_reagents(precision = prec)].</span>")
 	else if((loc == user) && user.skill_check(SKILL_CHEMISTRY, SKILL_EXPERT))
 		to_chat(user, "<span class='notice'>Using your chemistry knowledge, you identify the following reagents in \the [src]: [reagents.get_reagents(!user.skill_check(SKILL_CHEMISTRY, SKILL_PROF), 5)].</span>")
+
+/obj/item/chems/ex_act(severity)
+	if(reagents)
+		for(var/datum/reagent/R in reagents.reagent_list)
+			R.ex_act(src, severity)
+	..()

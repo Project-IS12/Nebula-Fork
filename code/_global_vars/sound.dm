@@ -57,10 +57,9 @@ GLOBAL_LIST_INIT(page_sound,\
 
 GLOBAL_LIST_INIT(fracture_sound,\
 	list(\
-		'sound/effects/bonebreak1.ogg',\
-		'sound/effects/bonebreak2.ogg',\
-		'sound/effects/bonebreak3.ogg',\
-		'sound/effects/bonebreak4.ogg'))
+		'sound/effects/gore/trauma1.ogg',\
+		'sound/effects/gore/trauma2.ogg',\
+		'sound/effects/gore/trauma3.ogg'))
 
 GLOBAL_LIST_INIT(lighter_sound,\
 	list(\
@@ -113,8 +112,26 @@ GLOBAL_LIST_INIT(light_strike_sound,\
 	list(\
 		'sound/effects/hit_kick.ogg',
 		'sound/effects/hit_punch.ogg'))
-		
-GLOBAL_LIST_INIT(tray_hit_sound,\
+
+GLOBAL_LIST_INIT(fall_sound, \
 	list(\
-		'sound/items/trayhit1.ogg',
-		'sound/items/trayhit2.ogg'))
+		'sound/effects/bodyfall1.ogg',\
+		'sound/effects/bodyfall2.ogg',\
+		'sound/effects/bodyfall3.ogg',\
+		'sound/effects/bodyfall4.ogg'))
+
+GLOBAL_LIST_INIT(blood_drip, \
+	list(\
+		'sound/effects/gore/blood1.ogg',\
+		'sound/effects/gore/blood2.ogg',\
+		'sound/effects/gore/blood3.ogg',\
+		'sound/effects/gore/blood3.ogg',\
+		'sound/effects/gore/blood4.ogg',\
+		'sound/effects/gore/blood5.ogg',\
+		'sound/effects/gore/blood6.ogg'))
+
+GLOBAL_LIST_INIT(gun_pickup, \
+	list(\
+	'sound/items/handle/gunpickup1.ogg',\
+	'sound/items/handle/gunpickup2.ogg',\
+	'sound/items/handle/gunpickup3.ogg'))

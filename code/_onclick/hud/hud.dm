@@ -15,6 +15,7 @@
 		hud_used = new hud_type(src)
 	else
 		hud_used = new /datum/hud
+	add_filter_effects()
 
 /datum/hud
 	var/mob/mymob
@@ -27,6 +28,7 @@
 	var/obj/screen/lingchemdisplay
 	var/obj/screen/r_hand_hud_object
 	var/obj/screen/l_hand_hud_object
+	var/obj/screen/swaphands_hud_object
 	var/obj/screen/action_intent
 	var/obj/screen/move_intent
 	var/obj/screen/stamina/stamina_bar

@@ -23,7 +23,7 @@
 	possession_candidate = 1
 	pass_flags = PASS_FLAG_TABLE
 
-	skin_material = /decl/material/solid/skin/fur/orange
+	skin_material = MAT_SKIN_FUR_ORANGE
 
 	var/turns_since_scan = 0
 	var/mob/living/simple_animal/mouse/movement_target
@@ -117,7 +117,7 @@
 	if(M.a_intent == I_HURT)
 		set_flee_target(M)
 
-/mob/living/simple_animal/cat/explosion_act()
+/mob/living/simple_animal/cat/ex_act()
 	. = ..()
 	set_flee_target(src.loc)
 
@@ -218,7 +218,7 @@
 	item_state = "cat"
 	icon_living = "cat"
 	icon_dead = "cat_dead"
-	skin_material = /decl/material/solid/skin/fur/black
+	skin_material = MAT_SKIN_FUR_BLACK
 
 /mob/living/simple_animal/cat/kitten
 	name = "kitten"
@@ -255,20 +255,10 @@
 	gender = pick(MALE, FEMALE)
 
 /mob/living/simple_animal/cat/fluff/ran
-	name = "Runtime"
-	desc = "Under no circumstances is this feline allowed inside the atmospherics system."
+	name = "Rantime"
+	desc = "Her full name is Ran Ste-Su G'Mindel Time."
 	gender = FEMALE
 	icon_state = "cat2"
 	item_state = "cat2"
 	icon_living = "cat2"
 	icon_dead = "cat2_dead"
-
-/mob/living/simple_animal/cat/harvest_skin()
-	. = ..()
-	. += new/obj/item/cat_hide(get_turf(src))
-
-/obj/item/cat_hide
-	name = "cat hide"
-	desc = "The by-product of cat farming."
-	icon = 'icons/obj/items/sheet_hide.dmi'
-	icon_state = "sheet-cat"

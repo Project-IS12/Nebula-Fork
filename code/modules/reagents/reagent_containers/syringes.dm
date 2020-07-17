@@ -11,7 +11,7 @@
 	icon = 'icons/obj/syringe.dmi'
 	item_state = "rg0"
 	icon_state = "rg"
-	material = /decl/material/solid/glass
+	material = MAT_GLASS
 	amount_per_transfer_from_this = 5
 	possible_transfer_amounts = @"[1,2,5]"
 	volume = 15
@@ -117,26 +117,27 @@
 			injectReagents(target, user)
 
 /obj/item/chems/syringe/proc/drawReagents(var/atom/target, var/mob/user)
-	if(!REAGENTS_FREE_SPACE(reagents))
+	if(!reagents.get_free_space())
 		to_chat(user, "<span class='warning'>The syringe is full.</span>")
 		mode = SYRINGE_INJECT
 		return
 
 	if(ismob(target))//Blood!
-		if(reagents.total_volume)
+		if(reagents.has_reagent(/datum/reagent/blood))
 			to_chat(user, "<span class='notice'>There is already a blood sample in this syringe.</span>")
 			return
 		if(istype(target, /mob/living/carbon))
 			if(istype(target, /mob/living/carbon/slime))
 				to_chat(user, "<span class='warning'>You are unable to locate any blood.</span>")
 				return
-			var/amount = REAGENTS_FREE_SPACE(reagents)
+			var/amount = reagents.get_free_space()
 			var/mob/living/carbon/T = target
 			if(!T.dna)
 				to_chat(user, "<span class='warning'>You are unable to locate any blood.</span>")
 				if(istype(target, /mob/living/carbon/human))
 					CRASH("[T] \[[T.type]\] was missing their dna datum!")
 				return
+
 
 			var/allow = T.can_inject(user, check_zone(user.zone_sel.selecting))
 			if(!allow)
@@ -168,7 +169,9 @@
 				return
 
 			T.take_blood(src, amount)
-			user.visible_message(SPAN_NOTICE("\The [user] takes a blood sample from \the [target]."))
+			to_chat(user, "<span class='notice'>You take a blood sample from [target].</span>")
+			for(var/mob/O in viewers(4, user))
+				O.show_message("<span class='notice'>[user] takes a blood sample from [target].</span>", 1)
 
 	else //if not mob
 		if(!target.reagents.total_volume)
@@ -183,7 +186,7 @@
 		to_chat(user, "<span class='notice'>You fill the syringe with [trans] units of the solution.</span>")
 		update_icon()
 
-	if(!REAGENTS_FREE_SPACE(reagents))
+	if(!reagents.get_free_space())
 		mode = SYRINGE_INJECT
 		update_icon()
 
@@ -201,7 +204,7 @@
 	if(!ATOM_IS_OPEN_CONTAINER(target) && !ismob(target) && !istype(target, /obj/item/chems/food) && !istype(target, /obj/item/slime_extract) && !istype(target, /obj/item/clothing/mask/smokable/cigarette) && !istype(target, /obj/item/storage/fancy/cigarettes))
 		to_chat(user, "<span class='notice'>You cannot directly fill this object.</span>")
 		return
-	if(!REAGENTS_FREE_SPACE(target.reagents))
+	if(!target.reagents.get_free_space())
 		to_chat(user, "<span class='notice'>[target] is full.</span>")
 		return
 
@@ -333,7 +336,7 @@
 
 /obj/item/chems/syringe/ld50_syringe/Initialize()
 	. = ..()
-	reagents.add_reagent(/decl/material/liquid/heartstopper, 60)
+	reagents.add_reagent(/datum/reagent/toxin/heartstopper, 60)
 	mode = SYRINGE_INJECT
 	update_icon()
 
@@ -341,13 +344,13 @@
 /// Syringes. END
 ////////////////////////////////////////////////////////////////////////////////
 
-/obj/item/chems/syringe/stabilizer
-	name = "Syringe (stabilizer)"
-	desc = "Contains stabilizer - for patients in danger of brain damage."
+/obj/item/chems/syringe/adrenaline
+	name = "Syringe (adrenaline)"
+	desc = "Contains adrenaline - used to stabilize patients."
 
-/obj/item/chems/syringe/stabilizer/Initialize()
+/obj/item/chems/syringe/adrenaline/Initialize()
 	. = ..()
-	reagents.add_reagent(/decl/material/liquid/stabilizer, 15)
+	reagents.add_reagent(/datum/reagent/adrenaline, 15)
 	mode = SYRINGE_INJECT
 	update_icon()
 
@@ -357,7 +360,7 @@
 
 /obj/item/chems/syringe/antitoxin/Initialize()
 	. = ..()
-	reagents.add_reagent(/decl/material/liquid/antitoxins, 15)
+	reagents.add_reagent(/datum/reagent/antitoxins, 15)
 	mode = SYRINGE_INJECT
 	update_icon()
 
@@ -367,7 +370,7 @@
 
 /obj/item/chems/syringe/antibiotic/Initialize()
 	. = ..()
-	reagents.add_reagent(/decl/material/liquid/antibiotics, 15)
+	reagents.add_reagent(/datum/reagent/antibiotics, 15)
 	mode = SYRINGE_INJECT
 	update_icon()
 
@@ -377,9 +380,9 @@
 
 /obj/item/chems/syringe/drugs/Initialize()
 	. = ..()
-	reagents.add_reagent(/decl/material/liquid/psychoactives, 5)
-	reagents.add_reagent(/decl/material/liquid/hallucinogenics, 5)
-	reagents.add_reagent(/decl/material/liquid/presyncopics, 5)
+	reagents.add_reagent(/datum/reagent/psychoactives, 5)
+	reagents.add_reagent(/datum/reagent/hallucinogenics, 5)
+	reagents.add_reagent(/datum/reagent/presyncopics, 5)
 	mode = SYRINGE_INJECT
 	update_icon()
 
@@ -389,8 +392,8 @@
 
 /obj/item/chems/syringe/steroid/Initialize()
 	. = ..()
-	reagents.add_reagent(/decl/material/liquid/adrenaline, 5)
-	reagents.add_reagent(/decl/material/liquid/amphetamines, 10)
+	reagents.add_reagent(/datum/reagent/adrenaline, 5)
+	reagents.add_reagent(/datum/reagent/amphetamines, 10)
 
 
 // TG ports
@@ -401,10 +404,10 @@
 	amount_per_transfer_from_this = 20
 	volume = 60
 	icon_state = "bs"
-	material = /decl/material/solid/glass
+	material = MAT_GLASS
 	matter = list(
-		/decl/material/solid/phoron = MATTER_AMOUNT_REINFORCEMENT,
-		/decl/material/solid/gemstone/diamond = MATTER_AMOUNT_TRACE
+		MAT_PHORON = MATTER_AMOUNT_REINFORCEMENT,
+		MAT_DIAMOND = MATTER_AMOUNT_TRACE
 	)
 
 /obj/item/chems/syringe/noreact
@@ -413,8 +416,8 @@
 	volume = 20
 	atom_flags = ATOM_FLAG_NO_TEMP_CHANGE | ATOM_FLAG_NO_REACT
 	icon_state = "cs"
-	material = /decl/material/solid/glass
+	material = MAT_GLASS
 	matter = list(
-		/decl/material/solid/metal/gold = MATTER_AMOUNT_REINFORCEMENT,
-		/decl/material/solid/plastic = MATTER_AMOUNT_TRACE
+		MAT_GOLD = MATTER_AMOUNT_REINFORCEMENT,
+		MAT_PLASTIC = MATTER_AMOUNT_TRACE
 	)

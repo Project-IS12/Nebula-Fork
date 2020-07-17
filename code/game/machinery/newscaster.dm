@@ -162,7 +162,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 	securityCaster = istype(get_area(src), /area/security)
 	allCasters += src
 	paper_remaining = 15            // Will probably change this to something better
-	unit_no = "[sequential_id("obj/machinery/newscaster")]"
+	unit_no = sequential_id("obj/machinery/newscaster")
 	queue_icon_update()
 
 /obj/machinery/newscaster/Destroy()
@@ -679,10 +679,10 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 		else if(href_list["setScreen"]) //Brings us to the main menu and resets all fields~
 			src.screen = text2num(href_list["setScreen"])
 			if (src.screen == 0)
-				src.scanned_user = "Unknown"
-				msg = ""
+				src.scanned_user = "Unknown";
+				msg = "";
 				src.c_locked=0;
-				channel_name=""
+				channel_name="";
 				src.viewing_channel = null
 				if (photo_data)
 					qdel(photo_data)

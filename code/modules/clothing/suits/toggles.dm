@@ -63,18 +63,11 @@
 	else
 		icon_state = "[initial(icon_state)]"
 
-/obj/item/clothing/suit/storage/hooded/experimental_mob_overlay(mob/user_mob, slot)
-	var/image/I = ..()
-	if(suittoggled)
-		I.icon_state += "_t"
-	return I
 
 /obj/item/clothing/suit/storage/hooded/wintercoat
 	name = "winter coat"
 	desc = "A heavy jacket made from 'synthetic' animal furs."
-	icon = 'icons/clothing/suit/wintercoat/coat.dmi'
-	on_mob_icon = 'icons/clothing/suit/wintercoat/coat.dmi'
-	icon_state = ICON_STATE_WORLD
+	icon_state = "coatwinter"
 	body_parts_covered = UPPER_TORSO|LOWER_TORSO|ARMS
 	cold_protection = UPPER_TORSO|LOWER_TORSO|ARMS
 	min_cold_protection_temperature = ARMOR_MIN_COLD_PROTECTION_TEMPERATURE
@@ -97,7 +90,7 @@
 
 /obj/item/clothing/suit/storage/hooded/wintercoat/captain
 	name = "captain's winter coat"
-	on_mob_icon = 'icons/clothing/suit/wintercoat/captain.dmi'
+	icon_state = "coatcaptain"
 	armor = list(
 		melee = ARMOR_MELEE_KNIVES, 
 		bullet = ARMOR_BALLISTIC_MINOR, 
@@ -108,7 +101,7 @@
 
 /obj/item/clothing/suit/storage/hooded/wintercoat/security
 	name = "security winter coat"
-	on_mob_icon = 'icons/clothing/suit/wintercoat/sec.dmi'
+	icon_state = "coatsecurity"
 	armor = list(
 		melee = ARMOR_MELEE_KNIVES, 
 		bullet = ARMOR_BALLISTIC_SMALL, 
@@ -119,40 +112,40 @@
 
 /obj/item/clothing/suit/storage/hooded/wintercoat/medical
 	name = "medical winter coat"
-	on_mob_icon = 'icons/clothing/suit/wintercoat/med.dmi'
+	icon_state = "coatmedical"
 	armor = list(
 		bio = ARMOR_BIO_RESISTANT
 		)
 
 /obj/item/clothing/suit/storage/hooded/wintercoat/science
 	name = "science winter coat"
-	on_mob_icon = 'icons/clothing/suit/wintercoat/sci.dmi'
+	icon_state = "coatscience"
 	armor = list(
 		bomb = ARMOR_BOMB_MINOR
 		)
 
 /obj/item/clothing/suit/storage/hooded/wintercoat/engineering
 	name = "engineering winter coat"
-	on_mob_icon = 'icons/clothing/suit/wintercoat/eng.dmi'
+	icon_state = "coatengineer"
 	armor = list(
 		rad = ARMOR_RAD_MINOR
 		)
 
 /obj/item/clothing/suit/storage/hooded/wintercoat/engineering/atmos
 	name = "atmospherics winter coat"
-	on_mob_icon = 'icons/clothing/suit/wintercoat/atmos.dmi'
+	icon_state = "coatatmos"
 
 /obj/item/clothing/suit/storage/hooded/wintercoat/hydro
 	name = "hydroponics winter coat"
-	on_mob_icon = 'icons/clothing/suit/wintercoat/hydro.dmi'
+	icon_state = "coathydro"
 
 /obj/item/clothing/suit/storage/hooded/wintercoat/cargo
 	name = "cargo winter coat"
-	on_mob_icon = 'icons/clothing/suit/wintercoat/cargo.dmi'
+	icon_state = "coatcargo"
 
 /obj/item/clothing/suit/storage/hooded/wintercoat/miner
 	name = "mining winter coat"
-	on_mob_icon = 'icons/clothing/suit/wintercoat/mining.dmi'
+	icon_state = "coatminer"
 	armor = list(
 		melee = ARMOR_MELEE_SMALL
 		)

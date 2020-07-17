@@ -1,5 +1,5 @@
 /obj/structure
-	icon = 'icons/obj/structures/barricade.dmi'
+	icon = 'icons/obj/structures.dmi'
 	w_class = ITEM_SIZE_STRUCTURE
 	layer = STRUCTURE_LAYER
 
@@ -24,14 +24,14 @@
 		UNSETEMPTY(matter)
 
 /obj/structure/Initialize(var/ml, var/_mat, var/_reinf_mat)
-	if(ispath(_mat, /decl/material))
+	if(ispath(_mat, /material))
 		material = _mat
-	if(ispath(material, /decl/material))
-		material = decls_repository.get_decl(material)
-	if(ispath(_reinf_mat, /decl/material))
+	if(ispath(material, /material))
+		material = SSmaterials.get_material_datum(material)
+	if(ispath(_reinf_mat, /material))
 		reinf_material = _reinf_mat
-	if(ispath(reinf_material, /decl/material))
-		reinf_material = decls_repository.get_decl(reinf_material)
+	if(ispath(reinf_material, /material))
+		reinf_material = SSmaterials.get_material_datum(reinf_material)
 	. = ..()
 	update_materials()
 	if(!CanFluidPass())
@@ -93,6 +93,17 @@
 				else
 					to_chat(user, SPAN_SUBTLE("Can have wiring installed with a cable coil."))
 
+/obj/structure/attack_generic(var/mob/user, var/damage, var/attack_verb, var/wallbreaker)
+	if(wallbreaker && damage && breakable)
+		visible_message(SPAN_DANGER("\The [user] smashes \the [src] to pieces!"))
+		attack_animation(user)
+		qdel(src)
+		return 1
+	visible_message(SPAN_DANGER("\The [user] [attack_verb] \the [src]!"))
+	attack_animation(user)
+	take_damage(damage)
+	return 1
+
 /obj/structure/proc/mob_breakout(var/mob/living/escapee)
 	set waitfor = FALSE
 	return FALSE
@@ -114,7 +125,7 @@
 	show_damage_message(health/maxhealth)
 
 	if(health == 0)
-		physically_destroyed()
+		destroyed()
 
 /obj/structure/proc/show_damage_message(var/perc)
 	if(perc > 0.75)
@@ -129,16 +140,12 @@
 		visible_message(SPAN_WARNING("\The [src] is showing some damage!"))
 		last_damage_message = 0.75
 
-/obj/structure/physically_destroyed()
-	. = ..() && dismantle()
+/obj/structure/proc/destroyed()
+	. = dismantle()
 
 /obj/structure/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
 	. = ..()
-	var/dmg = 100
-	if(material)
-		dmg = round(dmg * material.combustion_effect(get_turf(src),temperature, 0.3))
-	if(dmg)
-		take_damage(dmg)
+	take_damage(100*material.combustion_effect(get_turf(src),temperature, 0.3))
 
 /obj/structure/Destroy()
 	reset_mobs_offset()
@@ -195,7 +202,7 @@
 		else
 			playsound(loc, 'sound/weapons/tablehit1.ogg', 50, 1)
 		var/list/L = take_damage(rand(1,5))
-		for(var/obj/item/shard/S in L)
+		for(var/obj/item/material/shard/S in L)
 			if(S.sharp && prob(50))
 				affecting_mob.visible_message(SPAN_DANGER("\The [S] slices into [affecting_mob]'s face!"), SPAN_DANGER("\The [S] slices into your face!"))
 				affecting_mob.standard_weapon_hit_effects(S, G.assailant, S.force*2, BP_HEAD)
@@ -212,15 +219,13 @@
 		qdel(G)
 		return TRUE
 
-/obj/structure/explosion_act(severity)
-	..()
-	if(QDELETED(src))
-		if(severity == 1)
-			physically_destroyed()
-		else if(severity == 2)
-			take_damage(rand(20, 30))
-		else
-			take_damage(rand(5, 15))
+/obj/structure/ex_act(severity)
+	if(severity == 1)
+		destroyed()
+	else if(severity == 2)
+		take_damage(rand(20, 30))
+	else
+		take_damage(rand(5, 15))
 
 /obj/structure/proc/can_repair(var/mob/user)
 	if(health >= maxhealth)

@@ -7,7 +7,7 @@ GLOBAL_LIST_INIT(station_bookcases, new)
 	density = 1
 	opacity = 1
 	obj_flags = OBJ_FLAG_ANCHORABLE
-	material = /decl/material/solid/wood
+	material = MAT_WOOD
 	tool_interaction_flags = (TOOL_INTERACTION_ANCHOR | TOOL_INTERACTION_DECONSTRUCT)
 	material_alteration = MAT_FLAG_ALTERATION_NAME | MAT_FLAG_ALTERATION_COLOR
 
@@ -53,28 +53,35 @@ GLOBAL_LIST_INIT(station_bookcases, new)
 				choice.dropInto(loc)
 			update_icon()
 
-/obj/structure/bookcase/explosion_act(severity)
-	..()
-	if(!QDELETED(src))
-		var/book_destroy_prob = 100
-		var/case_destroy_prob = 100
-		if(severity == 2)
-			book_destroy_prob = 50
-		else if(severity == 3)
-			case_destroy_prob = 50
-			book_destroy_prob = 0
-		if(prob(case_destroy_prob))
+/obj/structure/bookcase/ex_act(severity)
+	switch(severity)
+		if(1.0)
 			for(var/obj/item/book/b in contents)
-				b.dropInto(loc)
-				if(prob(book_destroy_prob))
-					qdel(b)
-			physically_destroyed()
+				qdel(b)
+			qdel(src)
+			return
+		if(2.0)
+			for(var/obj/item/book/b in contents)
+				if (prob(50)) b.dropInto(loc)
+				else qdel(b)
+			qdel(src)
+			return
+		if(3.0)
+			if (prob(50))
+				for(var/obj/item/book/b in contents)
+					b.dropInto(loc)
+				qdel(src)
+			return
+		else
+	return
 
 /obj/structure/bookcase/on_update_icon()
 	if(contents.len < 5)
 		icon_state = "book-[contents.len]"
 	else
 		icon_state = "book-5"
+
+
 
 /obj/structure/bookcase/manuals/medical
 	name = "Medical Manuals bookcase"
@@ -101,4 +108,12 @@ GLOBAL_LIST_INIT(station_bookcases, new)
 	new /obj/item/book/manual/engineering_singularity_safety(src)
 	new /obj/item/book/manual/evaguide(src)
 	new /obj/item/book/manual/rust_engine(src)
+	update_icon()
+
+/obj/structure/bookcase/manuals/research_and_development
+	name = "R&D Manuals bookcase"
+
+/obj/structure/bookcase/manuals/research_and_development/Initialize()
+	. = ..()
+	new /obj/item/book/manual/research_and_development(src)
 	update_icon()

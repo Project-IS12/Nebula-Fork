@@ -1,3 +1,5 @@
+GLOBAL_LIST_EMPTY(computer_networks)
+
 /datum/computer_network
 	var/network_id
 	var/network_key
@@ -11,7 +13,6 @@
 	var/list/relays = list()
 
 	var/datum/extension/network_device/broadcaster/router/router
-	var/datum/extension/network_device/acl/access_controller
 
 	var/network_features_enabled = NETWORK_ALL_FEATURES
 	var/intrusion_detection_enabled
@@ -24,15 +25,14 @@
 	if(!new_id)
 		new_id = "network[random_id(type, 100,999)]"
 	network_id = new_id
-	SSnetworking.networks[network_id] = src
+	GLOB.computer_networks[network_id] = src
 
 /datum/computer_network/Destroy()
 	for(var/datum/extension/network_device/D in devices)
 		D.disconnect()
-	QDEL_NULL_LIST(chat_channels)
+	QDEL_NULL(chat_channels)
 	devices = null
 	mainframes = null
-	SSnetworking.networks -= network_id
 	. = ..()
 
 /datum/computer_network/proc/add_device(datum/extension/network_device/D)
@@ -54,8 +54,6 @@
 	else if(istype(D, /datum/extension/network_device/broadcaster/relay))
 		relays |= D
 		add_log("Relay ONLINE", D.network_tag)
-	else if(istype(D, /datum/extension/network_device/acl) && !access_controller)
-		set_access_controller(D)
 	return TRUE
 
 /datum/computer_network/proc/remove_device(datum/extension/network_device/D)
@@ -79,9 +77,6 @@
 		if(!router)
 			add_log("Router offline, network shutting down", D.network_tag)
 			qdel(src)
-	if(D == access_controller)
-		access_controller = null
-		add_log("Access controller offline. Network security offline.", D.network_tag)
 	return TRUE
 
 /datum/computer_network/proc/get_unique_tag(nettag)
@@ -98,12 +93,7 @@
 	network_key = router.key
 	change_id(router.network_id)
 	devices |= D
-	add_log("New main router set.", router.network_tag)
-
-/datum/computer_network/proc/set_access_controller(datum/extension/network_device/D)
-	access_controller = D
-	devices |= D
-	add_log("New main access controller set.", D.network_tag)
+	add_log("New main router set", router.network_tag)
 
 /datum/computer_network/proc/check_connection(datum/extension/network_device/D, specific_action)
 	if(!router)
@@ -138,14 +128,13 @@
 /datum/computer_network/proc/change_id(new_id)
 	if(new_id == network_id)
 		return
-	// Update connected devices.
 	for(var/datum/extension/network_device/D in devices)
 		if(D.network_id != new_id)
 			D.network_id = new_id
-	SSnetworking.networks -= network_id
+	GLOB.computer_networks -= network_id
 	add_log("Network ID was changed from '[network_id]' to '[new_id]'")
 	network_id = new_id
-	SSnetworking.networks[network_id] = src
+	GLOB.computer_networks[network_id] = src
 
 /datum/computer_network/proc/enable_network_feature(feature)
 	network_features_enabled |= feature
@@ -179,36 +168,7 @@
 
 // TODO: Some way to set what network it should be, based on map vars or overmap vars
 /proc/get_local_network_at(turf/T)
-	for(var/id in SSnetworking.networks)
-		var/datum/computer_network/net = SSnetworking.networks[id]
+	for(var/id in GLOB.computer_networks)
+		var/datum/computer_network/net = GLOB.computer_networks[id]
 		if(net.router && ARE_Z_CONNECTED(get_z(net.router.holder), get_z(T)))
 			return net
-
-/datum/computer_network/proc/get_mainframes_by_role(mainframe_role = MF_ROLE_FILESERVER, mob/user)
-	// if administrator, give full access.
-	if(!user)
-		return mainframes_by_role[mainframe_role]
-	var/obj/item/card/id/network/id = user.GetIdCard()
-	if(id && istype(id, /obj/item/card/id/network) && access_controller && (id.user_id in access_controller.administrators))
-		return mainframes_by_role[mainframe_role]
-	var/list/allowed_mainframes = list()
-	for(var/datum/extension/network_device/D in mainframes_by_role[mainframe_role])
-		if(D.has_access(user))
-			allowed_mainframes |= D
-	return allowed_mainframes
-
-/datum/computer_network/proc/get_devices_by_type(var/type, var/mob/user)
-	var/bypass_auth = !user
-	if(!bypass_auth)
-		// Check for admin.
-		var/obj/item/card/id/network/id = user.GetIdCard()
-		if(id && istype(id, /obj/item/card/id/network) && access_controller && (id.user_id in access_controller.administrators))
-			bypass_auth = TRUE
-
-	var/list/results = list()
-	for(var/datum/extension/network_device/device in devices)
-		if(istype(device.holder, type))
-			if(bypass_auth || device.has_access(user))
-				results += device.holder
-	return results
-

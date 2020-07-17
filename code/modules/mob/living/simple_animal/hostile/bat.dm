@@ -16,7 +16,10 @@
 	health = 20
 
 	harm_intent_damage = 8
-	natural_weapon = /obj/item/natural_weapon/bite
+	melee_damage_lower = 10
+	melee_damage_upper = 10
+	attacktext = "bit"
+	attack_sound = 'sound/weapons/bite.ogg'
 
 	min_gas = null
 	max_gas = null

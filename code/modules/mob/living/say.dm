@@ -312,14 +312,45 @@ proc/get_radio_key_from_channel(var/channel)
 				if(O) //It's possible that it could be deleted in the meantime.
 					O.hear_talk(src, stars(message), verb, speaking)
 
-	INVOKE_ASYNC(GLOBAL_PROC, .proc/animate_speech_bubble, speech_bubble, speech_bubble_recipients, 30)
+	if(!whispering)
+		var/ending = copytext(message, length(message))
+		var/sound_key = "m"
+		var/sound_end = ""//Blank string by default
+		if(gender == FEMALE)
+			sound_key = "f"
+		if(gender == PLURAL)//Fuck plural genders tbh. Such an unneseccessary edition.
+			sound_key = "n"
+		if(gender == NEUTER)
+			sound_key = "n"
+		if(ending=="?")
+			sound_end = "_ask"
+		if(ending=="!")
+			sound_end = "_exclaim"
+		playsound(src, "sound/voice/human/[sound_key]speak[sound_end].ogg", 100)//Play the talking sound.
+
+	INVOKE_ASYNC(GLOBAL_PROC, .proc/animate_speechbubble, speech_bubble, speech_bubble_recipients, 30)
 	INVOKE_ASYNC(src, /atom/movable/proc/animate_chat, message, speaking, italics, speech_bubble_recipients, 30)
+
 
 	if(whispering)
 		log_whisper("[name]/[key] : [message]")
 	else
 		log_say("[name]/[key] : [message]")
 	return 1
+
+
+/proc/animate_speechbubble(image/I, list/show_to, duration)
+	var/matrix/M = matrix()
+	M.Scale(0,0)
+	I.transform = M
+	I.alpha = 0
+	for(var/client/C in show_to)
+		C.images += I
+	animate(I, transform = 0, alpha = 255, time = 5, easing = ELASTIC_EASING)
+	addtimer(CALLBACK(GLOBAL_PROC, .proc/fade_speechbubble, I), duration-5)
+
+/proc/fade_speechbubble(image/I)
+	animate(I, alpha = 0, time = 5, easing = EASE_IN)
 
 /mob/living/proc/say_signlang(var/message, var/verb="gestures", var/decl/language/language)
 	for (var/mob/O in viewers(src, null))

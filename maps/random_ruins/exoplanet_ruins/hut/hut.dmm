@@ -18,6 +18,7 @@
 /turf/simulated/floor/tiled/dark,
 /area/template_noop)
 "f" = (
+/obj/machinery/r_n_d/server,
 /turf/simulated/floor/tiled/dark,
 /area/template_noop)
 "g" = (

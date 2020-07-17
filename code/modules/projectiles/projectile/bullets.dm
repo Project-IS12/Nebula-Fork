@@ -7,7 +7,6 @@
 	damage_flags = DAM_BULLET | DAM_SHARP
 	nodamage = 0
 	embed = 1
-	space_knockback = 1
 	penetration_modifier = 1.0
 	var/mob_passthrough_check = 0
 	var/caliber
@@ -65,7 +64,6 @@
 
 	return 0
 
-/* short-casing projectiles, like the kind used in pistols or SMGs */
 
 /obj/item/projectile/bullet/pistol
 	fire_sound = 'sound/weapons/gunshot/gunshot_pistol.ogg'
@@ -94,6 +92,15 @@
 /obj/item/projectile/bullet/pistol/rubber/holdout
 	agony = 20
 
+//4mm. Tiny, very low damage, does not embed, but has very high penetration. Only to be used for the experimental SMG.
+/obj/item/projectile/bullet/flechette
+	fire_sound = 'sound/weapons/gunshot/gunshot_4mm.ogg'
+	damage = 23
+	penetrating = 1
+	armor_penetration = 70
+	embed = 0
+	distance_falloff = 2
+
 /* shotgun projectiles */
 
 /obj/item/projectile/bullet/shotgun
@@ -111,15 +118,32 @@
 	armor_penetration = 0
 	distance_falloff = 3
 
+//Should do about 80 damage at 1 tile distance (adjacent), and 50 damage at 3 tiles distance.
+//Overall less damage than slugs in exchange for more damage at very close range and more embedding
+/obj/item/projectile/bullet/pellet/shotgun
+	icon_state = "pellets"
+	name = "shrapnel"
+	fire_sound = 'sound/weapons/gunshot/shotgun.ogg'
+	damage = 30
+	pellets = 6
+	range_step = 1
+	spread_step = 10
+
 /* "Rifle" rounds */
 
 /obj/item/projectile/bullet/rifle
-	fire_sound = 'sound/weapons/gunshot/gunshot3.ogg'
+	fire_sound = 'sound/weapons/gunshot/ltrifle_fire.ogg'
 	damage = 45
 	armor_penetration = 25
 	penetration_modifier = 1.5
 	penetrating = 1
 	distance_falloff = 1.5
+
+/obj/item/projectile/bullet/rifle/military
+	fire_sound = 'sound/weapons/gunshot/sfrifle_fire.ogg'
+	damage = 40
+	armor_penetration = 35
+	penetration_modifier = 1
 
 /obj/item/projectile/bullet/rifle/shell
 	fire_sound = 'sound/weapons/gunshot/sniper.ogg'
@@ -138,6 +162,17 @@
 	penetration_modifier = 1.5
 
 /* Miscellaneous */
+/obj/item/projectile/bullet/gyro
+	name = "minirocket"
+	fire_sound = 'sound/effects/Explosion1.ogg'
+	var/gyro_devastation = -1
+	var/gyro_heavy_impact = 0
+	var/gyro_light_impact = 2
+
+/obj/item/projectile/bullet/gyro/on_hit(var/atom/target, var/blocked = 0)
+	if(isturf(target))
+		explosion(target, gyro_devastation, gyro_heavy_impact, gyro_light_impact)
+	..()
 
 /obj/item/projectile/bullet/blank
 	invisibility = 101
@@ -149,7 +184,7 @@
 /obj/item/projectile/bullet/pistol/practice
 	damage = 5
 
-/obj/item/projectile/bullet/rifle/practice
+/obj/item/projectile/bullet/rifle/military/practice
 	damage = 5
 
 /obj/item/projectile/bullet/shotgun/practice
@@ -175,7 +210,7 @@
 	icon_state = "rock"
 	damage = 40
 	armor_penetration = 25
-	life_span = 255
+	range = 255
 	distance_falloff = 0
 
 /obj/item/projectile/bullet/rock/Initialize()

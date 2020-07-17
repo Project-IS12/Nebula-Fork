@@ -15,7 +15,7 @@
 /turf/simulated/floor/tiled/dark,
 /area/map_template/hydrobase/station/growX)
 "ae" = (
-/obj/effect/wallframe_spawn/reinforced_borosilicate,
+/obj/effect/wallframe_spawn/reinforced_phoron,
 /obj/machinery/door/firedoor,
 /turf/simulated/floor/fixed/alium,
 /area/map_template/hydrobase/station/growX)
@@ -51,7 +51,7 @@
 /turf/simulated/floor/tiled/dark,
 /area/map_template/hydrobase/station/growX)
 "al" = (
-/obj/effect/wallframe_spawn/reinforced_borosilicate,
+/obj/effect/wallframe_spawn/reinforced_phoron,
 /obj/machinery/door/firedoor,
 /turf/simulated/floor/fixed/alium,
 /area/map_template/hydrobase/station/growA)
@@ -129,7 +129,7 @@
 /turf/simulated/wall/alium,
 /area/map_template/hydrobase/station/growD)
 "au" = (
-/obj/effect/wallframe_spawn/reinforced_borosilicate,
+/obj/effect/wallframe_spawn/reinforced_phoron,
 /obj/machinery/door/firedoor,
 /turf/simulated/floor/fixed/alium,
 /area/map_template/hydrobase/station/growD)
@@ -235,7 +235,8 @@
 	icon_state = "warningcorner";
 	dir = 4
 	},
-/obj/structure/window/borosilicate_reinforced{
+/obj/structure/window/phoronreinforced{
+	icon_state = "phoronrwindow";
 	dir = 8
 	},
 /turf/simulated/floor/tiled/white,
@@ -355,7 +356,8 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
-/obj/structure/window/borosilicate_reinforced{
+/obj/structure/window/phoronreinforced{
+	icon_state = "phoronrwindow";
 	dir = 8
 	},
 /turf/simulated/floor/tiled/white,
@@ -416,7 +418,8 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
-/obj/structure/window/borosilicate_reinforced{
+/obj/structure/window/phoronreinforced{
+	icon_state = "phoronrwindow";
 	dir = 8
 	},
 /turf/simulated/floor/tiled/white,
@@ -798,7 +801,7 @@
 /turf/simulated/floor/bluegrid,
 /area/map_template/hydrobase/station/growF)
 "ca" = (
-/obj/effect/wallframe_spawn/reinforced_borosilicate,
+/obj/effect/wallframe_spawn/reinforced_phoron,
 /obj/machinery/door/firedoor,
 /turf/simulated/floor/fixed/alium,
 /area/map_template/hydrobase/station/growF)
@@ -917,12 +920,12 @@
 /area/map_template/hydrobase/station/growA)
 "cq" = (
 /obj/structure/closet/secure_closet/hydroponics/hydro,
-/obj/item/hatchet/machete,
+/obj/item/material/hatchet/machete,
 /turf/simulated/floor/tiled,
 /area/map_template/hydrobase/station/growF)
 "cr" = (
 /obj/structure/closet/secure_closet/hydroponics/hydro,
-/obj/item/scythe,
+/obj/item/material/scythe,
 /turf/simulated/floor/tiled,
 /area/map_template/hydrobase/station/growF)
 "cs" = (
@@ -935,9 +938,9 @@
 /turf/simulated/floor/tiled,
 /area/map_template/hydrobase/station/growF)
 "ct" = (
-/obj/item/knife/kitchen,
+/obj/item/material/knife/kitchen,
 /obj/structure/table/glass/pglass,
-/obj/item/ashtray,
+/obj/item/material/ashtray/bronze,
 /turf/simulated/floor/tiled,
 /area/map_template/hydrobase/station/growF)
 "cu" = (
@@ -945,7 +948,7 @@
 /turf/simulated/floor/tiled,
 /area/map_template/hydrobase/station/growF)
 "cv" = (
-/obj/effect/wallframe_spawn/reinforced_borosilicate,
+/obj/effect/wallframe_spawn/reinforced_phoron,
 /obj/machinery/door/firedoor,
 /turf/simulated/floor/fixed/alium,
 /area/map_template/hydrobase/station/growC)
@@ -1019,7 +1022,8 @@
 	dir = 4;
 	start_pressure = 740.5
 	},
-/obj/structure/window/borosilicate_reinforced{
+/obj/structure/window/phoronreinforced{
+	icon_state = "phoronrwindow";
 	dir = 1
 	},
 /turf/simulated/floor/fixed/alium,
@@ -1029,7 +1033,8 @@
 	icon_state = "map";
 	dir = 1
 	},
-/obj/structure/window/borosilicate_reinforced{
+/obj/structure/window/phoronreinforced{
+	icon_state = "phoronrwindow";
 	dir = 1
 	},
 /obj/structure/catwalk,
@@ -1039,13 +1044,14 @@
 /obj/machinery/atmospherics/binary/pump{
 	dir = 4
 	},
-/obj/structure/window/borosilicate_reinforced{
+/obj/structure/window/phoronreinforced{
+	icon_state = "phoronrwindow";
 	dir = 1
 	},
 /obj/structure/catwalk,
 /obj/random/toolbox,
 /obj/structure/table/rack,
-/obj/item/gun/projectile/zipgun,
+/obj/item/gun/projectile/pirate,
 /turf/simulated/floor/fixed/alium,
 /area/map_template/hydrobase/station/growF)
 "cH" = (
@@ -1053,10 +1059,11 @@
 	icon_state = "map_universal";
 	dir = 4
 	},
-/obj/structure/window/borosilicate_reinforced{
+/obj/structure/window/phoronreinforced{
+	icon_state = "phoronrwindow";
 	dir = 1
 	},
-/obj/structure/window/borosilicate_reinforced{
+/obj/structure/window/phoronreinforced{
 	dir = 4
 	},
 /obj/structure/catwalk,
@@ -1526,7 +1533,7 @@
 /area/map_template/hydrobase/station/processing)
 "dM" = (
 /obj/structure/catwalk,
-/obj/item/kitchen/utensil/spoon,
+/obj/item/material/kitchen/utensil/spoon,
 /obj/structure/table/glass/pglass,
 /turf/simulated/floor/fixed/alium,
 /area/map_template/hydrobase/station/processing)
@@ -1578,7 +1585,8 @@
 	id = "hydrosolar";
 	track = 2
 	},
-/obj/structure/window/borosilicate_reinforced{
+/obj/structure/window/phoronreinforced{
+	icon_state = "phoronrwindow";
 	dir = 8
 	},
 /obj/structure/cable,
@@ -1698,10 +1706,10 @@
 /area/map_template/hydrobase/station/growA)
 "eh" = (
 /obj/structure/catwalk,
-/obj/item/kitchen/rollingpin,
-/obj/item/knife/kitchen,
+/obj/item/material/kitchen/rollingpin,
+/obj/item/material/knife/kitchen,
 /obj/structure/table/glass/pglass,
-/obj/item/ashtray,
+/obj/item/material/ashtray/bronze,
 /turf/simulated/floor/fixed/alium,
 /area/map_template/hydrobase/station/processing)
 "ei" = (
@@ -1743,10 +1751,11 @@
 /area/map_template/hydrobase/station/processing)
 "eo" = (
 /obj/structure/closet/toolcloset,
-/obj/structure/window/borosilicate_reinforced{
+/obj/structure/window/phoronreinforced{
+	icon_state = "phoronrwindow";
 	dir = 8
 	},
-/obj/structure/window/borosilicate_reinforced,
+/obj/structure/window/phoronreinforced,
 /obj/structure/catwalk,
 /turf/simulated/floor/fixed/alium,
 /area/map_template/hydrobase/station/processing)
@@ -1766,7 +1775,7 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
-/obj/structure/window/borosilicate_reinforced,
+/obj/structure/window/phoronreinforced,
 /obj/structure/catwalk,
 /turf/simulated/floor/fixed/alium,
 /area/map_template/hydrobase/station/processing)
@@ -2121,7 +2130,8 @@
 /area/map_template/hydrobase/station/processing)
 "eX" = (
 /obj/structure/closet/l3closet/general/multi,
-/obj/structure/window/borosilicate_reinforced{
+/obj/structure/window/phoronreinforced{
+	icon_state = "phoronrwindow";
 	dir = 8
 	},
 /turf/simulated/floor/tiled,
@@ -2159,10 +2169,11 @@
 	icon_state = "4-8"
 	},
 /obj/structure/catwalk,
-/obj/structure/window/borosilicate_reinforced{
+/obj/structure/window/phoronreinforced{
+	icon_state = "phoronrwindow";
 	dir = 8
 	},
-/obj/item/shard/borosilicate,
+/obj/item/material/shard/phoron,
 /turf/simulated/floor/fixed/alium,
 /area/map_template/hydrobase/station/processing)
 "fb" = (
@@ -2182,13 +2193,14 @@
 	icon_state = "1-8"
 	},
 /obj/structure/catwalk,
-/obj/structure/window/borosilicate_reinforced{
+/obj/structure/window/phoronreinforced{
+	icon_state = "phoronrwindow";
 	dir = 1
 	},
 /turf/simulated/floor/fixed/alium,
 /area/map_template/hydrobase/station/processing)
 "fd" = (
-/obj/effect/wallframe_spawn/reinforced_borosilicate,
+/obj/effect/wallframe_spawn/reinforced_phoron,
 /turf/simulated/floor/fixed/alium,
 /area/map_template/hydrobase/station/solarlock)
 "fe" = (
@@ -2286,7 +2298,7 @@
 /area/map_template/hydrobase/station/processing)
 "fr" = (
 /obj/structure/catwalk,
-/obj/item/knife/folding/combat/switchblade,
+/obj/item/material/knife/folding/combat/switchblade,
 /obj/random/coin,
 /obj/random/coin,
 /obj/structure/closet/crate/secure/weapon{
@@ -2295,7 +2307,7 @@
 	req_access = list("ACCESS_SYNDICATE")
 	},
 /obj/random/projectile,
-/obj/item/knife/combat,
+/obj/item/material/knife/combat,
 /obj/item/cash/c100,
 /obj/random/cash,
 /obj/random/cash,
@@ -2316,20 +2328,21 @@
 /area/map_template/hydrobase/station/processing)
 "ft" = (
 /obj/machinery/light,
-/obj/structure/window/borosilicate_reinforced{
+/obj/structure/window/phoronreinforced{
+	icon_state = "phoronrwindow";
 	dir = 8
 	},
 /obj/structure/table/rack,
 /obj/item/ammo_casing/shotgun/emp,
 /obj/item/ammo_casing/shotgun/emp,
 /obj/item/gun/projectile/shotgun/doublebarrel,
-/obj/structure/window/borosilicate_reinforced{
+/obj/structure/window/phoronreinforced{
 	dir = 4
 	},
 /obj/item/grenade/chem_grenade/antiweed,
 /obj/item/grenade/chem_grenade/incendiary,
 /obj/item/weedkiller/D24,
-/obj/item/shard/borosilicate,
+/obj/item/material/shard/phoron,
 /turf/simulated/floor/tiled/dark,
 /area/map_template/hydrobase/station/processing)
 "fu" = (
@@ -2347,7 +2360,7 @@
 /turf/simulated/floor/fixed/alium,
 /area/map_template/hydrobase/station/processing)
 "fw" = (
-/obj/effect/wallframe_spawn/reinforced_borosilicate,
+/obj/effect/wallframe_spawn/reinforced_phoron,
 /obj/machinery/door/firedoor,
 /turf/simulated/floor/fixed/alium,
 /area/map_template/hydrobase/station/growB)
@@ -2386,7 +2399,7 @@
 /turf/simulated/wall/alium,
 /area/map_template/hydrobase/station/shipaccess)
 "fC" = (
-/obj/effect/wallframe_spawn/reinforced_borosilicate,
+/obj/effect/wallframe_spawn/reinforced_phoron,
 /obj/machinery/door/firedoor,
 /turf/simulated/floor/plating,
 /area/map_template/hydrobase/station/shipaccess)
@@ -2763,7 +2776,7 @@
 /turf/simulated/floor/tiled,
 /area/map_template/hydrobase/station/dockport)
 "gp" = (
-/obj/effect/wallframe_spawn/reinforced_borosilicate,
+/obj/effect/wallframe_spawn/reinforced_phoron,
 /obj/machinery/door/firedoor,
 /turf/simulated/floor/plating,
 /area/map_template/hydrobase/station/dockport)
@@ -2850,15 +2863,15 @@
 /area/map_template/hydrobase/station/dockport)
 "gx" = (
 /obj/item/clothing/under/overalls,
-/obj/item/clothing/shoes/jackboots/desertboots,
+/obj/item/clothing/shoes/desertboots,
 /obj/structure/closet,
 /turf/simulated/floor/tiled/freezer,
 /area/map_template/hydrobase/station/shower)
 "gy" = (
 /obj/item/clothing/accessory/toggleable/hawaii/random,
 /obj/item/clothing/under/casual_pants/greyjeans,
-/obj/item/clothing/head/bowler,
-/obj/item/clothing/shoes/craftable,
+/obj/item/clothing/head/bowlerhat,
+/obj/item/clothing/shoes/leather,
 /obj/structure/closet,
 /turf/simulated/floor/tiled/freezer,
 /area/map_template/hydrobase/station/shower)

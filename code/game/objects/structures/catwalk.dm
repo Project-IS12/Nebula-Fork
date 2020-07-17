@@ -1,7 +1,7 @@
 /obj/structure/catwalk
 	name = "catwalk"
 	desc = "Cats really don't like these things."
-	icon = 'icons/obj/structures/catwalks.dmi'
+	icon = 'icons/obj/catwalks.dmi'
 	icon_state = "catwalk"
 	density = 0
 	anchored = 1.0
@@ -10,10 +10,9 @@
 	obj_flags = OBJ_FLAG_NOFALL
 	handle_generic_blending = TRUE
 	tool_interaction_flags = TOOL_INTERACTION_DECONSTRUCT
-	material = /decl/material/solid/metal/steel
 
 	var/hatch_open = FALSE
-	var/decl/flooring/tiling/plated_tile
+	var/obj/item/stack/tile/mono/plated_tile
 	var/list/connections
 	var/list/other_connections
 
@@ -28,11 +27,6 @@
 /obj/structure/catwalk/Initialize()
 	. = ..()
 	DELETE_IF_DUPLICATE_OF(/obj/structure/catwalk)
-
-	if(!istype(material))
-		return INITIALIZE_HINT_QDEL
-
-	return INITIALIZE_HINT_LATELOAD
 
 /obj/structure/catwalk/LateInitialize()
 	..()
@@ -61,23 +55,21 @@
 	var/image/I
 	if(!hatch_open)
 		for(var/i = 1 to 4)
-			I = image(icon, "catwalk[connections ? connections[i] : "0"]", dir = 1<<(i-1))
+			I = image('icons/obj/catwalks.dmi', "catwalk[connections ? connections[i] : "0"]", dir = 1<<(i-1))
 			overlays += I
 	if(plated_tile)
-		I = image(icon, "plated")
+		I = image('icons/obj/catwalks.dmi', "plated")
 		I.color = plated_tile.color
 		overlays += I
 
-/obj/structure/catwalk/create_dismantled_products(var/turf/T)
-	new /obj/item/stack/material/rods(T, 2, material.type)
-	if(plated_tile)
-		var/plate_path = plated_tile.build_type
-		new plate_path(T)
-
-/obj/structure/catwalk/explosion_act(severity)
-	..()
-	if(!QDELETED(src) && severity != 3)
-		physically_destroyed()
+/obj/structure/catwalk/ex_act(severity)
+	switch(severity)
+		if(1)
+			new /obj/item/stack/material/rods(loc)
+			qdel(src)
+		if(2)
+			new /obj/item/stack/material/rods(loc)
+			qdel(src)
 
 /obj/structure/catwalk/attack_robot(var/mob/user)
 	if(Adjacent(user))
@@ -148,7 +140,7 @@
 
 /obj/effect/catwalk_plated
 	name = "plated catwalk spawner"
-	icon = 'icons/obj/structures/catwalks.dmi'
+	icon = 'icons/obj/catwalks.dmi'
 	icon_state = "catwalk_plated"
 	density = 1
 	anchored = 1.0
@@ -167,9 +159,12 @@
 	return 0
 
 /obj/effect/catwalk_plated/attack_hand()
-	activate()
+	attack_generic()
 
 /obj/effect/catwalk_plated/attack_ghost()
+	attack_generic()
+
+/obj/effect/catwalk_plated/attack_generic()
 	activate()
 
 /obj/effect/catwalk_plated/proc/activate()

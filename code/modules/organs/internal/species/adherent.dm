@@ -114,7 +114,7 @@
 	eye_icon = 'icons/mob/human_races/species/adherent/eyes.dmi'
 	icon_state = "eyes"
 	status = ORGAN_PROSTHETIC
-	contaminant_guard = TRUE
+	phoron_guard = TRUE
 	innate_flash_protection = FLASH_PROTECTION_MAJOR
 
 /obj/item/organ/internal/eyes/adherent/Initialize()

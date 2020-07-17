@@ -7,7 +7,7 @@
 	name = "\improper ChemMaster 3000"
 	density = 1
 	anchored = 1
-	icon = 'icons/obj/machines/chemistry/chemmaster.dmi'
+	icon = 'icons/obj/chemical.dmi'
 	icon_state = "mixer0"
 	layer = BELOW_OBJ_LAYER
 	idle_power_usage = 20
@@ -30,10 +30,15 @@
 	. = ..()
 	create_reagents(120)
 
-/obj/machinery/chem_master/explosion_act(severity)
-	. = ..()
-	if(. && (severity == 1) || (severity == 2 && prob(50)))
-		physically_destroyed()
+/obj/machinery/chem_master/ex_act(severity)
+	switch(severity)
+		if(1.0)
+			qdel(src)
+			return
+		if(2.0)
+			if (prob(50))
+				qdel(src)
+				return
 
 /obj/machinery/chem_master/attackby(var/obj/item/B, var/mob/user)
 
@@ -77,21 +82,21 @@
 	if(beaker)
 		var/datum/reagents/R = beaker.reagents
 		if (href_list["analyze"])
-			var/decl/material/reagent = locate(href_list["analyze"])
+			var/datum/reagent/reagent = locate(href_list["analyze"]) in R.reagent_list
 			var/dat = get_chem_info(reagent)
-			if(dat && REAGENT_VOLUME(beaker.reagents, reagent.type))
+			if(dat)
 				show_browser(user, dat, "window=chem_master;size=575x400")
 			return
 
 		else if (href_list["add"])
 			if(href_list["amount"])
-				var/decl/material/their_reagent = locate(href_list["add"])
+				var/datum/reagent/their_reagent = locate(href_list["add"]) in R.reagent_list
 				if(their_reagent)
 					var/mult = 1
 					var/amount = Clamp((text2num(href_list["amount"])), 0, 200)
 					if(sloppy)
 						var/contaminants = fetch_contaminants(user, R, their_reagent)
-						for(var/decl/material/reagent in contaminants)
+						for(var/datum/reagent/reagent in contaminants)
 							R.trans_type_to(src, reagent.type, round(rand()*amount/5, 0.1))
 					else
 						mult -= 0.4 * (SKILL_MAX - user.get_skill_value(core_skill))/(SKILL_MAX-SKILL_MIN) //10% loss per skill level down from max
@@ -100,7 +105,7 @@
 
 
 		else if (href_list["addcustom"])
-			var/decl/material/their_reagent = locate(href_list["addcustom"])
+			var/datum/reagent/their_reagent = locate(href_list["addcustom"]) in R.reagent_list
 			if(their_reagent)
 				useramount = input("Select the amount to transfer.", 30, useramount) as null|num
 				if(useramount)
@@ -109,21 +114,21 @@
 
 		else if (href_list["remove"])
 			if(href_list["amount"])
-				var/decl/material/my_reagents = locate(href_list["remove"])
+				var/datum/reagent/my_reagents = locate(href_list["remove"]) in reagents.reagent_list
 				if(my_reagents)
 					var/amount = Clamp((text2num(href_list["amount"])), 0, 200)
 					var/contaminants = fetch_contaminants(user, reagents, my_reagents)
 					if(mode)
 						reagents.trans_type_to(beaker, my_reagents.type, amount)
-						for(var/decl/material/reagent in contaminants)
+						for(var/datum/reagent/reagent in contaminants)
 							reagents.trans_type_to(beaker, reagent.type, round(rand()*amount, 0.1))
 					else
 						reagents.remove_reagent(my_reagents.type, amount)
-						for(var/decl/material/reagent in contaminants)
+						for(var/datum/reagent/reagent in contaminants)
 							reagents.remove_reagent(reagent.type, round(rand()*amount, 0.1))
 
 		else if (href_list["removecustom"])
-			var/decl/material/my_reagents = locate(href_list["removecustom"])
+			var/datum/reagent/my_reagents = locate(href_list["removecustom"]) in reagents.reagent_list
 			if(my_reagents)
 				useramount = input("Select the amount to transfer.", 30, useramount) as null|num
 				if(useramount)
@@ -159,13 +164,13 @@
 			var/amount_per_pill = reagents.total_volume/count
 			if (amount_per_pill > 30) amount_per_pill = 30
 
-			var/name = sanitizeSafe(input(usr,"Name:","Name your pill!","[reagents.get_primary_reagent_name()] ([amount_per_pill]u)"), MAX_NAME_LEN)
+			var/name = sanitizeSafe(input(usr,"Name:","Name your pill!","[reagents.get_master_reagent_name()] ([amount_per_pill]u)"), MAX_NAME_LEN)
 
 			if(reagents.total_volume/count < 1) //Sanity checking.
 				return
 			while (count-- && count >= 0)
 				var/obj/item/chems/pill/P = new/obj/item/chems/pill(loc)
-				if(!name) name = reagents.get_primary_reagent_name()
+				if(!name) name = reagents.get_master_reagent_name()
 				P.SetName("[name] pill")
 				P.icon_state = "pill"+pillsprite
 				if(P.icon_state in list("pill1", "pill2", "pill3", "pill4", "pill5")) // if using greyscale, take colour from reagent
@@ -199,33 +204,34 @@
 
 	updateUsrDialog()
 
-/obj/machinery/chem_master/proc/fetch_contaminants(mob/user, datum/reagents/reagents, decl/material/main_reagent)
+/obj/machinery/chem_master/proc/fetch_contaminants(mob/user, datum/reagents/reagents, datum/reagent/main_reagent)
 	. = list()
-	for(var/rtype in reagents.reagent_volumes)
-		var/decl/material/reagent = decls_repository.get_decl(rtype)
-		if(reagent != main_reagent && prob(user.skill_fail_chance(core_skill, 100)))
+	for(var/datum/reagent/reagent in reagents.reagent_list)
+		if(reagent == main_reagent)
+			continue
+		if(prob(user.skill_fail_chance(core_skill, 100)))
 			. += reagent
 
-/obj/machinery/chem_master/proc/get_chem_info(decl/material/reagent, heading = "Chemical infos", detailed_blood = 1)
+/obj/machinery/chem_master/proc/get_chem_info(datum/reagent/reagent, heading = "Chemical infos", detailed_blood = 1)
 	if(!beaker || !reagent)
 		return
 	. = list()
 	. += "<TITLE>[name]</TITLE>"
 	. += "[heading]:<BR><BR>Name:<BR>[reagent.name]"
 	. += "<BR><BR>Description:<BR>"
-	if(detailed_blood && istype(reagent, /decl/material/liquid/blood))
-		var/blood_data = REAGENT_DATA(beaker?.reagents, /decl/material/liquid/blood)
-		. += "Blood Type: [LAZYACCESS(blood_data, "blood_type")]<br>DNA: [LAZYACCESS(blood_data, "blood.DNA")]"
+	if(detailed_blood && istype(reagent, /datum/reagent/blood))
+		var/datum/reagent/blood/B = reagent
+		. += "Blood Type: [B.data["blood_type"]]<br>DNA: [B.data["blood.DNA"]]"
 	else
-		. += "[reagent.lore_text]"
+		. += "[reagent.description]"
 	. += "<BR><BR><BR><A href='?src=\ref[src];main=1'>(Back)</A>"
 	. = JOINTEXT(.)
 
 /obj/machinery/chem_master/proc/create_bottle(mob/user)
-	var/name = sanitizeSafe(input(usr,"Name:","Name your bottle!",reagents.get_primary_reagent_name()), MAX_NAME_LEN)
+	var/name = sanitizeSafe(input(usr,"Name:","Name your bottle!",reagents.get_master_reagent_name()), MAX_NAME_LEN)
 	var/obj/item/chems/glass/bottle/P = new/obj/item/chems/glass/bottle(loc)
 	if(!name)
-		name = reagents.get_primary_reagent_name()
+		name = reagents.get_master_reagent_name()
 	P.SetName("[name] bottle")
 	P.icon_state = bottlesprite
 	reagents.trans_to_obj(P,60)
@@ -244,9 +250,9 @@
 		spawn()
 			has_sprites += user.client
 			for(var/i = 1 to MAX_PILL_SPRITE)
-				send_rsc(usr, icon('icons/obj/items/chem/pill.dmi', "pill" + num2text(i)), "pill[i].png")
+				send_rsc(usr, icon('icons/obj/chemical.dmi', "pill" + num2text(i)), "pill[i].png")
 			for(var/sprite in BOTTLE_SPRITES)
-				send_rsc(usr, icon('icons/obj/items/chem/bottle.dmi', sprite), "[sprite].png")
+				send_rsc(usr, icon('icons/obj/chemical.dmi', sprite), "[sprite].png")
 	var/dat = list()
 	dat += "<TITLE>[name]</TITLE>"
 	dat += "[name] Menu:"
@@ -269,26 +275,24 @@
 			dat += "Beaker is empty."
 		else
 			dat += "Add to buffer:<BR>"
-			for(var/rtype in R.reagent_volumes)
-				var/decl/material/G = decls_repository.get_decl(rtype)
-				dat += "[G.name], [REAGENT_VOLUME(R, rtype)] Units - "
+			for(var/datum/reagent/G in R.reagent_list)
+				dat += "[G.name], [G.volume] Units - "
 				dat += "<A href='?src=\ref[src];analyze=\ref[G]'>(Analyze)</A> "
 				dat += "<A href='?src=\ref[src];add=\ref[G];amount=1'>(1)</A> "
 				dat += "<A href='?src=\ref[src];add=\ref[G];amount=5'>(5)</A> "
 				dat += "<A href='?src=\ref[src];add=\ref[G];amount=10'>(10)</A> "
-				dat += "<A href='?src=\ref[src];add=\ref[G];amount=[REAGENT_VOLUME(R, rtype)]'>(All)</A> "
+				dat += "<A href='?src=\ref[src];add=\ref[G];amount=[G.volume]'>(All)</A> "
 				dat += "<A href='?src=\ref[src];addcustom=\ref[G]'>(Custom)</A><BR>"
 
 		dat += "<HR>Transfer to <A href='?src=\ref[src];toggle=1'>[(!mode ? "disposal" : "beaker")]:</A><BR>"
 		if(reagents.total_volume)
-			for(var/rtype in reagents.reagent_volumes)
-				var/decl/material/N = decls_repository.get_decl(rtype)
-				dat += "[N.name], [REAGENT_VOLUME(reagents, rtype)] Units - "
+			for(var/datum/reagent/N in reagents.reagent_list)
+				dat += "[N.name], [N.volume] Units - "
 				dat += "<A href='?src=\ref[src];analyze=\ref[N]'>(Analyze)</A> "
 				dat += "<A href='?src=\ref[src];remove=\ref[N];amount=1'>(1)</A> "
 				dat += "<A href='?src=\ref[src];remove=\ref[N];amount=5'>(5)</A> "
 				dat += "<A href='?src=\ref[src];remove=\ref[N];amount=10'>(10)</A> "
-				dat += "<A href='?src=\ref[src];remove=\ref[N];amount=[REAGENT_VOLUME(reagents, rtype)]'>(All)</A> "
+				dat += "<A href='?src=\ref[src];remove=\ref[N];amount=[N.volume]'>(All)</A> "
 				dat += "<A href='?src=\ref[src];removecustom=\ref[N]'>(Custom)</A><BR>"
 		else
 			dat += "Empty<BR>"
@@ -308,7 +312,7 @@
 	name = "\improper CondiMaster 3000"
 	core_skill = SKILL_COOKING
 
-/obj/machinery/chem_master/condimaster/get_chem_info(decl/material/reagent)
+/obj/machinery/chem_master/condimaster/get_chem_info(datum/reagent/reagent)
 	return ..(reagent, "Condiment infos", 0)
 
 /obj/machinery/chem_master/condimaster/create_bottle(mob/user)

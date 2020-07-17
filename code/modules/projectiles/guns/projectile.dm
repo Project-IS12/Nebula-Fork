@@ -2,12 +2,12 @@
 	name = "gun"
 	desc = "A gun that fires bullets."
 	icon = 'icons/obj/guns/pistol.dmi'
-	icon_state = "pistol"
+	icon_state = "secguncomp"
 	origin_tech = "{'combat':2,'materials':2}"
 	w_class = ITEM_SIZE_NORMAL
-	material = /decl/material/solid/metal/steel
-	screen_shake = 1
-	space_recoil = 1
+	matter = list(MAT_STEEL = 1000)
+	screen_shake = 0
+	material = MAT_STEEL
 	combustion = 1
 
 	var/caliber = CALIBER_PISTOL		//determines which casings will fit
@@ -20,7 +20,6 @@
 	var/ammo_type = null		//the type of ammo that the gun comes preloaded with
 	var/list/loaded = list()	//stored ammo
 	var/starts_loaded = 1		//whether the gun starts loaded or not, can be overridden for guns crafted in-game
-	var/load_sound = 'sound/weapons/guns/interaction/bullet_insert.ogg'
 
 	//For MAGAZINE guns
 	var/magazine_type = null	//the type of magazine that the gun comes preloaded with
@@ -30,14 +29,12 @@
 	var/auto_eject_sound = null
 	var/mag_insert_sound = 'sound/weapons/guns/interaction/pistol_magin.ogg'
 	var/mag_remove_sound = 'sound/weapons/guns/interaction/pistol_magout.ogg'
+	var/cock_sound		= 'sound/weapons/guns/interaction/pistol_cock.ogg'
+	var/load_sound 		= 'sound/weapons/guns/interaction/rev_magin.ogg'
 
 	var/is_jammed = 0           //Whether this gun is jammed
 	var/jam_chance = 0          //Chance it jams on fire
-	var/ammo_indicator	   //if true, draw ammo indicator overlays
-	//TODO generalize ammo icon states for guns
-	//var/magazine_states = 0
-	//var/list/icon_keys = list()		//keys
-	//var/list/ammo_states = list()	//values
+	var/load_delay = 0			//If set to anything but 0, loading your gun will use this delay
 
 /obj/item/gun/projectile/Initialize()
 	. = ..()
@@ -105,7 +102,7 @@
 	switch(handle_casings)
 		if(EJECT_CASINGS) //eject casing onto ground.
 			chambered.dropInto(loc)
-			chambered.throw_at(get_ranged_target_turf(get_turf(src),turn(loc.dir,270),1), rand(0,1), 5)
+			chambered.throw_at(get_ranged_target_turf(get_turf(src),turn(loc.dir,270),1), rand(0,1), 5, make_throw_sound = FALSE)
 			if(LAZYLEN(chambered.fall_sounds))
 				playsound(loc, pick(chambered.fall_sounds), 50, 1)
 		if(CYCLE_CASINGS) //cycle the casing back to the end.
@@ -129,6 +126,9 @@
 
 		switch(AM.mag_type)
 			if(MAGAZINE)
+				if(load_delay)
+					if(!do_after(user, load_delay, src))
+						return
 				if((ispath(allowed_magazines) && !istype(A, allowed_magazines)) || (islist(allowed_magazines) && !is_type_in_list(A, allowed_magazines)))
 					to_chat(user, "<span class='warning'>\The [A] won't fit into [src].</span>")
 					return
@@ -141,6 +141,9 @@
 				ammo_magazine = AM
 				user.visible_message("[user] inserts [AM] into [src].", "<span class='notice'>You insert [AM] into [src].</span>")
 				playsound(loc, mag_insert_sound, 50, 1)
+				if(cock_sound && AM.stored_ammo.len)
+					spawn(4)
+						playsound(src, cock_sound, 100, 1)
 			if(SPEEDLOADER)
 				if(loaded.len >= max_shells)
 					to_chat(user, "<span class='warning'>[src] is full!</span>")
@@ -157,6 +160,7 @@
 				if(count)
 					user.visible_message("[user] reloads [src].", "<span class='notice'>You load [count] round\s into [src].</span>")
 					playsound(src.loc, 'sound/weapons/empty.ogg', 50, 1)
+
 		AM.update_icon()
 	else if(istype(A, /obj/item/ammo_casing))
 		. = TRUE
@@ -176,12 +180,6 @@
 
 //attempts to unload src. If allow_dump is set to 0, the speedloader unloading method will be disabled
 /obj/item/gun/projectile/proc/unload_ammo(mob/user, var/allow_dump=1)
-	if(is_jammed)
-		user.visible_message("\The [user] begins to unjam [src].", "You clear the jam and unload [src]")
-		if(!do_after(user, 4, src))
-			return
-		is_jammed = 0
-		playsound(src.loc, 'sound/weapons/flipblade.ogg', 50, 1)
 	if(ammo_magazine)
 		user.put_in_hands(ammo_magazine)
 		user.visible_message("[user] removes [ammo_magazine] from [src].", "<span class='notice'>You remove [ammo_magazine] from [src].</span>")
@@ -221,12 +219,44 @@
 	else
 		unload_ammo(user)
 
+/obj/item/gun/projectile/MouseDrop(var/obj/over_object) //Click drag to unload the weapon.
+	if (!over_object || !(ishuman(usr) || issmall(usr)))
+		return
+
+	if (!(src.loc == usr))
+		return
+
+	var/mob/living/carbon/human/H = usr
+	if(H.incapacitated(INCAPACITATION_STUNNED|INCAPACITATION_KNOCKOUT))
+		return
+
+	switch(over_object.name)
+		if("r_hand")
+			unload_ammo(usr, allow_dump=0)
+		if("l_hand")
+			unload_ammo(usr, allow_dump=0)
+
+/obj/item/gun/projectile/proc/unjam(mob/user)
+	if(is_jammed)
+		user.visible_message("\The [user] begins to unjam [src].", "You clear the jam and unload [src]")
+		if(!do_after(user, 4, src))
+			return
+		is_jammed = 0
+		playsound(src.loc, 'sound/weapons/unjam.ogg', 50, 1)
+
+/obj/item/gun/projectile/RightClick(mob/user)
+	if(is_jammed)
+		unjam(user)
+	else
+		..()
+
+/*
 /obj/item/gun/projectile/attack_hand(mob/user)
 	if(user.get_inactive_hand() == src)
 		unload_ammo(user, allow_dump=0)
 	else
 		return ..()
-
+*/
 /obj/item/gun/projectile/afterattack(atom/A, mob/living/user)
 	..()
 	if(auto_eject && ammo_magazine && ammo_magazine.stored_ammo && !ammo_magazine.stored_ammo.len)
@@ -247,7 +277,7 @@
 		to_chat(user, "<span class='warning'>It looks jammed.</span>")
 	if(ammo_magazine)
 		to_chat(user, "It has \a [ammo_magazine] loaded.")
-	if(user.skill_check(SKILL_WEAPONS, SKILL_ADEPT))
+	if(user.skill_check(SKILL_WEAPONS, SKILL_EXPERT))
 		to_chat(user, "Has [getAmmo()] round\s remaining.")
 
 /obj/item/gun/projectile/proc/getAmmo()
@@ -259,20 +289,6 @@
 	if(chambered)
 		bullets += 1
 	return bullets
-
-/obj/item/gun/projectile/on_update_icon()
-	..()
-	if(ammo_indicator)
-		overlays += get_ammo_indicator()
-	
-/obj/item/gun/projectile/proc/get_ammo_indicator()
-	var/base_state = get_world_inventory_state()
-	if(!ammo_magazine || !LAZYLEN(ammo_magazine.stored_ammo))
-		return get_mutable_overlay(icon, "[base_state]_ammo_bad")
-	else if(LAZYLEN(ammo_magazine.stored_ammo) <= 0.5 * ammo_magazine.max_ammo)
-		return get_mutable_overlay(icon, "[base_state]_ammo_warn") 
-	else
-		return get_mutable_overlay(icon, "[base_state]_ammo_ok") 
 
 /* Unneeded -- so far.
 //in case the weapon has firemodes and can't unload using attack_hand()

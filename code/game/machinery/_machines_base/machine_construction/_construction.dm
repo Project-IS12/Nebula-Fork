@@ -18,10 +18,6 @@
 
 // Return a change state define or a fail message to block transition.
 /obj/machinery/proc/cannot_transition_to(var/state_path, var/mob/user)
-	if(ispath(state_path, /decl/machine_construction/default/deconstructed))
-		var/obj/item/stock_parts/network_lock/lock = get_component_of_type(/obj/item/stock_parts/network_lock)
-		if(istype(lock) && !allowed(user)) // Only check if we have a network_lock.
-			return MCS_BLOCK
 	return MCS_CHANGE
 
 /decl/machine_construction
@@ -40,7 +36,7 @@
 			return "Machine [log_info_line(machine)] lacked a circuitboard."
 		if(C.board_type != needs_board)
 			return "Machine [log_info_line(machine)] had a circuitboard of an unexpected type: was [C.board_type], should be [needs_board]."
-		var/design = SSfabrication.recipes_by_product_type[C.type]
+		var/design = GLOB.build_path_to_design_datum_path[C.type]
 		if(!design && !cannot_print)
 			return "Machine [log_info_line(machine)] had a circuitboard which could not be printed."
 		else if(design && cannot_print)

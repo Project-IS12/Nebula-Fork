@@ -1,9 +1,11 @@
 /obj/item/clothing/head/wizard
 	name = "wizard hat"
 	desc = "Strange-looking hat-wear that most certainly belongs to a real magic user."
-	icon_state = ICON_STATE_WORLD
-	icon = 'icons/clothing/head/wizard/wizard.dmi'
-	on_mob_icon = 'icons/clothing/head/wizard/wizard.dmi'
+	icon_state = "wizard"
+	item_state_slots = list(
+		slot_l_hand_str = "wizhat",
+		slot_r_hand_str = "wizhat",
+		)
 	//Not given any special protective value since the magic robes are full-body protection --NEO
 	siemens_coefficient = 0.8
 	body_parts_covered = 0
@@ -12,37 +14,41 @@
 /obj/item/clothing/head/wizard/red
 	name = "red wizard hat"
 	desc = "Strange-looking, red, hat-wear that most certainly belongs to a real magic user."
-	icon = 'icons/clothing/head/wizard/red.dmi'
-	on_mob_icon = 'icons/clothing/head/wizard/red.dmi'
+	icon_state = "redwizard"
 	siemens_coefficient = 0.8
 
 /obj/item/clothing/head/wizard/fake
 	name = "wizard hat"
 	desc = "It has WIZZARD written across it in sequins. Comes with a cool beard."
-	icon = 'icons/clothing/head/wizard/fake.dmi'
-	on_mob_icon = 'icons/clothing/head/wizard/fake.dmi'
+	icon_state = "wizard-fake"
 	body_parts_covered = HEAD|FACE
 
 /obj/item/clothing/head/wizard/marisa
 	name = "Witch Hat"
 	desc = "Strange-looking hat-wear, makes you want to cast fireballs."
-	icon = 'icons/clothing/head/wizard/marisa.dmi'
-	on_mob_icon = 'icons/clothing/head/wizard/marisa.dmi'
+	icon_state = "marisa"
 	siemens_coefficient = 0.8
 
 /obj/item/clothing/head/wizard/magus
 	name = "Magus Helm"
 	desc = "A mysterious helmet that hums with an unearthly power."
-	icon = 'icons/clothing/head/wizard/magus.dmi'
-	on_mob_icon = 'icons/clothing/head/wizard/magus.dmi'
+	icon_state = "magus"
+	item_state = "magus"
+	item_state_slots = list(
+		slot_l_hand_str = "helmet",
+		slot_r_hand_str = "helmet",
+		)
 	siemens_coefficient = 0.8
 	body_parts_covered = HEAD|FACE|EYES
 
 /obj/item/clothing/head/wizard/cap
 	name = "Gentlemans Cap"
 	desc = "A checkered gray flat cap woven together with the rarest of threads."
-	icon = 'icons/clothing/head/flatcap.dmi'
-	on_mob_icon = 'icons/clothing/head/flatcap.dmi'
+	icon_state = "gentcap"
+	item_state_slots = list(
+		slot_l_hand_str = "det_hat",
+		slot_r_hand_str = "det_hat",
+		)
 	siemens_coefficient = 0.8
 
 /obj/item/clothing/suit/wizrobe
@@ -109,6 +115,7 @@
 /obj/item/clothing/head/wizard/marisa/fake
 	name = "Witch Hat"
 	desc = "Strange-looking hat-wear, makes you want to cast fireballs."
+	icon_state = "marisa"
 	armor = null
 	siemens_coefficient = 1.0
 

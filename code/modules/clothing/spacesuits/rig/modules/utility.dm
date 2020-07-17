@@ -39,10 +39,10 @@
 	use_power_cost = 200
 	origin_tech = "{'magnets':3,'biotech':3,'engineering':5}"
 	device = /obj/item/scanner/health
-	material = /decl/material/solid/plastic
+	material = MAT_PLASTIC
 	matter = list(
-		/decl/material/solid/metal/steel = MATTER_AMOUNT_REINFORCEMENT,
-		/decl/material/solid/glass = MATTER_AMOUNT_TRACE
+		MAT_STEEL = MATTER_AMOUNT_REINFORCEMENT,
+		MAT_GLASS = MATTER_AMOUNT_TRACE
 	)
 
 /obj/item/rig_module/device/defib
@@ -68,11 +68,11 @@
 	module_cooldown = 0
 	origin_tech = "{'materials':6,'powerstorage':4,'engineering':6}"
 	device = /obj/item/pickaxe/diamonddrill
-	material = /decl/material/solid/metal/steel
+	material = MAT_STEEL
 	matter = list(
-		/decl/material/solid/glass = MATTER_AMOUNT_REINFORCEMENT,
-		/decl/material/solid/gemstone/diamond = MATTER_AMOUNT_TRACE,
-		/decl/material/solid/plastic = MATTER_AMOUNT_TRACE
+		MAT_GLASS = MATTER_AMOUNT_REINFORCEMENT,
+		MAT_DIAMOND = MATTER_AMOUNT_TRACE,
+		MAT_PLASTIC = MATTER_AMOUNT_TRACE
 	)
 
 /obj/item/rig_module/device/anomaly_scanner
@@ -87,10 +87,10 @@
 	selectable = 0
 	device = /obj/item/ano_scanner
 	origin_tech = "{'bluespace':4,'magnets':4,'engineering':6}"
-	material = /decl/material/solid/plastic
+	material = MAT_PLASTIC
 	matter = list(
-		/decl/material/solid/metal/steel = MATTER_AMOUNT_REINFORCEMENT,
-		/decl/material/solid/glass = MATTER_AMOUNT_TRACE
+		MAT_STEEL = MATTER_AMOUNT_REINFORCEMENT,
+		MAT_GLASS = MATTER_AMOUNT_TRACE
 	)
 
 /obj/item/rig_module/device/orescanner
@@ -106,10 +106,10 @@
 	use_power_cost = 200
 	device = /obj/item/scanner/mining
 	origin_tech = "{'materials':4,'magnets':4,'engineering':6}"
-	material = /decl/material/solid/plastic
+	material = MAT_PLASTIC
 	matter = list(
-		/decl/material/solid/metal/steel = MATTER_AMOUNT_REINFORCEMENT,
-		/decl/material/solid/glass = MATTER_AMOUNT_TRACE
+		MAT_STEEL = MATTER_AMOUNT_REINFORCEMENT,
+		MAT_GLASS = MATTER_AMOUNT_TRACE
 	)
 
 /obj/item/rig_module/device/orescanner/activate()
@@ -130,12 +130,12 @@
 	use_power_cost = 300
 	origin_tech = "{'materials':6,'magnets':5,'engineering':7}"
 	device = /obj/item/rcd/mounted
-	material = /decl/material/solid/metal/steel
+	material = MAT_STEEL
 	matter = list(
-		/decl/material/solid/glass = MATTER_AMOUNT_REINFORCEMENT,
-		/decl/material/solid/plastic = MATTER_AMOUNT_TRACE,
-		/decl/material/solid/metal/gold = MATTER_AMOUNT_TRACE,
-		/decl/material/solid/metal/silver = MATTER_AMOUNT_TRACE
+		MAT_GLASS = MATTER_AMOUNT_REINFORCEMENT,
+		MAT_PLASTIC = MATTER_AMOUNT_TRACE,
+		MAT_GOLD = MATTER_AMOUNT_TRACE,
+		MAT_SILVER = MATTER_AMOUNT_TRACE
 	)
 	
 /obj/item/rig_module/device/Initialize()
@@ -177,12 +177,12 @@
 	interface_desc = "Dispenses loaded chemicals directly into the wearer's bloodstream."
 
 	charges = list(
-		list("oxygel",       "oxygel",       /decl/material/liquid/oxy_meds,     80),
-		list("stabilizer",   "stabilizer",   /decl/material/liquid/stabilizer,   80),
-		list("antitoxins",   "antitoxins",   /decl/material/liquid/antitoxins,   80),
-		list("antirads",     "antirads",     /decl/material/liquid/antirads,     80),
-		list("antibiotics",  "antibiotics",  /decl/material/liquid/antibiotics,  80),
-		list("painkillers",  "painkillers",  /decl/material/liquid/painkillers,  80)
+		list("oxygel",       "oxygel",       /datum/reagent/oxy_meds,     80),
+		list("adrenaline",   "adrenaline",   /datum/reagent/adrenaline,   80),
+		list("antitoxins",   "antitoxins",   /datum/reagent/antitoxins,   80),
+		list("antirads",     "antirads",     /datum/reagent/antirads,     80),
+		list("antibiotics",  "antibiotics",  /datum/reagent/antibiotics,  80),
+		list("painkillers",  "painkillers",  /datum/reagent/painkillers,  80)
 		)
 
 	var/max_reagent_volume = 80 //Used when refilling.
@@ -192,14 +192,14 @@
 
 	//just over a syringe worth of each. Want more? Go refill. Gives the ninja another reason to have to show their face.
 	charges = list(
-		list("oxygen",       "oxygel",       /decl/material/liquid/oxy_meds,          20),
-		list("stabilizer",   "stabilizer",   /decl/material/liquid/stabilizer,        20),
-		list("antitoxins",   "antitoxins",   /decl/material/liquid/antitoxins,        20),
-		list("glucose",      "glucose",      /decl/material/liquid/nutriment/glucose, 80),
-		list("antirads",    "antirads",      /decl/material/liquid/antirads,          20),
-		list("regenerative", "regenerative", /decl/material/liquid/burn_meds,         20),
-		list("antibiotics",  "antibiotics",  /decl/material/liquid/antibiotics,       20),
-		list("painkillers",  "painkillers",  /decl/material/liquid/painkillers,       20)
+		list("oxygen",       "oxygel",       /datum/reagent/oxy_meds,          20),
+		list("adrenaline",   "adrenaline",   /datum/reagent/adrenaline,        20),
+		list("antitoxins",   "antitoxins",   /datum/reagent/antitoxins,        20),
+		list("glucose",      "glucose",      /datum/reagent/nutriment/glucose, 80),
+		list("antirads",    "antirads",      /datum/reagent/antirads,          20),
+		list("regenerative", "regenerative", /datum/reagent/burn_meds,         20),
+		list("antibiotics",  "antibiotics",  /datum/reagent/antibiotics,       20),
+		list("painkillers",  "painkillers",  /datum/reagent/painkillers,       20)
 		)
 
 /obj/item/rig_module/chem_dispenser/accepts_item(var/obj/item/input_item, var/mob/living/user)
@@ -213,16 +213,20 @@
 
 	// Magical chemical filtration system, do not question it.
 	var/total_transferred = 0
-	for(var/rtype in input_item.reagents.reagent_volumes)
+	for(var/datum/reagent/R in input_item.reagents.reagent_list)
 		for(var/chargetype in charges)
 			var/datum/rig_charge/charge = charges[chargetype]
-			if(charge.product_type == rtype)
-				var/chems_to_transfer = REAGENT_VOLUME(input_item.reagents, rtype)
+			if(charge.product_type == R.type)
+
+				var/chems_to_transfer = R.volume
+
 				if((charge.charges + chems_to_transfer) > max_reagent_volume)
 					chems_to_transfer = max_reagent_volume - charge.charges
+
 				charge.charges += chems_to_transfer
-				input_item.reagents.remove_reagent(rtype, chems_to_transfer)
+				input_item.reagents.remove_reagent(R.type, chems_to_transfer)
 				total_transferred += chems_to_transfer
+
 				break
 
 	if(total_transferred)
@@ -279,11 +283,11 @@
 	desc = "A complex web of tubing and needles suitable for hardsuit use."
 
 	charges = list(
-		list("antidepressants", "antidepressants",  /decl/material/liquid/antidepressants,   30),
-		list("stimulants",      "stimulants",       /decl/material/liquid/stimulants,        30),
-		list("amphetamines",    "amphetamines",     /decl/material/liquid/amphetamines,      30),
-		list("painkillers",     "painkillers",      /decl/material/liquid/painkillers,       30),
-		list("glucose",         "glucose",          /decl/material/liquid/nutriment/glucose, 80)
+		list("antidepressants", "antidepressants",  /datum/reagent/antidepressants,   30),
+		list("stimulants",      "stimulants",       /datum/reagent/stimulants,        30),
+		list("amphetamines",    "amphetamines",     /datum/reagent/amphetamines,      30),
+		list("painkillers",     "painkillers",      /datum/reagent/painkillers,       30),
+		list("glucose",         "glucose",          /datum/reagent/nutriment/glucose, 80)
 		)
 
 	interface_name = "combat chem dispenser"
@@ -384,10 +388,10 @@
 	interface_name = "maneuvering jets"
 	interface_desc = "An inbuilt EVA maneuvering system that runs off the rig air supply."
 	origin_tech = "{'materials':6,'engineering':7}"
-	material = /decl/material/solid/metal/steel
+	material = MAT_STEEL
 	matter = list(
-		/decl/material/solid/plastic = MATTER_AMOUNT_REINFORCEMENT,
-		/decl/material/solid/glass = MATTER_AMOUNT_TRACE
+		MAT_PLASTIC = MATTER_AMOUNT_REINFORCEMENT,
+		MAT_GLASS = MATTER_AMOUNT_TRACE
 	)
 	var/obj/item/tank/jetpack/rig/jets
 
@@ -505,10 +509,10 @@
 	interface_desc = "Eats trash like no one's business."
 	origin_tech = "{'materials':5,'engineering':5}"
 	device = /obj/item/matter_decompiler
-	material = /decl/material/solid/metal/steel
+	material = MAT_STEEL
 	matter = list(
-		/decl/material/solid/plastic = MATTER_AMOUNT_REINFORCEMENT,
-		/decl/material/solid/glass = MATTER_AMOUNT_TRACE
+		MAT_PLASTIC = MATTER_AMOUNT_REINFORCEMENT,
+		MAT_GLASS = MATTER_AMOUNT_TRACE
 	)
 
 /obj/item/rig_module/cooling_unit
@@ -518,10 +522,10 @@
 	interface_name = "mounted cooling unit"
 	interface_desc = "A heat sink with a liquid cooled radiator."
 	module_cooldown = 0 SECONDS //no cd because its critical for a life-support module
-	material = /decl/material/solid/metal/steel
+	material = MAT_STEEL
 	matter = list(
-		/decl/material/solid/glass = MATTER_AMOUNT_REINFORCEMENT,
-		/decl/material/solid/plastic = MATTER_AMOUNT_TRACE
+		MAT_GLASS = MATTER_AMOUNT_REINFORCEMENT,
+		MAT_PLASTIC = MATTER_AMOUNT_TRACE
 	)
 	var/charge_consumption = 0.5 KILOWATTS
 	var/max_cooling = 12

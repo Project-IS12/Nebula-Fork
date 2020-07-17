@@ -32,7 +32,7 @@
 
 /mob/living/carbon/human
 	var/oxygen_alert = 0
-	var/toxins_alert = 0
+	var/phoron_alert = 0
 	var/co2_alert = 0
 	var/fire_alert = 0
 	var/pressure_alert = 0
@@ -80,6 +80,12 @@
 		handle_stamina()
 
 		handle_medical_side_effects()
+
+		update_aim_icon()
+
+		if(!client && !mind)
+			species.handle_npc(src)
+
 
 	if(!handle_some_updates())
 		return											//We go ahead and process them 5 times for HUD images and other stuff though.
@@ -264,7 +270,7 @@
 		damage = Floor(damage * species.get_radiation_mod(src))
 		if(damage)
 			adjustToxLoss(damage * RADIATION_SPEED_COEFFICIENT)
-			immunity = max(0, immunity - damage * 15 * RADIATION_SPEED_COEFFICIENT) 
+			immunity = max(0, immunity - damage * 15 * RADIATION_SPEED_COEFFICIENT)
 			updatehealth()
 			if(!isSynthetic() && organs.len)
 				var/obj/item/organ/external/O = pick(organs)
@@ -324,9 +330,9 @@
 
 	//Check for contaminants before anything else because we don't want to skip it.
 	for(var/g in environment.gas)
-		var/decl/material/mat = decls_repository.get_decl(g)
+		var/material/mat = SSmaterials.get_material_datum(g)
 		if((mat.gas_flags & XGM_GAS_CONTAMINANT) && environment.gas[g] > mat.gas_overlay_limit + 1)
-			handle_contaminants()
+			pl_effects()
 			break
 
 	if(istype(src.loc, /turf/space)) //being in a closet will interfere with radiation, may not make sense but we don't model radiation for atoms in general so it will have to do for now.
@@ -540,7 +546,7 @@
 	for(var/T in chem_doses)
 		if(bloodstr.has_reagent(T) || ingested.has_reagent(T) || touching.has_reagent(T))
 			continue
-		var/decl/material/R = T
+		var/datum/reagent/R = T
 		chem_doses[T] -= initial(R.metabolism)*2
 		if(chem_doses[T] <= 0)
 			chem_doses -= T
@@ -639,11 +645,11 @@
 		if(gloves && germ_level > gloves.germ_level && prob(10))
 			gloves.germ_level += 1
 
-		if(vsc.contaminant_control.CONTAMINATION_LOSS)
+		if(vsc.plc.CONTAMINATION_LOSS)
 			var/total_phoronloss = 0
 			for(var/obj/item/I in src)
 				if(I.contaminated)
-					total_phoronloss += vsc.contaminant_control.CONTAMINATION_LOSS
+					total_phoronloss += vsc.plc.CONTAMINATION_LOSS
 			adjustToxLoss(total_phoronloss)
 
 		// nutrition decrease
@@ -718,43 +724,53 @@
 			clear_fullscreen("brute")
 
 		if(healths)
-
-			var/mutable_appearance/healths_ma = new(healths)
-			healths_ma.icon_state = "blank"
-			healths_ma.overlays = null
-
-			if (chem_effects[CE_PAINKILLER] > 100)
-				healths_ma.icon_state = "health_numb"
+			if(using_alt_hud)//If we're using Lunahud we want the lunahud health face.
+				var/mhealth = (getBruteLoss() + getFireLoss())
+				switch(mhealth)
+					if(100 to INFINITY)		healths.icon_state = "health6"
+					if(80 to 100)			healths.icon_state = "health5"
+					if(60 to 80)			healths.icon_state = "health4"
+					if(60 to 80)			healths.icon_state = "health3"
+					if(40 to 60)			healths.icon_state = "health2"
+					if(20 to 40)			healths.icon_state = "health1"
+					if(0 to 20)				healths.icon_state = "health0"
 			else
-				// Generate a by-limb health display.
-				var/no_damage = 1
-				var/trauma_val = 0 // Used in calculating softcrit/hardcrit indicators.
-				if(can_feel_pain())
-					trauma_val = max(shock_stage,get_shock())/(species.total_health-100)
-				// Collect and apply the images all at once to avoid appearance churn.
-				var/list/health_images = list()
-				for(var/obj/item/organ/external/E in organs)
-					if(no_damage && (E.brute_dam || E.burn_dam))
-						no_damage = 0
-					health_images += E.get_damage_hud_image()
+				var/mutable_appearance/healths_ma = new(healths)
+				healths_ma.icon_state = "blank"
+				healths_ma.overlays = null
 
-				// Apply a fire overlay if we're burning.
-				if(on_fire)
-					health_images += image('icons/mob/screen1_health.dmi',"burning")
-
-				// Show a general pain/crit indicator if needed.
-				if(is_asystole())
-					health_images += image('icons/mob/screen1_health.dmi',"hardcrit")
-				else if(trauma_val)
+				if (chem_effects[CE_PAINKILLER] > 100)
+					healths_ma.icon_state = "health_numb"
+				else
+					// Generate a by-limb health display.
+					var/no_damage = 1
+					var/trauma_val = 0 // Used in calculating softcrit/hardcrit indicators.
 					if(can_feel_pain())
-						if(trauma_val > 0.7)
-							health_images += image('icons/mob/screen1_health.dmi',"softcrit")
-						if(trauma_val >= 1)
-							health_images += image('icons/mob/screen1_health.dmi',"hardcrit")
-				else if(no_damage)
-					health_images += image('icons/mob/screen1_health.dmi',"fullhealth")
-				healths_ma.overlays += health_images
-			healths.appearance = healths_ma
+						trauma_val = max(shock_stage,get_shock())/(species.total_health-100)
+					// Collect and apply the images all at once to avoid appearance churn.
+					var/list/health_images = list()
+					for(var/obj/item/organ/external/E in organs)
+						if(no_damage && (E.brute_dam || E.burn_dam))
+							no_damage = 0
+						health_images += E.get_damage_hud_image()
+
+					// Apply a fire overlay if we're burning.
+					if(on_fire)
+						health_images += image('icons/mob/screen1_health.dmi',"burning")
+
+					// Show a general pain/crit indicator if needed.
+					if(is_asystole())
+						health_images += image('icons/mob/screen1_health.dmi',"hardcrit")
+					else if(trauma_val)
+						if(can_feel_pain())
+							if(trauma_val > 0.7)
+								health_images += image('icons/mob/screen1_health.dmi',"softcrit")
+							if(trauma_val >= 1)
+								health_images += image('icons/mob/screen1_health.dmi',"hardcrit")
+					else if(no_damage)
+						health_images += image('icons/mob/screen1_health.dmi',"fullhealth")
+					healths_ma.overlays += health_images
+				healths.appearance = healths_ma
 
 		if(nutrition_icon)
 			switch(nutrition)
@@ -783,7 +799,7 @@
 		if(pressure)
 			pressure.icon_state = "pressure[pressure_alert]"
 		if(toxin)
-			toxin.icon_state = "tox[toxins_alert ? "1" : "0"]"
+			toxin.icon_state = "tox[phoron_alert ? "1" : "0"]"
 		if(oxygen)
 			oxygen.icon_state = "oxy[oxygen_alert ? "1" : "0"]"
 		if(fire)
@@ -1089,21 +1105,21 @@
 	..()
 	if(machine_visual && machine_visual != A)
 		machine_visual.remove_visual(src)
-	if(eyeobj)
-		eyeobj.remove_visual(src)
 
 /mob/living/carbon/human/handle_vision()
 	if(client)
 		client.screen.Remove(GLOB.global_hud.nvg, GLOB.global_hud.thermal, GLOB.global_hud.meson, GLOB.global_hud.science)
 	if(machine)
 		var/viewflags = machine.check_eye(src)
+		machine.apply_visual(src)
 		if(viewflags < 0)
 			reset_view(null, 0)
 		else if(viewflags)
 			set_sight(sight|viewflags)
-	else if(eyeobj)
-		if(eyeobj.owner != src)
-			reset_view(null)
+	//else if(eyeobj)
+	//	if(eyeobj.owner != src)
+	//		reset_view(null)
+	/*
 	else
 		var/isRemoteObserve = 0
 		if(z_eye)
@@ -1114,6 +1130,7 @@
 		if(!isRemoteObserve && client && !client.adminobs)
 			remoteview_target = null
 			reset_view(null, 0)
+	*/
 
 	update_equipment_vision()
 	species.handle_vision(src)

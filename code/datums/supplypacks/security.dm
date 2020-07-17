@@ -31,12 +31,12 @@
 /decl/hierarchy/supply_pack/security/tacticalarmor
 	name = "Armor - Tactical"
 	contains = list(/obj/item/clothing/under/tactical,
-					/obj/item/clothing/suit/armor/pcarrier/tactical,
+					/obj/item/clothing/suit/armor/pcarrier/tan/tactical,
 					/obj/item/clothing/head/helmet/tactical,
 					/obj/item/clothing/mask/balaclava/tactical,
 					/obj/item/clothing/glasses/tacgoggles,
 					/obj/item/storage/belt/holster/security/tactical,
-					/obj/item/clothing/shoes/jackboots/tactical,
+					/obj/item/clothing/shoes/tactical,
 					/obj/item/clothing/gloves/tactical)
 	cost = 45
 	containertype = /obj/structure/closet/crate/secure
@@ -47,6 +47,42 @@
 	name = "Armor - Arm and leg guards, black"
 	contains = list(/obj/item/clothing/accessory/armguards = 2,
 					/obj/item/clothing/accessory/legguards = 2)
+	cost = 20
+	containertype = /obj/structure/closet/crate/secure
+	containername = "arm and leg guards crate"
+	access = access_armory
+
+/decl/hierarchy/supply_pack/security/blueguards
+	name = "Armor - Arm and leg guards, blue"
+	contains = list(/obj/item/clothing/accessory/armguards/blue = 2,
+					/obj/item/clothing/accessory/legguards/blue = 2)
+	cost = 20
+	containertype = /obj/structure/closet/crate/secure
+	containername = "arm and leg guards crate"
+	access = access_armory
+
+/decl/hierarchy/supply_pack/security/greenguards
+	name = "Armor - Arm and leg guards, green"
+	contains = list(/obj/item/clothing/accessory/armguards/green = 2,
+					/obj/item/clothing/accessory/legguards/green = 2)
+	cost = 20
+	containertype = /obj/structure/closet/crate/secure
+	containername = "arm and leg guards crate"
+	access = access_armory
+
+/decl/hierarchy/supply_pack/security/navyguards
+	name = "Armor - Arm and leg guards, navy blue"
+	contains = list(/obj/item/clothing/accessory/armguards/navy = 2,
+					/obj/item/clothing/accessory/legguards/navy = 2)
+	cost = 20
+	containertype = /obj/structure/closet/crate/secure
+	containername = "arm and leg guards crate"
+	access = access_armory
+
+/decl/hierarchy/supply_pack/security/tanguards
+	name = "Armor - Arm and leg guards, tan"
+	contains = list(/obj/item/clothing/accessory/armguards/tan = 2,
+					/obj/item/clothing/accessory/legguards/tan = 2)
 	cost = 20
 	containertype = /obj/structure/closet/crate/secure
 	containername = "arm and leg guards crate"
@@ -86,7 +122,7 @@
 	name = "Weapons - Security basic"
 	contains = list(/obj/item/flash = 4,
 					/obj/item/chems/spray/pepper = 4,
-					/obj/item/baton/loaded = 4,
+					/obj/item/melee/baton/loaded = 4,
 					/obj/item/gun/energy/taser = 4)
 	cost = 50
 	containertype = /obj/structure/closet/crate/secure/weapon
@@ -121,7 +157,7 @@
 
 /decl/hierarchy/supply_pack/security/shotgun
 	name = "Weapons - Shotgun"
-	contains = list(/obj/item/gun/projectile/shotgun/pump = 2)
+	contains = list(/obj/item/gun/projectile/shotgun/pump/combat = 2)
 	cost = 60
 	containertype = /obj/structure/closet/crate/secure/weapon
 	containername = "shotgun crate"
@@ -164,7 +200,7 @@
 
 /decl/hierarchy/supply_pack/security/pdwammo
 	name = "Ammunition - SMG top mounted"
-	contains = list(/obj/item/ammo_magazine/smg = 4)
+	contains = list(/obj/item/ammo_magazine/smg_top = 4)
 	cost = 40
 	containertype = /obj/structure/closet/crate/secure/weapon
 	containername = "SMG ammunition crate"
@@ -173,7 +209,7 @@
 
 /decl/hierarchy/supply_pack/security/pdwammorubber
 	name = "Ammunition - SMG top mounted rubber"
-	contains = list(/obj/item/ammo_magazine/smg/rubber = 4)
+	contains = list(/obj/item/ammo_magazine/smg_top/rubber = 4)
 	cost = 30
 	containertype = /obj/structure/closet/crate/secure/weapon
 	containername = "SMG rubber ammunition crate"
@@ -181,7 +217,7 @@
 
 /decl/hierarchy/supply_pack/security/pdwammopractice
 	name = "Ammunition - SMG top mounted practice"
-	contains = list(/obj/item/ammo_magazine/smg/practice = 8)
+	contains = list(/obj/item/ammo_magazine/smg_top/practice = 8)
 	cost = 30
 	containertype = /obj/structure/closet/crate/secure/weapon
 	containername = "SMG practice ammunition crate"
@@ -189,7 +225,7 @@
 
 /decl/hierarchy/supply_pack/security/bullpupammo
 	name = "Ammunition - military rifle"
-	contains = list(/obj/item/ammo_magazine/rifle = 4)
+	contains = list(/obj/item/ammo_magazine/mil_rifle = 4)
 	cost = 60
 	containertype = /obj/structure/closet/crate/secure/weapon
 	containername = "military rifle ammunition crate"
@@ -198,7 +234,7 @@
 
 /decl/hierarchy/supply_pack/security/bullpupammopractice
 	name = "Ammunition - military rifle practice"
-	contains = list(/obj/item/ammo_magazine/rifle/practice = 8)
+	contains = list(/obj/item/ammo_magazine/mil_rifle/practice = 8)
 	cost = 30
 	containertype = /obj/structure/closet/crate/secure/weapon
 	containername = "military rifle practice ammunition crate"

@@ -16,10 +16,6 @@
 	if (above)
 		above.update_mimic()
 
-/turf/physically_destroyed()
-	SHOULD_CALL_PARENT(FALSE)
-	. = TRUE
-
 //Creates a new turf
 /turf/proc/ChangeTurf(var/turf/N, var/tell_universe = TRUE, var/force_lighting_update = FALSE, var/keep_air = FALSE)
 	if (!N)
@@ -52,14 +48,12 @@
 	// Run the Destroy() chain.
 	qdel(src)
 
-	var/old_opaque_counter = opaque_counter
 	var/turf/simulated/W = new N(src)
 
 	if (permit_ao)
 		regenerate_ao()
 
-	W.opaque_counter = old_opaque_counter
-	W.RecalculateOpacity()
+	W.opaque_counter = opaque_counter
 
 	if (keep_air)
 		W.air = old_air

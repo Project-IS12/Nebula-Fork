@@ -12,8 +12,6 @@
 	var/mix_message = "The solution begins to bubble."
 	var/reaction_sound = 'sound/effects/bubbles.ogg'
 	var/log_is_important = 0 // If this reaction should be considered important for logging. Important recipes message admins when mixed, non-important ones just log to file.
-	var/lore_text
-	var/mechanics_text
 
 /datum/chemical_reaction/proc/can_happen(var/datum/reagents/holder)
 	//check that all the required reagents are present
@@ -52,7 +50,7 @@
 
 	var/reaction_volume = holder.maximum_volume
 	for(var/reactant in required_reagents)
-		var/A = REAGENT_VOLUME(holder, reactant) / required_reagents[reactant] / limit // How much of this reagent we are allowed to use
+		var/A = holder.get_reagent_amount(reactant) / required_reagents[reactant] / limit // How much of this reagent we are allowed to use
 		if(reaction_volume > A)
 			reaction_volume = A
 

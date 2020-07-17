@@ -6,7 +6,8 @@
 	critical = 0
 	icon_state = "netcard_basic"
 	hardware_size = 1
-	material = /decl/material/solid/glass
+	material = MAT_STEEL
+	matter = list(MAT_GLASS = MATTER_AMOUNT_REINFORCEMENT)
 
 	var/long_range = 0
 	var/ethernet = 0 // Hard-wired, therefore always on, ignores wireless checks.
@@ -42,7 +43,8 @@
 	power_usage = 100 // Better range but higher power usage.
 	icon_state = "netcard_advanced"
 	hardware_size = 1
-	material = /decl/material/solid/glass
+	material = MAT_STEEL
+	matter = list(MAT_GLASS = MATTER_AMOUNT_REINFORCEMENT)
 
 /obj/item/stock_parts/computer/network_card/wired
 	name = "wired network card"
@@ -52,8 +54,8 @@
 	power_usage = 100 // Better range but higher power usage.
 	icon_state = "netcard_ethernet"
 	hardware_size = 3
-	material = /decl/material/solid/glass
-
+	material = MAT_STEEL
+	matter = list(MAT_GLASS = MATTER_AMOUNT_REINFORCEMENT)
 
 // Returns a string identifier of this network card
 /obj/item/stock_parts/computer/network_card/proc/get_network_tag()

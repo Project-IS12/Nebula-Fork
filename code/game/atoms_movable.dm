@@ -1,7 +1,8 @@
 /atom/movable
 	layer = OBJ_LAYER
 	appearance_flags = TILE_BOUND
-	glide_size = 4
+	glide_size = 8
+	var/waterproof = TRUE
 	var/movable_flags
 	var/last_move = null
 	var/anchored = 0
@@ -14,111 +15,13 @@
 	var/throw_range = 7
 	var/moved_recently = 0
 	var/item_state = null // Used to specify the item state for the on-mob overlays.
-	var/does_spin = TRUE // Does the atom spin when thrown (of course it does :P)
+	var/does_spin = FALSE // Does the atom spin when thrown (of course it does :P)
 	var/list/grabbed_by
-
-	var/inertia_dir = 0
-	var/atom/inertia_last_loc
-	var/inertia_moving = 0
-	var/inertia_next_move = 0
-	var/inertia_move_delay = 5
-	var/atom/movable/inertia_ignore
-
-//call this proc to start space drifting
-/atom/movable/proc/space_drift(direction)//move this down
-	if(!loc || direction & (UP|DOWN) || Process_Spacemove(0))
-		inertia_dir = 0
-		inertia_ignore = null
-		return 0
-
-	inertia_dir = direction
-	if(!direction)
-		return 1
-	inertia_last_loc = loc
-	SSspacedrift.processing[src] = src
-	return 1
-
-//return 0 to space drift, 1 to stop, -1 for mobs to handle space slips
-/atom/movable/proc/Process_Spacemove(var/allow_movement)
-	if(!simulated)
-		return 1
-
-	if(has_gravity())
-		return 1
-
-	if(length(grabbed_by))
-		return 1
-
-	if(throwing)
-		return 1
-
-	if(anchored)
-		return 1
-
-	if(!isturf(loc))
-		return 1
-
-	if(locate(/obj/structure/lattice) in range(1, get_turf(src))) //Not realistic but makes pushing things in space easier
-		return -1
-
-	return 0
-
-/atom/movable/hitby(var/atom/movable/AM, var/datum/thrownthing/TT)
-	. = ..()
-	process_momentum(AM,TT)
-
-/atom/movable/proc/process_momentum(var/atom/movable/AM, var/datum/thrownthing/TT)//physic isn't an exact science
-	. = momentum_power(AM,TT)
-
-	if(.)
-		momentum_do(.,TT,AM)
-
-/atom/movable/proc/momentum_power(var/atom/movable/AM, var/datum/thrownthing/TT)
-	if(anchored)
-		return 0
-
-	. = (AM.get_mass()*TT.speed)/(get_mass()*min(AM.throw_speed,2))
-	if(has_gravity())
-		. *= 0.5
-
-/atom/movable/proc/momentum_do(var/power, var/datum/thrownthing/TT)
-	var/direction = TT.init_dir
-	switch(power)
-		if(0.75 to INFINITY)		//blown backward, also calls being pinned to walls
-			throw_at(get_edge_target_turf(src, direction), min((TT.maxrange - TT.dist_travelled) * power, 10), throw_speed * min(power, 1.5))
-
-		if(0.5 to 0.75)	//knocks them back and changes their direction
-			step(src, direction)
-
-		if(0.25 to 0.5)	//glancing change in direction
-			var/drift_dir
-			if(direction & (NORTH|SOUTH))
-				if(inertia_dir & (NORTH|SOUTH))
-					drift_dir |= (direction & (NORTH|SOUTH)) & (inertia_dir & (NORTH|SOUTH))
-				else
-					drift_dir |= direction & (NORTH|SOUTH)
-			else
-				drift_dir |= inertia_dir & (NORTH|SOUTH)
-			if(direction & (EAST|WEST))
-				if(inertia_dir & (EAST|WEST))
-					drift_dir |= (direction & (EAST|WEST)) & (inertia_dir & (EAST|WEST))
-				else
-					drift_dir |= direction & (EAST|WEST)
-			else
-				drift_dir |= inertia_dir & (EAST|WEST)
-			space_drift(drift_dir)
-
-/atom/movable/proc/get_mass()
-	return 1.5
 
 /atom/movable/Destroy()
 	. = ..()
-#ifdef DISABLE_DEBUG_CRASH
-	// meh do nothing. we know what we're doing. pro engineers.
-#else
 	if(!(atom_flags & ATOM_FLAG_INITIALIZED))
-		crash_with("Was deleted before initialization")
-#endif
+		crash_with("Was deleted before initalization")
 
 	for(var/A in src)
 		qdel(A)
@@ -138,9 +41,6 @@
 /atom/movable/Bump(var/atom/A, yes)
 	if(!QDELETED(throwing))
 		throwing.hit_atom(A)
-
-	if(inertia_dir)
-		inertia_dir = 0
 
 	if (A && yes)
 		A.last_bumped = world.time
@@ -229,8 +129,9 @@
 		var/turf/T = hit_atom
 		T.hitby(src,TT)
 
-/atom/movable/proc/throw_at(atom/target, range, speed, mob/thrower, spin = TRUE, datum/callback/callback) //If this returns FALSE then callback will not be called.
+/atom/movable/proc/throw_at(atom/target, range, speed, mob/thrower, spin = TRUE, datum/callback/callback, make_throw_sound = TRUE) //If this returns FALSE then callback will not be called.
 	. = TRUE
+	glide_size = world.icon_size / max((speed - GLIDE_SIZE_CONSTANT), world.tick_lag) * world.tick_lag
 	if (!target || speed <= 0 || QDELETED(src) || (target.z != src.z))
 		return FALSE
 
@@ -246,6 +147,8 @@
 	SSthrowing.processing[src] = TT
 	if (SSthrowing.state == SS_PAUSED && length(SSthrowing.currentrun))
 		SSthrowing.currentrun[src] = TT
+	if(make_throw_sound)
+		playsound(src, 'sound/effects/throw.ogg', 100)
 
 //Overlays
 /atom/movable/overlay

@@ -1,8 +1,7 @@
 /obj/item/clothing/head/helmet/space/void/ascent
 	name = "\improper Ascent voidsuit helmet"
 	desc = "An articulated spacesuit helmet of mantid manufacture."
-	icon = 'mods/ascent/icons/alate_spacesuit/helmet.dmi'
-	on_mob_icon = 'mods/ascent/icons/alate_spacesuit/helmet.dmi'
+	icon_state = "ascent_general"
 	armor = list(
 		melee = ARMOR_MELEE_RESISTANT,
 		bullet = ARMOR_BALLISTIC_RESISTANT,
@@ -14,12 +13,12 @@
 	)
 	max_pressure_protection = ENG_VOIDSUIT_MAX_PRESSURE
 	bodytype_restricted = list(BODYTYPE_MANTID_SMALL)
+	sprite_sheets = list(BODYTYPE_MANTID_SMALL = 'mods/ascent/icons/species/mantid/onmob_head_alate.dmi')
 
 /obj/item/clothing/suit/space/void/ascent
 	name = "\improper Ascent voidsuit"
 	desc = "A form-fitting spacesuit of mantid manufacture."
-	icon = 'mods/ascent/icons/alate_spacesuit/suit.dmi'
-	on_mob_icon = 'mods/ascent/icons/alate_spacesuit/suit.dmi'
+	icon_state = "ascent_general"
 	max_pressure_protection = ENG_VOIDSUIT_MAX_PRESSURE
 	armor = list(
 		melee = ARMOR_MELEE_RESISTANT,
@@ -31,6 +30,7 @@
 		rad = ARMOR_RAD_SHIELDED
 	)
 	bodytype_restricted = list(BODYTYPE_MANTID_SMALL)
+	sprite_sheets = list(BODYTYPE_MANTID_SMALL = 'mods/ascent/icons/species/mantid/onmob_suit_alate.dmi')
 	allowed = list(
 		/obj/item/clustertool,
 		/obj/item/tank/mantid,

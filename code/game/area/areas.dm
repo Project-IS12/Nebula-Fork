@@ -243,9 +243,20 @@ var/list/mob/living/forced_ambiance_list = new
 
 	var/turf/T = get_turf(L)
 
+
+	//else
+	//	if(L.client.ambience_playing)
+	//		L.client.ambience_playing = 0
+	//		sound_to(L, sound(null, channel = GLOB.ambience_sound_channel))
+
 	if(LAZYLEN(forced_ambience) && !(L in forced_ambiance_list))
 		forced_ambiance_list += L
 		L.playsound_local(T,sound(pick(forced_ambience), repeat = 1, wait = 0, volume = 25, channel = GLOB.lobby_sound_channel))
+
+	else if(!L.client.ambience_playing)
+		L.client.ambience_playing = 1
+		L.playsound_local(T,sound('sound/machines/vent_hum.ogg', repeat = 1, wait = 0, volume = 20, channel = GLOB.ambience_sound_channel))
+
 	if(ambience.len && prob(5) && (world.time >= L.client.played + 3 MINUTES))
 		L.playsound_local(T, sound(pick(ambience), repeat = 0, wait = 0, volume = 15, channel = GLOB.lobby_sound_channel))
 		L.client.played = world.time
@@ -281,24 +292,6 @@ var/list/mob/living/forced_ambiance_list = new
 				H.AdjustWeakened(3)
 			to_chat(mob, "<span class='notice'>The sudden appearance of gravity makes you fall to the floor!</span>")
 
-/area/proc/throw_unbuckled_occupants(var/maxrange, var/speed, var/direction = null)
-	for(var/mob/M in src)
-		addtimer(CALLBACK(src, .proc/throw_unbuckled_occupant, M, maxrange, speed, direction), 0)
-
-/area/proc/throw_unbuckled_occupant(var/mob/M, var/maxrange, var/speed, var/direction = null)
-	if(iscarbon(M))
-		if(M.buckled)
-			to_chat(M, SPAN_WARNING("Sudden acceleration presses you into your chair!"))
-			shake_camera(M, 3, 1)
-		else
-			shake_camera(M, 10, 1)
-			M.visible_message(SPAN_WARNING("[M.name] is tossed around by the sudden acceleration!"), SPAN_WARNING("The floor lurches beneath you!"))
-			if(!direction)
-				M.throw_at_random(FALSE, maxrange, speed)
-			else
-				var/turf/T = get_ranged_target_turf(M, direction, maxrange)
-				M.throw_at(T, maxrange, speed)
-
 /area/proc/prison_break()
 	var/obj/machinery/power/apc/theAPC = get_apc()
 	if(theAPC && theAPC.operating)
@@ -309,28 +302,16 @@ var/list/mob/living/forced_ambiance_list = new
 		for(var/obj/machinery/door/window/temp_windoor in src)
 			temp_windoor.open()
 
-/area/has_gravity()
+/area/proc/has_gravity()
 	return has_gravity
 
 /area/space/has_gravity()
 	return 0
 
-/atom/proc/has_gravity()
-	var/area/A = get_area(src)
-	if(A && A.has_gravity())
-		return 1
-	return 0
-
-/mob/has_gravity()
-	if(!lastarea)
-		lastarea = get_area(src)
-	if(!lastarea || !lastarea.has_gravity())
-		return 0
-
-	return 1
-
-/turf/has_gravity()
-	var/area/A = loc
+/proc/has_gravity(atom/AT, turf/T)
+	if(!T)
+		T = get_turf(AT)
+	var/area/A = get_area(T)
 	if(A && A.has_gravity())
 		return 1
 	return 0

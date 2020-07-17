@@ -159,8 +159,8 @@
 /area/map_template/rescue_base/base)
 "az" = (
 /obj/structure/table/steel_reinforced,
-/obj/item/twohanded/baseballbat/aluminium,
-/obj/item/hatchet,
+/obj/item/material/twohanded/baseballbat/aluminium,
+/obj/item/material/hatchet,
 /turf/unsimulated/floor{
 	icon_state = "dark"
 	},
@@ -206,8 +206,8 @@
 /area/map_template/rescue_base/base)
 "aE" = (
 /obj/structure/table/rack,
-/obj/item/gun/projectile/shotgun/pump,
-/obj/item/gun/projectile/shotgun/pump,
+/obj/item/gun/projectile/shotgun/pump/combat,
+/obj/item/gun/projectile/shotgun/pump/combat,
 /obj/item/radio/intercom/specops{
 	dir = 2;
 	pixel_y = 22
@@ -357,6 +357,10 @@
 /area/map_template/rescue_base/base)
 "aT" = (
 /obj/structure/table/rack,
+/obj/item/ammo_magazine/box/machinegun,
+/obj/item/ammo_magazine/box/machinegun,
+/obj/item/ammo_magazine/box/machinegun,
+/obj/item/ammo_magazine/box/machinegun,
 /turf/unsimulated/floor{
 	icon_state = "vault";
 	dir = 1
@@ -386,9 +390,9 @@
 /area/map_template/rescue_base/base)
 "aW" = (
 /obj/structure/table/rack,
-/obj/item/gun/projectile/automatic/smg,
-/obj/item/gun/projectile/automatic/smg,
-/obj/item/gun/projectile/automatic/smg,
+/obj/item/gun/projectile/automatic/sec_smg,
+/obj/item/gun/projectile/automatic/sec_smg,
+/obj/item/gun/projectile/automatic/sec_smg,
 /turf/unsimulated/floor{
 	icon_state = "vault";
 	dir = 1
@@ -444,7 +448,7 @@
 /area/map_template/rescue_base/base)
 "bd" = (
 /obj/structure/table/rack,
-/obj/item/gun/projectile/automatic/assault_rifle,
+/obj/item/gun/projectile/automatic/l6_saw,
 /turf/unsimulated/floor{
 	icon_state = "vault";
 	dir = 1
@@ -471,15 +475,15 @@
 /area/map_template/rescue_base/base)
 "bf" = (
 /obj/structure/table/rack,
-/obj/item/ammo_magazine/smg/rubber,
-/obj/item/ammo_magazine/smg/rubber,
-/obj/item/ammo_magazine/smg/rubber,
-/obj/item/ammo_magazine/smg/rubber,
-/obj/item/ammo_magazine/smg/rubber,
-/obj/item/ammo_magazine/smg/rubber,
-/obj/item/ammo_magazine/smg/rubber,
-/obj/item/ammo_magazine/smg/rubber,
-/obj/item/ammo_magazine/smg/rubber,
+/obj/item/ammo_magazine/smg_top/rubber,
+/obj/item/ammo_magazine/smg_top/rubber,
+/obj/item/ammo_magazine/smg_top/rubber,
+/obj/item/ammo_magazine/smg_top/rubber,
+/obj/item/ammo_magazine/smg_top/rubber,
+/obj/item/ammo_magazine/smg_top/rubber,
+/obj/item/ammo_magazine/smg_top/rubber,
+/obj/item/ammo_magazine/smg_top/rubber,
+/obj/item/ammo_magazine/smg_top/rubber,
 /turf/unsimulated/floor{
 	icon_state = "vault";
 	dir = 1
@@ -571,16 +575,16 @@
 /area/map_template/rescue_base/base)
 "bp" = (
 /obj/structure/table/rack,
-/obj/item/ammo_magazine/smg,
-/obj/item/ammo_magazine/smg,
-/obj/item/ammo_magazine/smg,
-/obj/item/ammo_magazine/smg,
-/obj/item/ammo_magazine/smg,
-/obj/item/ammo_magazine/smg,
-/obj/item/ammo_magazine/smg,
-/obj/item/ammo_magazine/smg,
-/obj/item/ammo_magazine/smg,
-/obj/item/ammo_magazine/smg,
+/obj/item/ammo_magazine/smg_top,
+/obj/item/ammo_magazine/smg_top,
+/obj/item/ammo_magazine/smg_top,
+/obj/item/ammo_magazine/smg_top,
+/obj/item/ammo_magazine/smg_top,
+/obj/item/ammo_magazine/smg_top,
+/obj/item/ammo_magazine/smg_top,
+/obj/item/ammo_magazine/smg_top,
+/obj/item/ammo_magazine/smg_top,
+/obj/item/ammo_magazine/smg_top,
 /turf/unsimulated/floor{
 	icon_state = "vault";
 	dir = 1
@@ -707,8 +711,8 @@
 /area/map_template/rescue_base/base)
 "bD" = (
 /obj/structure/table/rack,
-/obj/item/gun/projectile/automatic/assault_rifle,
-/obj/item/gun/projectile/automatic/assault_rifle,
+/obj/item/gun/projectile/automatic/bullpup_rifle,
+/obj/item/gun/projectile/automatic/bullpup_rifle,
 /turf/unsimulated/floor{
 	icon_state = "vault";
 	dir = 1
@@ -722,7 +726,8 @@
 /obj/machinery/door/blast/regular{
 	icon_state = "pdoor1";
 	id_tag = "heavyrescue";
-	name = "Restricted Equipment"
+	name = "Restricted Equipment";
+	p_open = 0
 	},
 /turf/unsimulated/floor{
 	icon_state = "vault";
@@ -777,12 +782,12 @@
 /area/map_template/rescue_base/base)
 "bL" = (
 /obj/structure/table/rack,
-/obj/item/ammo_magazine/rifle,
-/obj/item/ammo_magazine/rifle,
-/obj/item/ammo_magazine/rifle,
-/obj/item/ammo_magazine/rifle,
-/obj/item/ammo_magazine/rifle,
-/obj/item/ammo_magazine/rifle,
+/obj/item/ammo_magazine/mil_rifle,
+/obj/item/ammo_magazine/mil_rifle,
+/obj/item/ammo_magazine/mil_rifle,
+/obj/item/ammo_magazine/mil_rifle,
+/obj/item/ammo_magazine/mil_rifle,
+/obj/item/ammo_magazine/mil_rifle,
 /turf/unsimulated/floor{
 	icon_state = "vault";
 	dir = 1
@@ -854,7 +859,8 @@
 /obj/machinery/door/blast/regular{
 	icon_state = "pdoor1";
 	id_tag = "standardrescue";
-	name = "Heavy Equipment"
+	name = "Heavy Equipment";
+	p_open = 0
 	},
 /turf/unsimulated/floor{
 	icon_state = "vault";
@@ -912,7 +918,7 @@
 	},
 /area/map_template/rescue_base/base)
 "bZ" = (
-/obj/item/clothing/shoes/color/orange,
+/obj/item/clothing/shoes/orange,
 /obj/item/clothing/under/color/orange,
 /obj/structure/closet{
 	name = "Prisoner's Locker"
@@ -951,12 +957,12 @@
 /obj/item/storage/box/flashbangs,
 /obj/item/flash,
 /obj/item/flash,
-/obj/item/baton/loaded,
-/obj/item/baton/loaded,
+/obj/item/melee/baton/loaded,
+/obj/item/melee/baton/loaded,
 /obj/item/chems/spray/pepper,
 /obj/item/chems/spray/pepper,
-/obj/item/telebaton,
-/obj/item/telebaton,
+/obj/item/melee/telebaton,
+/obj/item/melee/telebaton,
 /obj/machinery/recharger/wallcharger{
 	pixel_x = 4;
 	pixel_y = 32
@@ -1067,8 +1073,8 @@
 /obj/structure/table/rack,
 /obj/item/flash,
 /obj/item/flash,
-/obj/item/baton/loaded,
-/obj/item/baton/loaded,
+/obj/item/melee/baton/loaded,
+/obj/item/melee/baton/loaded,
 /obj/item/storage/box/syringes,
 /obj/item/storage/box/syringes,
 /obj/item/storage/box/autoinjectors,
@@ -1099,9 +1105,9 @@
 /obj/item/chems/hypospray,
 /obj/item/chems/hypospray,
 /obj/item/chems/glass/beaker/large,
-/obj/item/chems/glass/bottle/stabilizer,
-/obj/item/chems/glass/bottle/stabilizer,
-/obj/item/chems/glass/bottle/stabilizer,
+/obj/item/chems/glass/bottle/adrenaline,
+/obj/item/chems/glass/bottle/adrenaline,
+/obj/item/chems/glass/bottle/adrenaline,
 /turf/unsimulated/floor{
 	icon_state = "vault";
 	dir = 1
@@ -1167,6 +1173,13 @@
 	dir = 2;
 	pixel_y = 22
 	},
+/turf/unsimulated/floor{
+	icon_state = "vault";
+	dir = 1
+	},
+/area/map_template/rescue_base/base)
+"cr" = (
+/obj/structure/table/rack,
 /turf/unsimulated/floor{
 	icon_state = "vault";
 	dir = 1
@@ -1311,6 +1324,12 @@
 	},
 /area/map_template/rescue_base/base)
 "cB" = (
+/obj/structure/table/reinforced,
+/turf/unsimulated/floor{
+	icon_state = "dark"
+	},
+/area/map_template/rescue_base/base)
+"cC" = (
 /obj/structure/table/reinforced,
 /turf/unsimulated/floor{
 	icon_state = "dark"
@@ -1683,7 +1702,8 @@
 /obj/machinery/door/blast/regular{
 	icon_state = "pdoor1";
 	id_tag = "standardrescue";
-	name = "EVA"
+	name = "EVA";
+	p_open = 0
 	},
 /turf/unsimulated/floor{
 	icon_state = "vault";
@@ -1951,6 +1971,15 @@
 	dir = 1
 	},
 /area/map_template/rescue_base/base)
+"dM" = (
+/obj/structure/closet{
+	name = "insignias closet"
+	},
+/turf/unsimulated/floor{
+	icon_state = "vault";
+	dir = 1
+	},
+/area/map_template/rescue_base/base)
 "dN" = (
 /obj/effect/floor_decal/industrial/hatch/yellow,
 /turf/unsimulated/floor{
@@ -1987,7 +2016,8 @@
 /obj/machinery/door/blast/regular{
 	icon_state = "pdoor1";
 	id_tag = "standardrescue";
-	name = "Garage"
+	name = "Garage";
+	p_open = 0
 	},
 /turf/unsimulated/floor{
 	icon_state = "vault";
@@ -2097,6 +2127,12 @@
 	dir = 1
 	},
 /area/map_template/rescue_base/base)
+"ef" = (
+/obj/structure/table/steel,
+/turf/unsimulated/floor{
+	icon_state = "dark"
+	},
+/area/map_template/rescue_base/base)
 "eg" = (
 /obj/structure/bed/chair/office/dark{
 	dir = 4
@@ -2111,7 +2147,7 @@
 /obj/item/storage/box/flashbangs,
 /obj/item/storage/box/teargas,
 /obj/item/storage/box/handcuffs,
-/obj/item/baton/loaded,
+/obj/item/melee/baton/loaded,
 /turf/unsimulated/floor{
 	icon_state = "vault";
 	dir = 1
@@ -2138,6 +2174,13 @@
 "ek" = (
 /obj/structure/table/rack,
 /obj/item/gun/energy/gun,
+/turf/unsimulated/floor{
+	icon_state = "vault";
+	dir = 1
+	},
+/area/map_template/rescue_base/base)
+"el" = (
+/obj/structure/table/rack,
 /turf/unsimulated/floor{
 	icon_state = "vault";
 	dir = 1
@@ -2170,7 +2213,8 @@
 /obj/machinery/door/blast/regular{
 	icon_state = "pdoor1";
 	id_tag = "rescuegarage";
-	name = "Garage Exit"
+	name = "Garage Exit";
+	p_open = 0
 	},
 /turf/unsimulated/floor{
 	icon_state = "vault";
@@ -2187,10 +2231,16 @@
 	icon_state = "dark"
 	},
 /area/map_template/rescue_base/base)
+"es" = (
+/turf/unsimulated/floor{
+	icon_state = "vault";
+	dir = 1
+	},
+/area/map_template/rescue_base/base)
 "et" = (
 /obj/structure/table/rack,
 /obj/item/storage/secure/briefcase,
-/obj/item/clothing/head/beret/corp/centcom/captain,
+/obj/item/clothing/head/beret/centcom/captain,
 /turf/unsimulated/floor{
 	icon_state = "vault";
 	dir = 1
@@ -2278,8 +2328,8 @@
 /obj/structure/table/rack,
 /obj/item/flash,
 /obj/item/flash,
-/obj/item/baton/loaded,
-/obj/item/baton/loaded,
+/obj/item/melee/baton/loaded,
+/obj/item/melee/baton/loaded,
 /obj/item/grenade/chem_grenade/metalfoam,
 /obj/item/grenade/chem_grenade/metalfoam,
 /obj/item/grenade/chem_grenade/metalfoam,
@@ -2427,16 +2477,16 @@
 /obj/item/stack/material/plastic{
 	amount = 50
 	},
-/obj/item/stack/material/glass/reinforced_borosilicate{
+/obj/item/stack/material/glass/phoronrglass{
 	amount = 20
 	},
-/obj/item/stack/material/glass/reinforced_borosilicate{
+/obj/item/stack/material/glass/phoronrglass{
 	amount = 20
 	},
-/obj/item/stack/material/glass/reinforced_borosilicate{
+/obj/item/stack/material/glass/phoronrglass{
 	amount = 20
 	},
-/obj/item/stack/material/glass/reinforced_borosilicate{
+/obj/item/stack/material/glass/phoronrglass{
 	amount = 20
 	},
 /turf/unsimulated/floor{
@@ -2479,7 +2529,7 @@
 /obj/structure/table/woodentable{
 	dir = 5
 	},
-/obj/item/ashtray,
+/obj/item/material/ashtray/bronze,
 /obj/item/trash/cigbutt/cigarbutt,
 /turf/unsimulated/floor{
 	name = "plating";
@@ -2512,7 +2562,8 @@
 /obj/machinery/door/blast/regular{
 	icon_state = "pdoor1";
 	id_tag = "heavyrescue";
-	name = "Combat Exosuit"
+	name = "Combat Exosuit";
+	p_open = 0
 	},
 /turf/unsimulated/floor{
 	icon_state = "vault";
@@ -2682,7 +2733,7 @@
 	id_tag = "rescue_shuttle";
 	pixel_x = -8;
 	pixel_y = 25;
-	initial_access = list()
+	req_access = list()
 	},
 /obj/machinery/light{
 	dir = 4
@@ -2742,6 +2793,9 @@
 	icon_state = "console";
 	dir = 4
 	},
+/turf/simulated/floor/tiled/dark,
+/area/map_template/rescue_base/start)
+"fn" = (
 /turf/simulated/floor/tiled/dark,
 /area/map_template/rescue_base/start)
 "fo" = (
@@ -2897,7 +2951,7 @@
 	name = "interior access button";
 	pixel_x = 25;
 	pixel_y = 25;
-	initial_access = list("ACCESS_CENT_SPECOPS")
+	req_access = list("ACCESS_CENT_SPECOPS")
 	},
 /turf/simulated/floor/tiled/dark,
 /area/map_template/rescue_base/start)
@@ -3061,7 +3115,7 @@
 	name = "Emergency NanoMed";
 	pixel_x = 28;
 	pixel_y = 0;
-	initial_access = newlist()
+	req_access = newlist()
 	},
 /turf/simulated/floor/tiled/dark,
 /area/map_template/rescue_base/start)
@@ -3207,7 +3261,7 @@
 	pixel_x = -4;
 	pixel_y = 8
 	},
-/obj/item/chems/glass/bottle/stabilizer{
+/obj/item/chems/glass/bottle/adrenaline{
 	pixel_x = 4;
 	pixel_y = 7
 	},
@@ -3372,7 +3426,7 @@
 /obj/structure/closet{
 	name = "Prisoner's Locker"
 	},
-/obj/item/clothing/shoes/color/orange,
+/obj/item/clothing/shoes/orange,
 /obj/item/clothing/under/color/orange,
 /obj/item/radio/intercom/specops{
 	dir = 8;
@@ -3435,7 +3489,7 @@
 /obj/structure/closet{
 	name = "Prisoner's Locker"
 	},
-/obj/item/clothing/shoes/color/orange,
+/obj/item/clothing/shoes/orange,
 /obj/item/clothing/under/color/orange,
 /turf/simulated/floor/tiled/dark,
 /area/map_template/rescue_base/start)
@@ -4080,7 +4134,7 @@ bV
 bP
 ad
 ar
-cB
+cC
 ar
 cP
 cP
@@ -4154,7 +4208,7 @@ bg
 ar
 ar
 dS
-dT
+ef
 er
 ad
 ac
@@ -4283,7 +4337,7 @@ ao
 ao
 dU
 ao
-dP
+es
 ad
 ac
 ac
@@ -4433,12 +4487,12 @@ eQ
 eQ
 eU
 gi
-eZ
+fn
 gz
-eZ
-eZ
-eZ
-eZ
+fn
+fn
+fn
+fn
 gY
 hf
 eQ
@@ -4499,7 +4553,7 @@ eU
 gj
 gq
 fx
-eZ
+fn
 gP
 gW
 he
@@ -4626,8 +4680,8 @@ eQ
 eQ
 eQ
 eU
-eZ
-eZ
+fn
+fn
 eU
 eQ
 eQ
@@ -4678,12 +4732,12 @@ eQ
 eV
 eZ
 fg
-eZ
-eZ
+fn
+fn
 fy
-eZ
-eZ
-eZ
+fn
+fn
+fn
 fR
 eU
 eU
@@ -4730,7 +4784,7 @@ dz
 ao
 ao
 ao
-aT
+el
 bg
 bB
 bB
@@ -4743,18 +4797,18 @@ eV
 fa
 fh
 fo
-eZ
+fn
 fx
-eZ
-eZ
-eZ
-eZ
+fn
+fn
+fn
+fn
 fZ
-eZ
+fn
 gf
 gd
-eZ
-eZ
+fn
+fn
 fX
 eU
 eQ
@@ -4814,8 +4868,8 @@ fL
 fP
 fS
 fx
-eZ
-eZ
+fn
+fn
 fx
 gr
 gr
@@ -4942,8 +4996,8 @@ eQ
 eU
 fT
 ga
-eZ
-eZ
+fn
+fn
 eU
 gs
 gA
@@ -5006,8 +5060,8 @@ eQ
 eU
 fU
 gb
-eZ
-eZ
+fn
+fn
 gk
 gt
 gt
@@ -5070,8 +5124,8 @@ eQ
 eU
 ff
 gb
-eZ
-eZ
+fn
+fn
 gk
 gt
 gt
@@ -5134,8 +5188,8 @@ eQ
 eU
 fV
 gc
-eZ
-eZ
+fn
+fn
 eU
 gu
 gu
@@ -5262,8 +5316,8 @@ fM
 fQ
 fW
 fx
-eZ
-eZ
+fn
+fn
 fx
 gv
 gB
@@ -5322,11 +5376,11 @@ fk
 fu
 fz
 fG
-eZ
-eZ
-eZ
+fn
+fn
+fn
 gd
-eZ
+fn
 gg
 gl
 gw
@@ -5386,8 +5440,8 @@ fk
 fv
 fA
 fH
-eZ
-eZ
+fn
+fn
 fX
 eU
 eU
@@ -5431,7 +5485,7 @@ ao
 ao
 ao
 ad
-cR
+dM
 dP
 dY
 dY
@@ -5806,7 +5860,7 @@ bg
 bX
 bg
 ad
-aT
+cr
 ao
 ar
 ao

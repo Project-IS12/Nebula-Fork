@@ -106,7 +106,7 @@ var/const/FALLOFF_SOUNDS = 0.5
 			var/mob/living/carbon/M = src
 			if (istype(M) && M.hallucination_power > 50 && M.chem_effects[CE_MIND] < 1)
 				S.environment = PSYCHOTIC
-			else if (M.drugged)
+			else if (M.druggy)
 				S.environment = DRUGGED
 			else if (M.drowsyness)
 				S.environment = DIZZY
@@ -159,4 +159,7 @@ var/const/FALLOFF_SOUNDS = 0.5
 			if ("button") soundin = pick(GLOB.button_sound)
 			if ("chop") soundin = pick(GLOB.chop_sound)
 			if ("glasscrack") soundin = pick(GLOB.glasscrack_sound)
+			if ("fallsound") soundin = pick(GLOB.fall_sound)
+			if ("blood_drip") soundin = pick(GLOB.blood_drip)
+			if ("gunpickup") soundin = pick(GLOB.gun_pickup)
 	return soundin

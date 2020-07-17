@@ -20,7 +20,7 @@
 //--------------------------------------------
 /datum/omni_port
 	var/obj/machinery/atmospherics/omni/master
-	var/direction
+	var/dir
 	var/update = 1
 	var/mode = 0
 	var/concentration = 0
@@ -32,7 +32,7 @@
 
 /datum/omni_port/New(var/obj/machinery/atmospherics/omni/M, var/direction = NORTH)
 	..()
-	src.direction = direction
+	dir = direction
 	if(istype(M))
 		master = M
 	air = new
@@ -79,9 +79,9 @@
 
 //returns a direction flag based on the string passed to it
 // case insensitive
-/proc/dir_flag(var/direction)
-	direction = lowertext(direction)
-	switch(direction)
+/proc/dir_flag(var/dir)
+	dir = lowertext(dir)
+	switch(dir)
 		if("north")
 			return NORTH
 		if("south")
@@ -96,16 +96,16 @@
 /proc/mode_to_gasid(var/mode)
 	switch(mode)
 		if(ATM_O2)
-			return /decl/material/gas/oxygen
+			return MAT_OXYGEN
 		if(ATM_N2)
-			return /decl/material/gas/nitrogen
+			return MAT_NITROGEN
 		if(ATM_CO2)
-			return /decl/material/gas/carbon_dioxide
+			return MAT_CO2
 		if(ATM_P)
-			return /decl/material/solid/phoron
+			return MAT_PHORON
 		if(ATM_N2O)
-			return /decl/material/gas/nitrous_oxide
+			return MAT_N2O
 		if(ATM_H2)
-			return /decl/material/gas/hydrogen
+			return MAT_HYDROGEN
 		else
 			return null

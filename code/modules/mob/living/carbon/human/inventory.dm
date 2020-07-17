@@ -11,7 +11,12 @@ This saves us from having to call add_fingerprint() any time something is put in
 		var/mob/living/carbon/human/H = src
 		var/obj/item/I = H.get_active_hand()
 		if(!I)
-			to_chat(H, "<span class='notice'>You are not holding anything to equip.</span>")
+			var/obj/item/back_item = get_equipped_item(slot_s_store)
+			if(back_item)
+				unEquip(back_item)
+				put_in_active_hand(back_item)
+			else
+				to_chat(H, "<span class='notice'>You are not holding anything to equip.</span>")
 			return
 		if(H.equip_to_appropriate_slot(I))
 			if(hand)
@@ -117,8 +122,6 @@ This saves us from having to call add_fingerprint() any time something is put in
 	if(!W)	return 0
 
 	if (W == wear_suit)
-		if(s_store)
-			drop_from_inventory(s_store)
 		wear_suit = null
 		update_inv_wear_suit()
 	else if (W == w_uniform)
@@ -234,12 +237,16 @@ This saves us from having to call add_fingerprint() any time something is put in
 		if(slot_back)
 			src.back = W
 			W.equipped(src, slot)
+			if(W.equipsound)//Rifles being holstered, or backpacks being put on.
+				playsound(src, W.equipsound, 50, 1)
 			update_inv_back(redraw_mob)
 		if(slot_wear_mask)
 			src.wear_mask = W
 			if(wear_mask.flags_inv & (BLOCKHAIR|BLOCKHEADHAIR))
 				update_hair(redraw_mob)	//rebuild hair
 				update_inv_ears(0)
+			if(W.equipsound)//Unique sound for a mask being put on.
+				playsound(src, W.equipsound, 50, 1)
 			W.equipped(src, slot)
 			update_inv_wear_mask(redraw_mob)
 		if(slot_handcuffed)
@@ -251,15 +258,21 @@ This saves us from having to call add_fingerprint() any time something is put in
 			src.l_hand = W
 			W.equipped(src, slot)
 			W.screen_loc = ui_lhand
+			if(W.grab_sound)
+				W.grab_sound(src)//The grab sound, if it's loud it'll print a message about grabbing a weapon
 			update_inv_l_hand(redraw_mob)
 		if(slot_r_hand)
 			src.r_hand = W
 			W.equipped(src, slot)
 			W.screen_loc = ui_rhand
+			if(W.grab_sound)
+				W.grab_sound(src)//Same for the other hand.
 			update_inv_r_hand(redraw_mob)
 		if(slot_belt)
 			src.belt = W
 			W.equipped(src, slot)
+			if(W.equipsound)//So like a sword being sheathed.
+				playsound(src, W.equipsound, 50, 1)
 			update_inv_belt(redraw_mob)
 		if(slot_wear_id)
 			src.wear_id = W
@@ -308,12 +321,16 @@ This saves us from having to call add_fingerprint() any time something is put in
 			if(wear_suit.flags_inv & HIDEJUMPSUIT)
 				update_inv_w_uniform(0)
 			W.equipped(src, slot)
+			if(W.equipsound)//Armor being put on.
+				playsound(src, W.equipsound, 50, 1)
 			update_inv_wear_suit(redraw_mob)
 		if(slot_w_uniform)
 			src.w_uniform = W
 			if(w_uniform.flags_inv & HIDESHOES)
 				update_inv_shoes(0)
 			W.equipped(src, slot)
+			if(W.equipsound)//suit being zipped up
+				playsound(src, W.equipsound, 50, 1)
 			update_inv_w_uniform(redraw_mob)
 		if(slot_l_store)
 			src.l_store = W
@@ -326,6 +343,8 @@ This saves us from having to call add_fingerprint() any time something is put in
 		if(slot_s_store)
 			src.s_store = W
 			W.equipped(src, slot)
+			if(W.equipsound)//Rifles being holstered.
+				playsound(src, W.equipsound, 50, 1)
 			update_inv_s_store(redraw_mob)
 		if(slot_in_backpack)
 			if(src.get_active_hand() == W)

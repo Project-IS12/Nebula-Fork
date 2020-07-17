@@ -972,7 +972,7 @@
 /area/constructionsite/hallway/fore)
 "dc" = (
 /obj/structure/table/marble,
-/obj/item/kitchen/rollingpin,
+/obj/item/material/kitchen/rollingpin,
 /turf/simulated/floor/airless,
 /area/constructionsite/hallway/fore)
 "dd" = (
@@ -1225,7 +1225,7 @@
 /turf/simulated/floor/airless,
 /area/constructionsite/storage)
 "ed" = (
-/obj/machinery/fabricator/industrial,
+/obj/machinery/robotics_fabricator,
 /turf/simulated/floor/airless,
 /area/constructionsite/storage)
 "ee" = (
@@ -1811,20 +1811,22 @@
 /turf/simulated/floor/airless,
 /area/constructionsite/storage)
 "fy" = (
-/obj/machinery/fabricator/imprinter,
+/obj/machinery/r_n_d/circuit_imprinter,
 /turf/simulated/floor/tiled/dark/airless,
 /area/constructionsite/storage)
 "fz" = (
-/obj/machinery/destructive_analyzer,
+/obj/machinery/r_n_d/destructive_analyzer,
 /turf/simulated/floor/airless,
 /area/constructionsite/storage)
 "fA" = (
-/obj/machinery/fabricator/protolathe{
+/obj/machinery/r_n_d/protolathe{
+	icon_state = "protolathe_t";
 	stat = 1
 	},
 /turf/simulated/floor/airless,
 /area/constructionsite/storage)
 "fB" = (
+/obj/machinery/r_n_d/server/centcom,
 /turf/simulated/floor/airless,
 /area/constructionsite/storage)
 "fC" = (
@@ -3499,7 +3501,7 @@
 /turf/simulated/floor/airless,
 /area/constructionsite/engineering)
 "lI" = (
-/obj/item/shard{
+/obj/item/material/shard{
 	icon_state = "medium"
 	},
 /turf/simulated/floor/airless,

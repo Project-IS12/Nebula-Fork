@@ -1,12 +1,7 @@
 /obj/item/clothing/head/infilhat
 	name = "immaculate fedora"
 	desc = "Whoever owns this hat means business. Hopefully, it's just good business."
-	color = COLOR_SILVER
-	icon_state = ICON_STATE_WORLD
-	icon = 'icons/clothing/head/detective.dmi'
-	on_mob_icon = 'icons/clothing/head/detective.dmi'
-	markings_icon = "band"
-	markings_color = COLOR_DARK_GRAY
+	icon_state = "infhat"
 	armor = list(
 		melee = ARMOR_MELEE_MINOR, 
 		bullet = ARMOR_BALLISTIC_MINOR, 
@@ -35,7 +30,7 @@
 /obj/item/clothing/shoes/dress/infilshoes
 	name = "black leather shoes"
 	desc = "Dress shoes. Their footsteps are dead silent."
-	inset_color = COLOR_INDIGO
+	icon_state = "infshoes"
 	item_flags = ITEM_FLAG_SILENT
 
 /obj/item/clothing/head/infilhat/fem

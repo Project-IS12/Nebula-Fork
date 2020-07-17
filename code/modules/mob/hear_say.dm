@@ -9,6 +9,14 @@
 			//Or someone snoring.  So we make it where they won't hear it.
 		return
 
+	message = replacetext(message, "/", "")//None of this.
+	message = replacetext(message, "~", "")//Or this.
+	message = replacetext(message, " i ", " I ")//FUCKING USE CAPITAL LETTERS JAMES YOU FUCK!
+	message = replacetext(message, " ive ", " I've ")//I'M SO FUCKING SICK OF SEEING IVE YOU FUCKS
+	message = replacetext(message, " im ", " I'm ")//AND IM TOO! STOP THAT YOU FUCKS!
+	message = replacetext(message, " u ", " you ")//STOP USING FUCKING U YOU SICK FUCKS!
+	message = add_shout_append(capitalize(message))//So that if they end in an ! it gets bolded
+
 	if(language && (language.flags & (NONVERBAL|SIGNLANG)))
 		sound_vol = 0
 		speech_sound = null
@@ -203,6 +211,14 @@
 			track = "([ghost_follow_link(speaker, src)]) [speaker_name]"
 		else
 			track = "[speaker_name]"
+
+	message = replacetext(message, "/", "")//None of this.
+	message = replacetext(message, "~", "")//Or this.
+	message = replacetext(message, " i ", " I ")//FUCKING USE CAPITAL LETTERS JAMES YOU FUCK!
+	message = replacetext(message, " ive ", " I've ")//I'M SO FUCKING SICK OF SEEING IVE YOU FUCKS
+	message = replacetext(message, " im ", " I'm ")//AND IM TOO! STOP THAT YOU FUCKS!
+	message = replacetext(message, " u ", " you ")//STOP USING FUCKING U YOU SICK FUCKS!
+	message = add_shout_append(capitalize(message))//So that if they end in an ! it gets bolded
 
 	var/formatted
 	if (language)
